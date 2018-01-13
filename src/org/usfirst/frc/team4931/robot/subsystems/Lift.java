@@ -9,5 +9,19 @@ public class Lift extends Subsystem {
 		// TODO Auto-generated method stub
 		
 	}
+	
+	/**
+	 * Method to get lifter to rise up
+	 */
+	public void liftUp() {
+		
+	}
+	
+	/**
+	 * Method to get lifter to fall down
+	 */
+	public void liftDown() {
+		
+	}
 
 }

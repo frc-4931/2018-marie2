@@ -29,6 +29,10 @@ public class RobotMap {
 	public static boolean leftEncoderInverted = false;
 	public static boolean rightEncoderInverted = false;
 
+	public static final int armMotorLeftPort = 0;
+	public static final int armMotorRightPort = 5;
+	public static final boolean armMotorLeftInverted = false;
+	public static final boolean armMotorRightInverted = false;
 
 	// If you are using multiple modules, make sure to define both the port
 	// number and the module. For example you with a rangefinder:
