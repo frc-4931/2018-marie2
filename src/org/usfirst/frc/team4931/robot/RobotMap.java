@@ -20,6 +20,14 @@ public class RobotMap {
 	public static int leftBackMotorPort = 2;
 	public static int rightFrontMotorPort = 3;
 	public static int rightBackMotorPort = 4;
+	public static boolean leftFrontMotorInverted = false;
+	public static boolean leftBackMotorInverted = false;
+	public static boolean rightFrontMotorInverted = false;
+	public static boolean rightBackMotorInverted = false;
+	public static int[] leftEncoderPorts = {0, 1};
+	public static int[] rightEncoderPorts = {0, 1};
+	public static boolean leftEncoderInverted = false;
+	public static boolean rightEncoderInverted = false;
 
 
 	// If you are using multiple modules, make sure to define both the port
