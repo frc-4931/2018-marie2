@@ -7,6 +7,8 @@
 
 package org.usfirst.frc.team4931.robot;
 
+import edu.wpi.first.wpilibj.SPI;
+
 /**
  * The RobotMap is a mapping from the ports sensors and actuators are wired into
  * to a variable name. This provides flexibility changing wiring, makes checking
@@ -16,18 +18,29 @@ package org.usfirst.frc.team4931.robot;
 public class RobotMap {
 	// For example to map the left and right motors, you could define the
 	// following variables to use with your drivetrain subsystem.
-	public static final int leftFrontMotorPort = 1;
-	public static final int leftBackMotorPort = 2;
-	public static final int rightFrontMotorPort = 3;
-	public static final int rightBackMotorPort = 4;
-	public static final boolean leftFrontMotorInverted = false;
-	public static final boolean leftBackMotorInverted = false;
-	public static final boolean rightFrontMotorInverted = false;
-	public static final boolean rightBackMotorInverted = false;
-	public static final int[] leftEncoderPorts = {0, 1};
-	public static final int[] rightEncoderPorts = {0, 1};
-	public static final boolean leftEncoderInverted = false;
-	public static final boolean rightEncoderInverted = false;
+      
+    public static final int leftFrontMotorPort = 1;
+    public static final int leftBackMotorPort = 2;
+    public static final int rightFrontMotorPort = 3;
+    public static final int rightBackMotorPort = 4;
+    public static final boolean leftFrontMotorInverted = false;
+    public static final boolean leftBackMotorInverted = false;
+    public static final boolean rightFrontMotorInverted = false;
+    public static final boolean rightBackMotorInverted = false;
+    
+    public static final int[] leftEncoderPorts = {0, 1};
+    public static final int[] rightEncoderPorts = {0, 1};
+    public static final boolean leftEncoderInverted = false;
+    public static final boolean rightEncoderInverted = false;
+    
+	/** [0] is forward position port, [1] is backward position port */
+	public static final int[] leftGearBox = {0, 1};
+	/** [0] is forward position port, [1] is backward position port */
+    public static final int[] rightGearBox = {0, 1};
+    
+    public static final int compressor = 1;
+    
+    public static final SPI.Port gyroPort = SPI.Port.kOnboardCS0;
 
 	public static final int armMotorLeftPort = 0;
 	public static final int armMotorRightPort = 5;
