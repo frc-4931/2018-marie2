@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import org.usfirst.frc.team4931.robot.subsystems.Drivetrain;
+import org.usfirst.frc.team4931.robot.subsystems.Grabber;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -25,6 +26,7 @@ public class Robot extends TimedRobot {
 
   public static OperatorInput operatorInput;
   public static Drivetrain drivetrain;
+  public static Grabber grabber;
   Command m_autonomousCommand;
   SendableChooser<Command> m_chooser = new SendableChooser<>();
   public static Compressor compressor;
