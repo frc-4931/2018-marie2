@@ -7,6 +7,8 @@
 
 package org.usfirst.frc.team4931.robot;
 
+import edu.wpi.first.wpilibj.SPI;
+
 /**
  * The RobotMap is a mapping from the ports sensors and actuators are wired into
  * to a variable name. This provides flexibility changing wiring, makes checking
@@ -28,7 +30,12 @@ public class RobotMap {
 	public static int[] rightEncoderPorts = {0, 1};
 	public static boolean leftEncoderInverted = false;
 	public static boolean rightEncoderInverted = false;
-
+	/** [0] is forward position port, [1] is backward position port */
+	public static int[] leftGearBox = {0, 1};
+	/** [0] is forward position port, [1] is backward position port */
+    public static int[] rightGearBox = {0, 1};
+    public static int compressor = 1;
+    public static SPI.Port gyroPort = SPI.Port.kOnboardCS0;
 
 	// If you are using multiple modules, make sure to define both the port
 	// number and the module. For example you with a rangefinder:
