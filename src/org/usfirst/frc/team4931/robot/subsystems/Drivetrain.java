@@ -6,12 +6,10 @@ import edu.wpi.first.wpilibj.CounterBase.EncodingType;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.GyroBase;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj.interfaces.Gyro;
 import org.usfirst.frc.team4931.robot.RobotMap;
 
 public class Drivetrain extends Subsystem {
@@ -33,66 +31,73 @@ public class Drivetrain extends Subsystem {
 
   @Override
   protected void initDefaultCommand() {
+    //Configure drive motors
     leftFrontMotor = new WPI_TalonSRX(RobotMap.leftFrontMotorPort);
     leftBackMotor = new WPI_TalonSRX(RobotMap.leftBackMotorPort);
     rightFrontMotor = new WPI_TalonSRX(RobotMap.rightFrontMotorPort);
     rightBackMotor = new WPI_TalonSRX(RobotMap.rightBackMotorPort);
-
     leftFrontMotor.setInverted(RobotMap.leftFrontMotorInverted);
     leftBackMotor.setInverted(RobotMap.leftBackMotorInverted);
     rightFrontMotor.setInverted(RobotMap.rightFrontMotorInverted);
     rightBackMotor.setInverted(RobotMap.rightBackMotorInverted);
-
     leftSideMotors = new SpeedControllerGroup(leftFrontMotor, leftBackMotor);
     rightSideMotors = new SpeedControllerGroup(rightFrontMotor, rightBackMotor);
 
+    //Configure encoders
     leftEncoder = new Encoder(RobotMap.leftEncoderPorts[0], RobotMap.leftEncoderPorts[1],
         RobotMap.leftEncoderInverted, EncodingType.k4X);
     rightEncoder = new Encoder(RobotMap.rightEncoderPorts[0], RobotMap.rightEncoderPorts[1],
         RobotMap.rightEncoderInverted, EncodingType.k4X);
+    leftEncoder.setDistancePerPulse(360.0 / RobotMap.encoderPPR);
+    rightEncoder.setDistancePerPulse(360.0 / RobotMap.encoderPPR);
 
+    //Configure PID controllers
     leftSidePID = new PIDController(0, 0, 0, 0, leftEncoder, leftFrontMotor);
     rightSidePID = new PIDController(0, 0, 0, 0, rightEncoder, rightFrontMotor);
-    
+
+    //Configure pneumatics for 2 speed gearboxes
     leftGearBox = new DoubleSolenoid(RobotMap.leftGearBox[0], RobotMap.leftGearBox[1]);
     rightGearBox = new DoubleSolenoid(RobotMap.rightGearBox[0], RobotMap.rightGearBox[1]);
 
+    //Create drivetrain from left and right side motor groups
     drivetrain = new DifferentialDrive(leftSideMotors, rightSideMotors);
+
+    //Create gyro senser
     gyro = new ADXRS450_Gyro(RobotMap.gyroPort);
   }
 
   /**
    * Sets speed of Drivetrain.
-   * 
+   *
    * @param speed - speed of motors
    * @param rotation - difference between left and right
    */
   public void driveArcade(double speed, double rotation) {
     drivetrain.arcadeDrive(speed, rotation);
   }
-  
+
   /**
    * Sets left and right speed of Drivetrain.
-   * 
+   *
    * @param leftSpeed - speed for left side
    * @param rightSpeed - speed for right side
    */
   public void driveTank(double leftSpeed, double rightSpeed) {
     drivetrain.tankDrive(leftSpeed, rightSpeed);
   }
-  
+
   /**
-   * Returns value of left encoder in encoder counts.
+   * Returns value of left encoder in revolutions.
    */
-  public int getLeftEncoder() {
-    return leftEncoder.get();
+  public double getLeftEncoder() {
+    return leftEncoder.getDistance();
   }
-  
+
   /**
-   * Returns value of right encoder in encoder counts.
+   * Returns value of right encoder in revolutions.
    */
-  public int getRightEncoder() {
-    return rightEncoder.get();
+  public double getRightEncoder() {
+    return rightEncoder.getDistance();
   }
 
   /**
@@ -116,7 +121,7 @@ public class Drivetrain extends Subsystem {
     leftSidePID.free();
     rightSidePID.free();
   }
-  
+
   /**
    * Switches the Drivetrain to the high speed gear.
    */
@@ -124,7 +129,7 @@ public class Drivetrain extends Subsystem {
     leftGearBox.set(Value.kForward);
     rightGearBox.set(Value.kForward);
   }
-  
+
   /**
    * Switches the Drivetrain to the low speed gear.
    */
@@ -132,39 +137,37 @@ public class Drivetrain extends Subsystem {
     leftGearBox.set(Value.kReverse);
     rightGearBox.set(Value.kReverse);
   }
-  
+
   /**
    * Reads the angle of the gyro.
-   * 
-   * @return
    */
   public double gyroReadAngle() {
     return gyro.getAngle();
   }
-  
+
   /**
    * Reads the gyro rate.
-   * 
+   *
    * @return The rate of the gyro
    */
   public double gyroReadRate() {
     return gyro.getRate();
   }
-  
+
   /**
    * Resets the gyro.
    */
   public void gyroReset() {
     gyro.reset();
   }
-  
+
   /**
    * CalibRATES the gyro.
    */
   public void gyroCalibrate() {
     gyro.calibrate();
   }
-  
+
   /**
    * Disables Drivetrain.
    */
