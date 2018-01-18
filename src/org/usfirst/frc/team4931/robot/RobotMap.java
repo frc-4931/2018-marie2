@@ -32,6 +32,7 @@ public class RobotMap {
     public static final int[] rightEncoderPorts = {0, 1};
     public static final boolean leftEncoderInverted = false;
     public static final boolean rightEncoderInverted = false;
+    public static final int encoderPPR = 1024;
     
 	/** [0] is forward position port, [1] is backward position port */
 	public static final int[] leftGearBox = {0, 1};
