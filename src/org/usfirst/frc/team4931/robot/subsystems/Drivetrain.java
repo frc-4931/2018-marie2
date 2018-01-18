@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import org.usfirst.frc.team4931.robot.Robot;
 import org.usfirst.frc.team4931.robot.RobotMap;
 
 public class Drivetrain extends Subsystem {
@@ -48,8 +49,8 @@ public class Drivetrain extends Subsystem {
         RobotMap.leftEncoderInverted, EncodingType.k4X);
     rightEncoder = new Encoder(RobotMap.rightEncoderPorts[0], RobotMap.rightEncoderPorts[1],
         RobotMap.rightEncoderInverted, EncodingType.k4X);
-    leftEncoder.setDistancePerPulse(360.0 / RobotMap.encoderPPR);
-    rightEncoder.setDistancePerPulse(360.0 / RobotMap.encoderPPR);
+    leftEncoder.setDistancePerPulse(1.0 / RobotMap.encoderPPR);
+    rightEncoder.setDistancePerPulse(1.0 / RobotMap.encoderPPR);
 
     //Configure PID controllers
     leftSidePID = new PIDController(0, 0, 0, 0, leftEncoder, leftFrontMotor);
@@ -112,6 +113,32 @@ public class Drivetrain extends Subsystem {
    */
   public void resetRightEncoder() {
     rightEncoder.reset();
+  }
+
+  /**
+   * Sets the target for the left side PID loop in revaluations
+   *
+   * @param target - target in revaluations
+   */
+  public void setLeftPIDTaret(double target) {
+    leftSidePID.setSetpoint(target * RobotMap.encoderPPR);
+  }
+
+  /**
+   * Sets the target for the right side PID loop in revaluations
+   *
+   * @param target - target in revaluations
+   */
+  public void setRightPIDTaret(double target) {
+    rightSidePID.setSetpoint(target * RobotMap.encoderPPR);
+  }
+
+  public boolean leftPIDOnTarget() {
+    return leftSidePID.onTarget();
+  }
+
+  public boolean rightPIOnTarget() {
+    return rightSidePID.onTarget();
   }
 
   /**
