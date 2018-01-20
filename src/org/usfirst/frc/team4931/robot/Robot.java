@@ -11,9 +11,7 @@ import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.Relay.Value;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team4931.robot.subsystems.Drivetrain;
 import org.usfirst.frc.team4931.robot.subsystems.Grabber;
@@ -32,10 +30,10 @@ public class Robot extends TimedRobot {
   public static Drivetrain drivetrain;
   public static Grabber grabber;
   public static Lift lift;
+  Command autonomousCommand;
+  SendableChooser<Command> autoChooser = new SendableChooser<>();
   public static Compressor compressor;
   public static Relay compressorController;
-  Command m_autonomousCommand;
-  SendableChooser<Command> m_chooser = new SendableChooser<>();
 
   /**
    * This function is run when the robot is first started up and should be
@@ -45,9 +43,9 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     operatorInput = new OperatorInput();
     drivetrain = new Drivetrain();
-
     compressor = new Compressor(RobotMap.compressor);
     compressor.setClosedLoopControl(false);
+
     compressorController = new Relay(0);
 
     SmartDashboard.putBoolean("Pressure Switch", compressor.getPressureSwitchValue());
@@ -83,7 +81,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    m_autonomousCommand = m_chooser.getSelected();
+    autonomousCommand = autoChooser.getSelected();
 
 		/*
      * String autoSelected = SmartDashboard.getString("Auto Selector",
@@ -93,8 +91,8 @@ public class Robot extends TimedRobot {
 		 */
 
     // schedule the autonomous command (example)
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.start();
+    if (autonomousCommand != null) {
+      autonomousCommand.start();
     }
   }
 
@@ -112,8 +110,8 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.cancel();
+    if (autonomousCommand != null) {
+      autonomousCommand.cancel();
     }
   }
 
@@ -136,7 +134,6 @@ public class Robot extends TimedRobot {
 
     SmartDashboard.putBoolean("Pressure Switch", true);
     SmartDashboard.putBoolean("Bool", operatorInput.stick.getRawButton(1));
-    SmartDashboard.putNumber("Encoder", drivetrain.getLeftEncoder());
   }
 
   /**
@@ -144,6 +141,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void testPeriodic() {
-    SmartDashboard.putBoolean("Button 1", operatorInput.button.get());
+    SmartDashboard.putBoolean("Bool", true);
+    SmartDashboard.putBoolean("TEST", true);
   }
 }
