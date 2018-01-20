@@ -29,17 +29,17 @@ public class RobotMap {
     public static final boolean rightBackMotorInverted = false;
     
     public static final int[] leftEncoderPorts = {0, 1};
-    public static final int[] rightEncoderPorts = {0, 1};
+    public static final int[] rightEncoderPorts = {2, 3};
     public static final boolean leftEncoderInverted = false;
     public static final boolean rightEncoderInverted = false;
     public static final int encoderPPR = 1024;
     
 	/** [0] is forward position port, [1] is backward position port */
-	public static final int[] leftGearBox = {0, 1};
+	public static final int[] leftGearBox = {4, 5};
 	/** [0] is forward position port, [1] is backward position port */
-    public static final int[] rightGearBox = {0, 1};
+    public static final int[] rightGearBox = {2, 3};
     
-    public static final int compressor = 1;
+    public static final int compressor = 0;
     
     public static final SPI.Port gyroPort = SPI.Port.kOnboardCS0;
 
