@@ -16,37 +16,39 @@ import edu.wpi.first.wpilibj.SPI;
  * floating around.
  */
 public class RobotMap {
-	// For example to map the left and right motors, you could define the
-	// following variables to use with your drivetrain subsystem.
-      
-    public static final int leftFrontMotorPort = 1;
-    public static final int leftBackMotorPort = 2;
-    public static final int rightFrontMotorPort = 3;
-    public static final int rightBackMotorPort = 4;
-    public static final boolean leftFrontMotorInverted = false;
-    public static final boolean leftBackMotorInverted = false;
-    public static final boolean rightFrontMotorInverted = false;
-    public static final boolean rightBackMotorInverted = false;
-    
-    public static final int[] leftEncoderPorts = {0, 1};
-    public static final int[] rightEncoderPorts = {2, 3};
-    public static final boolean leftEncoderInverted = false;
-    public static final boolean rightEncoderInverted = false;
-    public static final int encoderPPR = 1024;
-    
-	/** [0] is forward position port, [1] is backward position port */
-	public static final int[] gearBox = {4, 5};
-	public static final int[] grabberPorts = {2, 3};
-    
-    public static final int compressor = 0;
-    
-    public static final SPI.Port gyroPort = SPI.Port.kOnboardCS0;
-	
-	public static final int liftMotorPort = 6;
-	public static final boolean liftMotorInverted = false;
+  // For example to map the left and right motors, you could define the
+  // following variables to use with your drivetrain subsystem.
 
-	// If you are using multiple modules, make sure to define both the port
-	// number and the module. For example you with a rangefinder:
-	// public static int rangefinderPort = 1;
-	// public static int rangefinderModule = 1;
+  public static final int leftFrontMotorPort = 1;
+  public static final int leftBackMotorPort = 2;
+  public static final int rightFrontMotorPort = 3;
+  public static final int rightBackMotorPort = 4;
+  public static final boolean leftFrontMotorInverted = false;
+  public static final boolean leftBackMotorInverted = false;
+  public static final boolean rightFrontMotorInverted = false;
+  public static final boolean rightBackMotorInverted = false;
+
+  public static final int[] leftEncoderPorts = {0, 1};
+  public static final int[] rightEncoderPorts = {2, 3};
+  public static final boolean leftEncoderInverted = false;
+  public static final boolean rightEncoderInverted = false;
+  public static final int encoderPPR = 1024;
+
+  /**
+   * [0] is forward position port, [1] is backward position port
+   */
+  public static final int[] gearBox = {4, 5};
+  public static final int[] grabberPorts = {2, 3};
+
+  public static final int compressor = 6;
+
+  public static final SPI.Port gyroPort = SPI.Port.kOnboardCS0;
+
+  public static final int liftMotorPort = 6;
+  public static final boolean liftMotorInverted = false;
+
+  // If you are using multiple modules, make sure to define both the port
+  // number and the module. For example you with a rangefinder:
+  // public static int rangefinderPort = 1;
+  // public static int rangefinderModule = 1;
 }
