@@ -10,8 +10,10 @@ import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import jaci.pathfinder.Waypoint;
 import org.usfirst.frc.team4931.robot.Robot;
 import org.usfirst.frc.team4931.robot.RobotMap;
+import jaci.pathfinder.Pathfinder;
 
 public class Drivetrain extends Subsystem {
 
@@ -30,8 +32,11 @@ public class Drivetrain extends Subsystem {
   private static DoubleSolenoid rightGearBox;
   private static ADXRS450_Gyro gyro;
 
-  @Override
-  protected void initDefaultCommand() {
+  public Drivetrain() {
+    initialization();
+  }
+
+  public void initialization() {
     //Configure drive motors
     leftFrontMotor = new WPI_TalonSRX(RobotMap.leftFrontMotorPort);
     leftBackMotor = new WPI_TalonSRX(RobotMap.leftBackMotorPort);
@@ -45,16 +50,14 @@ public class Drivetrain extends Subsystem {
     rightSideMotors = new SpeedControllerGroup(rightFrontMotor, rightBackMotor);
 
     //Configure encoders
-    leftEncoder = new Encoder(RobotMap.leftEncoderPorts[0], RobotMap.leftEncoderPorts[1],
-        RobotMap.leftEncoderInverted, EncodingType.k4X);
-    rightEncoder = new Encoder(RobotMap.rightEncoderPorts[0], RobotMap.rightEncoderPorts[1],
-        RobotMap.rightEncoderInverted, EncodingType.k4X);
+    leftEncoder = new Encoder(RobotMap.leftEncoderPorts[0], RobotMap.leftEncoderPorts[1], RobotMap.leftEncoderInverted, EncodingType.k4X);
+    rightEncoder = new Encoder(RobotMap.rightEncoderPorts[0], RobotMap.rightEncoderPorts[1], RobotMap.rightEncoderInverted, EncodingType.k4X);
     leftEncoder.setDistancePerPulse(1.0 / RobotMap.encoderPPR);
     rightEncoder.setDistancePerPulse(1.0 / RobotMap.encoderPPR);
 
     //Configure PID controllers
-    leftSidePID = new PIDController(0, 0, 0, 0, leftEncoder, leftFrontMotor);
-    rightSidePID = new PIDController(0, 0, 0, 0, rightEncoder, rightFrontMotor);
+    leftSidePID = new PIDController(0.1, 0.1, 0.1, leftEncoder, leftFrontMotor);
+    rightSidePID = new PIDController(0.1, 0.1, 0.1, 0.1, rightEncoder, rightFrontMotor);
 
     //Configure pneumatics for 2 speed gearboxes
     leftGearBox = new DoubleSolenoid(RobotMap.leftGearBox[0], RobotMap.leftGearBox[1]);
@@ -65,6 +68,10 @@ public class Drivetrain extends Subsystem {
 
     //Create gyro senser
     gyro = new ADXRS450_Gyro(RobotMap.gyroPort);
+  }
+
+  @Override
+  protected void initDefaultCommand() {
   }
 
   /**

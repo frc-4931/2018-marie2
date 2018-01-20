@@ -8,10 +8,17 @@
 package org.usfirst.frc.team4931.robot;
 
 import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.Relay;
+import edu.wpi.first.wpilibj.Relay.Value;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.buttons.Button;
+import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import org.usfirst.frc.team4931.robot.commands.openClose;
 import org.usfirst.frc.team4931.robot.subsystems.Drivetrain;
 import org.usfirst.frc.team4931.robot.subsystems.Grabber;
 import org.usfirst.frc.team4931.robot.subsystems.Lift;
@@ -32,6 +39,9 @@ public class Robot extends TimedRobot {
   Command m_autonomousCommand;
   SendableChooser<Command> m_chooser = new SendableChooser<>();
   public static Compressor compressor;
+  public static Relay compressorController;
+  public static DoubleSolenoid foo;
+  public static Button button1;
 
   /**
    * This function is run when the robot is first started up and should be
@@ -41,8 +51,20 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     operatorInput = new OperatorInput();
     drivetrain = new Drivetrain();
-    compressor = new Compressor(RobotMap.compressor);
-    compressor.setClosedLoopControl(true);
+    compressor = new Compressor(0);
+    compressor.setClosedLoopControl(false);
+
+    compressorController = new Relay(0);
+
+    foo = new DoubleSolenoid(0, 1);
+
+    button1 = new JoystickButton(operatorInput.stick, 1);
+    //button2.whenPressed(new openClose(button2));
+    
+    SmartDashboard.putBoolean("Pressure Switch", compressor.getPressureSwitchValue());
+    SmartDashboard.putBoolean("Bool", false);
+
+    System.out.println("Bool: false");
   }
 
   /**
@@ -53,11 +75,19 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledInit() {
     compressor.stop();
+    compressorController.set(Value.kOff);
   }
+
+
 
   @Override
   public void disabledPeriodic() {
-    Scheduler.getInstance().run();
+//    Scheduler.getInstance().run();
+    SmartDashboard.putBoolean("Pressure Switch", true);
+//  SmartDashboard.putBoolean("Bool",  operatorInput.stick.getRawButton(1));
+  SmartDashboard.putBoolean("Bool",  true);
+  //button1.get();
+  System.out.println("Bool: True");
   }
 
   /**
@@ -105,6 +135,16 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+
+
+
+  }
+  
+  
+
+  @Override
+  public void robotPeriodic() {
+
   }
 
   /**
@@ -114,7 +154,17 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     Scheduler.getInstance().run();
 
-    drivetrain.driveArcade(1, 0);
+//    if (compressor.getPressureSwitchValue())
+//      compressorController.set(Value.kForward);
+//    else
+//      compressorController.set(Value.kOff);
+
+    SmartDashboard.putBoolean("Pressure Switch", true);
+    SmartDashboard.putBoolean("Bool",  operatorInput.stick.getRawButton(1));
+//    SmartDashboard.putBoolean("Bool",  true);
+    //button1.get();
+    System.out.println("Bool: True");
+    //drivetrain.driveArcade(0, 0);
   }
 
   /**
@@ -122,5 +172,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void testPeriodic() {
+	  SmartDashboard.putBoolean("Bool", true);
+	  SmartDashboard.putBoolean("TEST", true);
+	  SmartDashboard.updateValues();
   }
 }
