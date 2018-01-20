@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import org.usfirst.frc.team4931.robot.commands.CloseGrabber;
 import org.usfirst.frc.team4931.robot.subsystems.Drivetrain;
 import org.usfirst.frc.team4931.robot.subsystems.Grabber;
 import org.usfirst.frc.team4931.robot.subsystems.Lift;
@@ -52,6 +53,8 @@ public class Robot extends TimedRobot {
     compressorController = new Relay(0);
 
     SmartDashboard.putBoolean("Pressure Switch", compressor.getPressureSwitchValue());
+    autoChooser.addObject("Go Forward", new CloseGrabber());
+    SmartDashboard.putData("Auto Select", autoChooser);
   }
 
   /**
@@ -84,15 +87,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
+    //Gets command from Smart Dashboard.
     autonomousCommand = autoChooser.getSelected();
-
-		/*
-     * String autoSelected = SmartDashboard.getString("Auto Selector",
-		 * "Default"); switch(autoSelected) { case "My Auto": autonomousCommand
-		 * = new MyAutoCommand(); break; case "Default Auto": default:
-		 * autonomousCommand = new ExampleCommand(); break; }
-		 */
-
     // schedule the autonomous command (example)
     if (autonomousCommand != null) {
       autonomousCommand.start();
