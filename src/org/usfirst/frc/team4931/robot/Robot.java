@@ -13,10 +13,12 @@ import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.Relay.Value;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.buttons.Button;
+import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import org.usfirst.frc.team4931.robot.commands.CloseGrabber;
 import org.usfirst.frc.team4931.robot.subsystems.Drivetrain;
 import org.usfirst.frc.team4931.robot.subsystems.Grabber;
 import org.usfirst.frc.team4931.robot.subsystems.Lift;
@@ -34,12 +36,13 @@ public class Robot extends TimedRobot {
   public static Drivetrain drivetrain;
   public static Grabber grabber;
   public static Lift lift;
+  Command autonomousCommand;
+  SendableChooser<Command> autoChooser = new SendableChooser<>();
   public static Compressor compressor;
   public static Relay compressorController;
-  public static DoubleSolenoid foo; //Its just a test. Why you heff to be mad?
+  public static DoubleSolenoid foo;
   public static Button button1;
-  Command m_autonomousCommand;
-  SendableChooser<Command> m_chooser = new SendableChooser<>();
+  
 
   /**
    * This function is run when the robot is first started up and should be
@@ -49,12 +52,23 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     operatorInput = new OperatorInput();
     drivetrain = new Drivetrain();
-    compressor = new Compressor(RobotMap.compressor);
+    compressor = new Compressor(0);
     compressor.setClosedLoopControl(false);
 
     compressorController = new Relay(0);
 
+    foo = new DoubleSolenoid(0, 1);
+
+    button1 = new JoystickButton(operatorInput.stick, 1);
+    //button2.whenPressed(new openClose(button2));
+    
     SmartDashboard.putBoolean("Pressure Switch", compressor.getPressureSwitchValue());
+    SmartDashboard.putBoolean("Bool", false);
+
+    System.out.println("Bool: false");
+    
+    autoChooser.addObject("Go Forward", new CloseGrabber());
+    SmartDashboard.putData("Auto Select", autoChooser);
   }
 
   /**
@@ -69,9 +83,15 @@ public class Robot extends TimedRobot {
   }
 
 
+
   @Override
   public void disabledPeriodic() {
-    Scheduler.getInstance().run();
+//    Scheduler.getInstance().run();
+    SmartDashboard.putBoolean("Pressure Switch", true);
+//  SmartDashboard.putBoolean("Bool",  operatorInput.stick.getRawButton(1));
+  SmartDashboard.putBoolean("Bool",  true);
+  //button1.get();
+  System.out.println("Bool: True");
   }
 
   /**
@@ -87,18 +107,11 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    m_autonomousCommand = m_chooser.getSelected();
-
-		/*
-     * String autoSelected = SmartDashboard.getString("Auto Selector",
-		 * "Default"); switch(autoSelected) { case "My Auto": autonomousCommand
-		 * = new MyAutoCommand(); break; case "Default Auto": default:
-		 * autonomousCommand = new ExampleCommand(); break; }
-		 */
-
+    //Gets command from Smart Dashboard.
+    autonomousCommand = autoChooser.getSelected();
     // schedule the autonomous command (example)
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.start();
+    if (autonomousCommand != null) {
+      autonomousCommand.start();
     }
   }
 
@@ -116,19 +129,19 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.cancel();
+    if (autonomousCommand != null) {
+      autonomousCommand.cancel();
     }
-  }
 
+
+
+  }
+  
+  
 
   @Override
   public void robotPeriodic() {
-    if (compressor.getPressureSwitchValue()) {
-      compressorController.set(Value.kForward);
-    } else {
-      compressorController.set(Value.kOff);
-    }
+
   }
 
   /**
@@ -138,8 +151,17 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     Scheduler.getInstance().run();
 
+//    if (compressor.getPressureSwitchValue())
+//      compressorController.set(Value.kForward);
+//    else
+//      compressorController.set(Value.kOff);
+
     SmartDashboard.putBoolean("Pressure Switch", true);
-    SmartDashboard.putBoolean("Bool", operatorInput.stick.getRawButton(1));
+    SmartDashboard.putBoolean("Bool",  operatorInput.stick.getRawButton(1));
+//    SmartDashboard.putBoolean("Bool",  true);
+    //button1.get();
+    System.out.println("Bool: True");
+    //drivetrain.driveArcade(0, 0);
   }
 
   /**
@@ -147,7 +169,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void testPeriodic() {
-    SmartDashboard.putBoolean("Bool", true);
-    SmartDashboard.putBoolean("TEST", true);
+	  SmartDashboard.putBoolean("Bool", true);
+	  SmartDashboard.putBoolean("TEST", true);
+	  SmartDashboard.updateValues();
   }
 }
