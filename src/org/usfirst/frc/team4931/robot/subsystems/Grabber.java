@@ -11,13 +11,21 @@ public class Grabber extends Subsystem {
 	private static final double CAPTURE_SPEED = 1;
 	private static final double RELEASE_SPEED = -1;
 	
+	public Grabber() {
+	  initialization();
+	}
+	
+	private void initialization() {
+	  armMotorLeft = new WPI_TalonSRX(RobotMap.armMotorLeftPort);
+      armMotorRight = new WPI_TalonSRX(RobotMap.armMotorRightPort);
+      armMotorLeft.setInverted(RobotMap.armMotorLeftInverted);
+      armMotorRight.setInverted(RobotMap.armMotorRightInverted);
+	}
+	
 	@Override
 	protected void initDefaultCommand() {
 		// TODO Auto-generated method stub
-		armMotorLeft = new WPI_TalonSRX(RobotMap.armMotorLeftPort);
-		armMotorRight = new WPI_TalonSRX(RobotMap.armMotorRightPort);
-		armMotorLeft.setInverted(RobotMap.armMotorLeftInverted);
-		armMotorRight.setInverted(RobotMap.armMotorRightInverted);
+		
 	}
 	
 	/**
