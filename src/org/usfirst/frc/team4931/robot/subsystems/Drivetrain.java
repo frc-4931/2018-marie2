@@ -10,10 +10,8 @@ import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import jaci.pathfinder.Waypoint;
 import org.usfirst.frc.team4931.robot.Robot;
 import org.usfirst.frc.team4931.robot.RobotMap;
-import jaci.pathfinder.Pathfinder;
 
 public class Drivetrain extends Subsystem {
 
