@@ -1,5 +1,6 @@
 package org.usfirst.frc.team4931.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.CounterBase.EncodingType;
@@ -22,11 +23,8 @@ public class Drivetrain extends Subsystem {
   private static SpeedControllerGroup rightSideMotors;
   private static PIDController leftSidePID;
   private static PIDController rightSidePID;
-  private static Encoder leftEncoder;
-  private static Encoder rightEncoder;
   private static DifferentialDrive drivetrain;
   private static DoubleSolenoid gearBox;
-  private static DoubleSolenoid rightGearBox;
   private static ADXRS450_Gyro gyro;
 
   public Drivetrain() {
@@ -47,16 +45,8 @@ public class Drivetrain extends Subsystem {
     rightSideMotors = new SpeedControllerGroup(rightFrontMotor, rightBackMotor);
 
     //Configure encoders
-    leftEncoder = new Encoder(RobotMap.leftEncoderPorts[0], RobotMap.leftEncoderPorts[1],
-        RobotMap.leftEncoderInverted, EncodingType.k4X);
-    rightEncoder = new Encoder(RobotMap.rightEncoderPorts[0], RobotMap.rightEncoderPorts[1],
-        RobotMap.rightEncoderInverted, EncodingType.k4X);
-    leftEncoder.setDistancePerPulse(1.0 / RobotMap.encoderPPR);
-    rightEncoder.setDistancePerPulse(1.0 / RobotMap.encoderPPR);
-
-    //Configure PID controllers
-    leftSidePID = new PIDController(0.1, 0.1, 0.1, leftEncoder, leftFrontMotor);
-    rightSidePID = new PIDController(0.1, 0.1, 0.1, 0.1, rightEncoder, rightFrontMotor);
+    leftFrontMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 50);
+    rightFrontMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 50);
 
     //Configure pneumatics for 2 speed gearboxes
     gearBox = new DoubleSolenoid(RobotMap.gearBox[0], RobotMap.gearBox[1]);
@@ -96,28 +86,28 @@ public class Drivetrain extends Subsystem {
    * Returns value of left encoder in revolutions.
    */
   public double getLeftEncoder() {
-    return leftEncoder.getDistance();
+    return leftFrontMotor.getSelectedSensorPosition(0);
   }
 
   /**
    * Returns value of right encoder in revolutions.
    */
   public double getRightEncoder() {
-    return rightEncoder.getDistance();
+    return rightFrontMotor.getSelectedSensorPosition(0);
   }
 
   /**
    * Resets value of left encoder.
    */
   public void resetLeftEncoder() {
-    leftEncoder.reset();
+    leftFrontMotor.setSelectedSensorPosition(0, 0, 50);
   }
 
   /**
    * Resets value of right encoder.
    */
   public void resetRightEncoder() {
-    rightEncoder.reset();
+    rightFrontMotor.setSelectedSensorPosition(0, 0, 50);
   }
 
   /**
@@ -125,26 +115,26 @@ public class Drivetrain extends Subsystem {
    *
    * @param target - target in revaluations
    */
-  public void setLeftPIDTaret(double target) {
-    leftSidePID.setSetpoint(target * RobotMap.encoderPPR);
-  }
+//  public void setLeftPIDTaret(double target) {
+//    leftSidePID.setSetpoint(target * RobotMap.encoderPPR);
+//  }
 
   /**
    * Sets the target for the right side PID loop in revaluations
    *
    * @param target - target in revaluations
    */
-  public void setRightPIDTaret(double target) {
-    rightSidePID.setSetpoint(target * RobotMap.encoderPPR);
-  }
+//  public void setRightPIDTaret(double target) {
+//    rightSidePID.setSetpoint(target * RobotMap.encoderPPR);
+//  }
 
-  public boolean leftPIDOnTarget() {
-    return leftSidePID.onTarget();
-  }
-
-  public boolean rightPIOnTarget() {
-    return rightSidePID.onTarget();
-  }
+//  public boolean leftPIDOnTarget() {
+//    return leftSidePID.onTarget();
+//  }
+//
+//  public boolean rightPIOnTarget() {
+//    return rightSidePID.onTarget();
+//  }
 
   /**
    * Frees PID controllers.
@@ -205,7 +195,6 @@ public class Drivetrain extends Subsystem {
     leftSideMotors.disable();
     rightSideMotors.disable();
     gearBox.set(Value.kOff);
-    rightGearBox.set(Value.kOff);
   }
 
 }

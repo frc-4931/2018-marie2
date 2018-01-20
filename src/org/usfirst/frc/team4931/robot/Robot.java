@@ -8,12 +8,9 @@
 package org.usfirst.frc.team4931.robot;
 
 import edu.wpi.first.wpilibj.Compressor;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.Relay.Value;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.buttons.Button;
-import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -22,6 +19,7 @@ import org.usfirst.frc.team4931.robot.commands.CloseGrabber;
 import org.usfirst.frc.team4931.robot.subsystems.Drivetrain;
 import org.usfirst.frc.team4931.robot.subsystems.Grabber;
 import org.usfirst.frc.team4931.robot.subsystems.Lift;
+
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -36,13 +34,10 @@ public class Robot extends TimedRobot {
   public static Drivetrain drivetrain;
   public static Grabber grabber;
   public static Lift lift;
-  Command autonomousCommand;
-  SendableChooser<Command> autoChooser = new SendableChooser<>();
   public static Compressor compressor;
   public static Relay compressorController;
-  public static DoubleSolenoid foo;
-  public static Button button1;
-  
+  Command autonomousCommand;
+  SendableChooser<Command> autoChooser = new SendableChooser<>();
 
   /**
    * This function is run when the robot is first started up and should be
@@ -52,21 +47,12 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     operatorInput = new OperatorInput();
     drivetrain = new Drivetrain();
-    compressor = new Compressor(0);
+    compressor = new Compressor(RobotMap.compressor);
     compressor.setClosedLoopControl(false);
 
     compressorController = new Relay(0);
 
-    foo = new DoubleSolenoid(0, 1);
-
-    button1 = new JoystickButton(operatorInput.stick, 1);
-    //button2.whenPressed(new openClose(button2));
-    
     SmartDashboard.putBoolean("Pressure Switch", compressor.getPressureSwitchValue());
-    SmartDashboard.putBoolean("Bool", false);
-
-    System.out.println("Bool: false");
-    
     autoChooser.addObject("Go Forward", new CloseGrabber());
     SmartDashboard.putData("Auto Select", autoChooser);
   }
@@ -83,15 +69,9 @@ public class Robot extends TimedRobot {
   }
 
 
-
   @Override
   public void disabledPeriodic() {
-//    Scheduler.getInstance().run();
-    SmartDashboard.putBoolean("Pressure Switch", true);
-//  SmartDashboard.putBoolean("Bool",  operatorInput.stick.getRawButton(1));
-  SmartDashboard.putBoolean("Bool",  true);
-  //button1.get();
-  System.out.println("Bool: True");
+    Scheduler.getInstance().run();
   }
 
   /**
@@ -132,16 +112,16 @@ public class Robot extends TimedRobot {
     if (autonomousCommand != null) {
       autonomousCommand.cancel();
     }
-
-
-
   }
-  
-  
+
 
   @Override
   public void robotPeriodic() {
-
+    if (compressor.getPressureSwitchValue()) {
+      compressorController.set(Value.kForward);
+    } else {
+      compressorController.set(Value.kOff);
+    }
   }
 
   /**
@@ -151,17 +131,9 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     Scheduler.getInstance().run();
 
-//    if (compressor.getPressureSwitchValue())
-//      compressorController.set(Value.kForward);
-//    else
-//      compressorController.set(Value.kOff);
-
     SmartDashboard.putBoolean("Pressure Switch", true);
-    SmartDashboard.putBoolean("Bool",  operatorInput.stick.getRawButton(1));
-//    SmartDashboard.putBoolean("Bool",  true);
-    //button1.get();
-    System.out.println("Bool: True");
-    //drivetrain.driveArcade(0, 0);
+    SmartDashboard.putBoolean("Bool", operatorInput.stick.getRawButton(1));
+    SmartDashboard.putNumber("Encoder", drivetrain.getLeftEncoder());
   }
 
   /**
@@ -169,8 +141,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void testPeriodic() {
-	  SmartDashboard.putBoolean("Bool", true);
-	  SmartDashboard.putBoolean("TEST", true);
-	  SmartDashboard.updateValues();
+    SmartDashboard.putBoolean("Bool", true);
+    SmartDashboard.putBoolean("TEST", true);
   }
 }
