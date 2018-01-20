@@ -56,8 +56,6 @@ public class Robot extends TimedRobot {
 
     compressorController = new Relay(0);
 
-    foo = new DoubleSolenoid(0, 1);
-
     button1 = new JoystickButton(operatorInput.stick, 1);
     //button2.whenPressed(new openClose(button2));
     

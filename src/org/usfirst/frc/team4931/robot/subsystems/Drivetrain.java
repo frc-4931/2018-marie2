@@ -58,7 +58,7 @@ public class Drivetrain extends Subsystem {
     rightSidePID = new PIDController(0.1, 0.1, 0.1, 0.1, rightEncoder, rightFrontMotor);
 
     //Configure pneumatics for 2 speed gearboxes
-    leftGearBox = new DoubleSolenoid(RobotMap.leftGearBox[0], RobotMap.leftGearBox[1]);
+    leftGearBox = new DoubleSolenoid(RobotMap.gearBox[0], RobotMap.gearBox[1]);
     rightGearBox = new DoubleSolenoid(RobotMap.rightGearBox[0], RobotMap.rightGearBox[1]);
 
     //Create drivetrain from left and right side motor groups
