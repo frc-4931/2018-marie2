@@ -136,6 +136,7 @@ public class Robot extends TimedRobot {
 
     SmartDashboard.putBoolean("Pressure Switch", true);
     SmartDashboard.putBoolean("Bool", operatorInput.stick.getRawButton(1));
+    SmartDashboard.putNumber("Encoder", drivetrain.getLeftEncoder());
   }
 
   /**

@@ -17,16 +17,17 @@ public class DriveToDistance extends Command {
 
   @Override
   protected void initialize() {
-    Robot.drivetrain.setLeftPIDTaret(targetDistance);
-    Robot.drivetrain.setRightPIDTaret(targetDistance);
+//    Robot.drivetrain.setLeftPIDTaret(targetDistance);
+//    Robot.drivetrain.setRightPIDTaret(targetDistance);
   }
 
   @Override
   protected boolean isFinished() {
-    if (Robot.drivetrain.leftPIDOnTarget() && Robot.drivetrain.rightPIOnTarget()) {
-      return true;
-    } else {
-      return false;
-    }
+//    if (Robot.drivetrain.leftPIDOnTarget() && Robot.drivetrain.rightPIOnTarget()) {
+//      return true;
+//    } else {
+//      return false;
+//    }
+    return true;
   }
 }
