@@ -8,8 +8,7 @@ public class CloseGrabber extends Command {
 	
 	public CloseGrabber() {
 		requires(Robot.grabber);
-		// enable this if using claw
-		//setInterruptible(false);
+		setInterruptible(false);
 	}
 	
 	@Override
