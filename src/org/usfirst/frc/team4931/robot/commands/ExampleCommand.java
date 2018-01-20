@@ -8,41 +8,41 @@
 package org.usfirst.frc.team4931.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
-import org.usfirst.frc.team4931.robot.Robot;
 
 /**
  * An example command.  You can replace me with your own command.
  */
 public class ExampleCommand extends Command {
-	public ExampleCommand() {
-		// Use requires() here to declare subsystem dependencies
-		//requires(Robot.kExampleSubsystem);
-	}
 
-	// Called just before this Command runs the first time
-	@Override
-	protected void initialize() {
-	}
+  public ExampleCommand() {
+    // Use requires() here to declare subsystem dependencies
+    //requires(Robot.kExampleSubsystem);
+  }
 
-	// Called repeatedly when this Command is scheduled to run
-	@Override
-	protected void execute() {
-	}
+  // Called just before this Command runs the first time
+  @Override
+  protected void initialize() {
+  }
 
-	// Make this return true when this Command no longer needs to run execute()
-	@Override
-	protected boolean isFinished() {
-		return false;
-	}
+  // Called repeatedly when this Command is scheduled to run
+  @Override
+  protected void execute() {
+  }
 
-	// Called once after isFinished returns true
-	@Override
-	protected void end() {
-	}
+  // Make this return true when this Command no longer needs to run execute()
+  @Override
+  protected boolean isFinished() {
+    return false;
+  }
 
-	// Called when another command which requires one or more of the same
-	// subsystems is scheduled to run
-	@Override
-	protected void interrupted() {
-	}
+  // Called once after isFinished returns true
+  @Override
+  protected void end() {
+  }
+
+  // Called when another command which requires one or more of the same
+  // subsystems is scheduled to run
+  @Override
+  protected void interrupted() {
+  }
 }
