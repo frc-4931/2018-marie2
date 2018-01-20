@@ -11,11 +11,14 @@ import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.Relay.Value;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team4931.robot.subsystems.Drivetrain;
 import org.usfirst.frc.team4931.robot.subsystems.Grabber;
 import org.usfirst.frc.team4931.robot.subsystems.Lift;
+
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -30,10 +33,10 @@ public class Robot extends TimedRobot {
   public static Drivetrain drivetrain;
   public static Grabber grabber;
   public static Lift lift;
-  Command autonomousCommand;
-  SendableChooser<Command> autoChooser = new SendableChooser<>();
   public static Compressor compressor;
   public static Relay compressorController;
+  Command autonomousCommand;
+  SendableChooser<Command> autoChooser = new SendableChooser<>();
 
   /**
    * This function is run when the robot is first started up and should be
@@ -134,6 +137,7 @@ public class Robot extends TimedRobot {
 
     SmartDashboard.putBoolean("Pressure Switch", true);
     SmartDashboard.putBoolean("Bool", operatorInput.stick.getRawButton(1));
+    SmartDashboard.putNumber("Encoder", drivetrain.getLeftEncoder());
   }
 
   /**
