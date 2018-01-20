@@ -10,7 +10,6 @@ import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import org.usfirst.frc.team4931.robot.Robot;
 import org.usfirst.frc.team4931.robot.RobotMap;
 
 public class Drivetrain extends Subsystem {
@@ -26,7 +25,7 @@ public class Drivetrain extends Subsystem {
   private static Encoder leftEncoder;
   private static Encoder rightEncoder;
   private static DifferentialDrive drivetrain;
-  private static DoubleSolenoid leftGearBox;
+  private static DoubleSolenoid gearBox;
   private static DoubleSolenoid rightGearBox;
   private static ADXRS450_Gyro gyro;
 
@@ -48,8 +47,10 @@ public class Drivetrain extends Subsystem {
     rightSideMotors = new SpeedControllerGroup(rightFrontMotor, rightBackMotor);
 
     //Configure encoders
-    leftEncoder = new Encoder(RobotMap.leftEncoderPorts[0], RobotMap.leftEncoderPorts[1], RobotMap.leftEncoderInverted, EncodingType.k4X);
-    rightEncoder = new Encoder(RobotMap.rightEncoderPorts[0], RobotMap.rightEncoderPorts[1], RobotMap.rightEncoderInverted, EncodingType.k4X);
+    leftEncoder = new Encoder(RobotMap.leftEncoderPorts[0], RobotMap.leftEncoderPorts[1],
+        RobotMap.leftEncoderInverted, EncodingType.k4X);
+    rightEncoder = new Encoder(RobotMap.rightEncoderPorts[0], RobotMap.rightEncoderPorts[1],
+        RobotMap.rightEncoderInverted, EncodingType.k4X);
     leftEncoder.setDistancePerPulse(1.0 / RobotMap.encoderPPR);
     rightEncoder.setDistancePerPulse(1.0 / RobotMap.encoderPPR);
 
@@ -58,8 +59,7 @@ public class Drivetrain extends Subsystem {
     rightSidePID = new PIDController(0.1, 0.1, 0.1, 0.1, rightEncoder, rightFrontMotor);
 
     //Configure pneumatics for 2 speed gearboxes
-    leftGearBox = new DoubleSolenoid(RobotMap.gearBox[0], RobotMap.gearBox[1]);
-    rightGearBox = new DoubleSolenoid(RobotMap.gearBox[0], RobotMap.gearBox[1]);
+    gearBox = new DoubleSolenoid(RobotMap.gearBox[0], RobotMap.gearBox[1]);
 
     //Create drivetrain from left and right side motor groups
     drivetrain = new DifferentialDrive(leftSideMotors, rightSideMotors);
@@ -158,16 +158,14 @@ public class Drivetrain extends Subsystem {
    * Switches the Drivetrain to the high speed gear.
    */
   public void switchHighGear() {
-    leftGearBox.set(Value.kForward);
-    rightGearBox.set(Value.kForward);
+    gearBox.set(Value.kForward);
   }
 
   /**
    * Switches the Drivetrain to the low speed gear.
    */
   public void swithLowGear() {
-    leftGearBox.set(Value.kReverse);
-    rightGearBox.set(Value.kReverse);
+    gearBox.set(Value.kReverse);
   }
 
   /**
@@ -206,7 +204,7 @@ public class Drivetrain extends Subsystem {
   public void disable() {
     leftSideMotors.disable();
     rightSideMotors.disable();
-    leftGearBox.set(Value.kOff);
+    gearBox.set(Value.kOff);
     rightGearBox.set(Value.kOff);
   }
 

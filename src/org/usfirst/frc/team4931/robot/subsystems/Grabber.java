@@ -1,11 +1,12 @@
 package org.usfirst.frc.team4931.robot.subsystems;
 
-import org.usfirst.frc.team4931.robot.RobotMap;
-import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.command.Subsystem;
+import org.usfirst.frc.team4931.robot.RobotMap;
 
 public class Grabber extends Subsystem {
+
   private DoubleSolenoid pneumatic;
 
   public Grabber() {
