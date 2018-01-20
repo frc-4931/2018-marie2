@@ -40,7 +40,7 @@ public class Robot extends TimedRobot {
   SendableChooser<Command> m_chooser = new SendableChooser<>();
   public static Compressor compressor;
   public static Relay compressorController;
-  public static DoubleSolenoid foo;
+  public static DoubleSolenoid foo; //Its just a test. Why you heff to be mad?
   public static Button button1;
 
   /**
