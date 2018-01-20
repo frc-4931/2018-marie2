@@ -7,6 +7,7 @@ import org.usfirst.frc.team4931.robot.Robot;
  * Created by jcrane on 1/16/18.
  */
 public class DriveToDistance extends Command {
+
   private double targetDistance;
 
   DriveToDistance(double targetDistance) {
@@ -22,9 +23,10 @@ public class DriveToDistance extends Command {
 
   @Override
   protected boolean isFinished() {
-    if (Robot.drivetrain.leftPIDOnTarget() && Robot.drivetrain.rightPIOnTarget())
+    if (Robot.drivetrain.leftPIDOnTarget() && Robot.drivetrain.rightPIOnTarget()) {
       return true;
-    else
+    } else {
       return false;
+    }
   }
 }
