@@ -2,20 +2,21 @@ package org.usfirst.frc.team4931.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
 import org.usfirst.frc.team4931.robot.Robot;
+import org.usfirst.frc.team4931.robot.subsystems.FixedLiftHeight;
 
 public class SetLiftSetpoint extends Command {
 
-  private double setpoint;
+  private FixedLiftHeight liftHeight;
 
-  public SetLiftSetpoint(double setpoint) {
-    this.setpoint = setpoint;
+  public SetLiftSetpoint(FixedLiftHeight liftHeight) {
+    this.liftHeight = liftHeight;
     requires(Robot.lift);
   }
 
   @Override
   protected void initialize() {
     Robot.lift.enable();
-    Robot.lift.setSetpoint(setpoint);
+    Robot.lift.setLiftHeight(liftHeight);
   }
 
   @Override
