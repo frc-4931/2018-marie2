@@ -18,7 +18,6 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import org.usfirst.frc.team4931.robot.commands.openClose;
 import org.usfirst.frc.team4931.robot.subsystems.Drivetrain;
 import org.usfirst.frc.team4931.robot.subsystems.Grabber;
 import org.usfirst.frc.team4931.robot.subsystems.Lift;
@@ -57,12 +56,8 @@ public class Robot extends TimedRobot {
     compressorController = new Relay(0);
 
     button1 = new JoystickButton(operatorInput.stick, 1);
-    //button2.whenPressed(new openClose(button2));
     
     SmartDashboard.putBoolean("Pressure Switch", compressor.getPressureSwitchValue());
-    SmartDashboard.putBoolean("Bool", false);
-
-    System.out.println("Bool: false");
   }
 
   /**
@@ -80,12 +75,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledPeriodic() {
-//    Scheduler.getInstance().run();
-    SmartDashboard.putBoolean("Pressure Switch", true);
-//  SmartDashboard.putBoolean("Bool",  operatorInput.stick.getRawButton(1));
-  SmartDashboard.putBoolean("Bool",  true);
-  //button1.get();
-  System.out.println("Bool: True");
+    Scheduler.getInstance().run();
   }
 
   /**
@@ -133,16 +123,16 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
-
-
-
   }
   
   
 
   @Override
   public void robotPeriodic() {
-
+    if (compressor.getPressureSwitchValue())
+      compressorController.set(Value.kForward);
+    else
+      compressorController.set(Value.kOff);
   }
 
   /**
@@ -152,17 +142,8 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     Scheduler.getInstance().run();
 
-//    if (compressor.getPressureSwitchValue())
-//      compressorController.set(Value.kForward);
-//    else
-//      compressorController.set(Value.kOff);
-
     SmartDashboard.putBoolean("Pressure Switch", true);
     SmartDashboard.putBoolean("Bool",  operatorInput.stick.getRawButton(1));
-//    SmartDashboard.putBoolean("Bool",  true);
-    //button1.get();
-    System.out.println("Bool: True");
-    //drivetrain.driveArcade(0, 0);
   }
 
   /**
@@ -172,6 +153,5 @@ public class Robot extends TimedRobot {
   public void testPeriodic() {
 	  SmartDashboard.putBoolean("Bool", true);
 	  SmartDashboard.putBoolean("TEST", true);
-	  SmartDashboard.updateValues();
   }
 }
