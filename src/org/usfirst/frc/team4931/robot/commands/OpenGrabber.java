@@ -17,8 +17,7 @@ public class OpenGrabber extends Command {
 
   @Override
   protected boolean isFinished() {
-    // TODO Auto-generated method stub
-    return false;
+    return true;
   }
 
 }
