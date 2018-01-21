@@ -38,8 +38,9 @@ public class RobotMap {
    * [0] is forward position port, [1] is backward position port
    */
   public static final int[] gearBox = {4, 5};
-  public static final int[] grabberPorts = {2, 3};
-
+  public static final int[] leftGrabberPorts = {2, 3};
+  public static final int[] rightGrabberPorts = {0, 1};
+  
   public static final int compressor = 6;
 
   public static final SPI.Port gyroPort = SPI.Port.kOnboardCS0;

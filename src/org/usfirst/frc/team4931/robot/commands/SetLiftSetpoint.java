@@ -15,12 +15,12 @@ public class SetLiftSetpoint extends Command {
 
   @Override
   protected void initialize() {
-    Robot.lift.enable();
+//    Robot.lift.enable();
     Robot.lift.setLiftHeight(liftHeight);
   }
 
   @Override
   protected boolean isFinished() {
-    return Robot.lift.onTarget();
+    return Robot.lift.isFinished();
   }
 }
