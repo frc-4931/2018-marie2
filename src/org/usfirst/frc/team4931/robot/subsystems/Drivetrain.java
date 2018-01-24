@@ -3,11 +3,8 @@ package org.usfirst.frc.team4931.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
-import edu.wpi.first.wpilibj.CounterBase.EncodingType;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
-import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
@@ -21,8 +18,6 @@ public class Drivetrain extends Subsystem {
   private static WPI_TalonSRX rightBackMotor;
   private static SpeedControllerGroup leftSideMotors;
   private static SpeedControllerGroup rightSideMotors;
-  private static PIDController leftSidePID;
-  private static PIDController rightSidePID;
   private static DifferentialDrive drivetrain;
   private static DoubleSolenoid gearBox;
   private static ADXRS450_Gyro gyro;
@@ -110,24 +105,24 @@ public class Drivetrain extends Subsystem {
     rightFrontMotor.setSelectedSensorPosition(0, 0, 50);
   }
 
-  /**
-   * Sets the target for the left side PID loop in revaluations
-   *
-   * @param target - target in revaluations
-   */
+//  /**
+//   * Sets the target for the left side PID loop in revaluations
+//   *
+//   * @param target - target in revaluations
+//   */
 //  public void setLeftPIDTaret(double target) {
 //    leftSidePID.setSetpoint(target * RobotMap.encoderPPR);
 //  }
-
-  /**
-   * Sets the target for the right side PID loop in revaluations
-   *
-   * @param target - target in revaluations
-   */
+//
+//  /**
+//   * Sets the target for the right side PID loop in revaluations
+//   *
+//   * @param target - target in revaluations
+//   */
 //  public void setRightPIDTaret(double target) {
 //    rightSidePID.setSetpoint(target * RobotMap.encoderPPR);
 //  }
-
+//
 //  public boolean leftPIDOnTarget() {
 //    return leftSidePID.onTarget();
 //  }
@@ -135,14 +130,14 @@ public class Drivetrain extends Subsystem {
 //  public boolean rightPIOnTarget() {
 //    return rightSidePID.onTarget();
 //  }
-
-  /**
-   * Frees PID controllers.
-   */
-  public void freePIDControllers() {
-    leftSidePID.free();
-    rightSidePID.free();
-  }
+//
+//  /**
+//   * Frees PID controllers.
+//   */
+//  public void freePIDControllers() {
+//    leftSidePID.free();
+//    rightSidePID.free();
+//  }
 
   /**
    * Switches the Drivetrain to the high speed gear.

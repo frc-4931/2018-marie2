@@ -53,7 +53,7 @@ public class Robot extends TimedRobot {
     compressorController = new Relay(0);
 
     SmartDashboard.putBoolean("Pressure Switch", compressor.getPressureSwitchValue());
-    autoChooser.addObject("Go Forward", new CloseGrabber());
+    //autoChooser.addObject("Go Forward");
     SmartDashboard.putData("Auto Select", autoChooser);
   }
 
@@ -67,7 +67,6 @@ public class Robot extends TimedRobot {
     compressor.stop();
     compressorController.set(Value.kOff);
   }
-
 
   @Override
   public void disabledPeriodic() {
@@ -117,7 +116,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotPeriodic() {
-    if (compressor.getPressureSwitchValue()) {
+    if (!compressor.getPressureSwitchValue()) {
       compressorController.set(Value.kForward);
     } else {
       compressorController.set(Value.kOff);
