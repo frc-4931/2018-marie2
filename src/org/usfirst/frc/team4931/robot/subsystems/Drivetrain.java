@@ -1,6 +1,8 @@
 package org.usfirst.frc.team4931.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -36,6 +38,10 @@ public class Drivetrain extends Subsystem {
     leftBackMotor.setInverted(RobotMap.leftBackMotorInverted);
     rightFrontMotor.setInverted(RobotMap.rightFrontMotorInverted);
     rightBackMotor.setInverted(RobotMap.rightBackMotorInverted);
+    leftFrontMotor.setNeutralMode(NeutralMode.Brake);
+    leftBackMotor.setNeutralMode(NeutralMode.Brake);
+    rightFrontMotor.setNeutralMode(NeutralMode.Brake);
+    rightBackMotor.setNeutralMode(NeutralMode.Brake);
     leftSideMotors = new SpeedControllerGroup(leftFrontMotor, leftBackMotor);
     rightSideMotors = new SpeedControllerGroup(rightFrontMotor, rightBackMotor);
 
@@ -105,39 +111,25 @@ public class Drivetrain extends Subsystem {
     rightFrontMotor.setSelectedSensorPosition(0, 0, 50);
   }
 
-//  /**
-//   * Sets the target for the left side PID loop in revaluations
-//   *
-//   * @param target - target in revaluations
-//   */
-//  public void setLeftPIDTaret(double target) {
-//    leftSidePID.setSetpoint(target * RobotMap.encoderPPR);
-//  }
-//
-//  /**
-//   * Sets the target for the right side PID loop in revaluations
-//   *
-//   * @param target - target in revaluations
-//   */
-//  public void setRightPIDTaret(double target) {
-//    rightSidePID.setSetpoint(target * RobotMap.encoderPPR);
-//  }
-//
-//  public boolean leftPIDOnTarget() {
-//    return leftSidePID.onTarget();
-//  }
-//
-//  public boolean rightPIOnTarget() {
-//    return rightSidePID.onTarget();
-//  }
-//
-//  /**
-//   * Frees PID controllers.
-//   */
-//  public void freePIDControllers() {
-//    leftSidePID.free();
-//    rightSidePID.free();
-//  }
+  /**
+   * Sets the target for the left side motors in revaluations
+   *
+   * @param target - target in revaluations
+   */
+  public void setLeftSetPoint(double target) {
+    leftFrontMotor.set(ControlMode.MotionMagic, target * RobotMap.encoderPPR);
+    leftBackMotor.follow(leftFrontMotor);
+  }
+
+  /**
+   * Sets the target for the right side motors in revaluations
+   *
+   * @param target - target in revaluations
+   */
+  public void setRightSetPoint(double target) {
+    rightFrontMotor.set(ControlMode.MotionMagic, target * RobotMap.encoderPPR);
+    rightBackMotor.follow(rightFrontMotor);
+  }
 
   /**
    * Switches the Drivetrain to the high speed gear.
