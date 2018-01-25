@@ -53,7 +53,19 @@ public class Robot extends TimedRobot {
     compressorController = new Relay(0);
 
     SmartDashboard.putBoolean("Pressure Switch", compressor.getPressureSwitchValue());
-    //autoChooser.addObject("Go Forward");
+    autoChooser.setName("Auto Chooser Stage 1");
+    autoChooser.addObject("Go Forward", new Command() {
+      @Override
+      protected boolean isFinished() {
+        return true;
+      }
+    });
+    autoChooser.addDefault("Go Side", new Command() {
+      @Override
+      protected boolean isFinished() {
+        return true;
+      }
+    });
     SmartDashboard.putData("Auto Select", autoChooser);
   }
 
@@ -92,6 +104,8 @@ public class Robot extends TimedRobot {
     if (autonomousCommand != null) {
       autonomousCommand.start();
     }
+    
+    SmartDashboard.putString("String", SmartDashboard.getString("Auto Chooser Stage 1", "None"));
   }
 
   /**
