@@ -8,6 +8,7 @@
 package org.usfirst.frc.team4931.robot;
 
 import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.Relay.Value;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -15,6 +16,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import java.lang.reflect.Array;
 import org.usfirst.frc.team4931.robot.commands.CloseGrabber;
 import org.usfirst.frc.team4931.robot.subsystems.Drivetrain;
 import org.usfirst.frc.team4931.robot.subsystems.Grabber;
@@ -36,8 +38,10 @@ public class Robot extends TimedRobot {
   public static Lift lift;
   public static Compressor compressor;
   public static Relay compressorController;
+  public static boolean runCompressor;
+  SendableChooser<String> autoChooserPos = new SendableChooser<>();
+  SendableChooser<String> autoChooserTarget = new SendableChooser<>();
   Command autonomousCommand;
-  SendableChooser<Command> autoChooser = new SendableChooser<>();
 
   /**
    * This function is run when the robot is first started up and should be
@@ -49,24 +53,20 @@ public class Robot extends TimedRobot {
     drivetrain = new Drivetrain();
     compressor = new Compressor(RobotMap.compressor);
     compressor.setClosedLoopControl(false);
+    runCompressor = true;
 
     compressorController = new Relay(0);
 
     SmartDashboard.putBoolean("Pressure Switch", compressor.getPressureSwitchValue());
-    autoChooser.setName("Auto Chooser Stage 1");
-    autoChooser.addObject("Go Forward", new Command() {
-      @Override
-      protected boolean isFinished() {
-        return true;
-      }
-    });
-    autoChooser.addDefault("Go Side", new Command() {
-      @Override
-      protected boolean isFinished() {
-        return true;
-      }
-    });
-    SmartDashboard.putData("Auto Select", autoChooser);
+
+    //Create position selector to the SmartDashboard
+    autoChooserPos.addDefault("Position 1", "pos1");
+    autoChooserPos.addObject("Position 2", "pos2");
+    autoChooserPos.addObject("Position 3", "pos3");
+    SmartDashboard.putData("Position Selection", autoChooserPos);
+
+    //Create strategy selector
+    autoChooserTarget.addDefault("Default Strategy", "def");
   }
 
   /**
@@ -76,7 +76,6 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void disabledInit() {
-    compressor.stop();
     compressorController.set(Value.kOff);
   }
 
@@ -98,14 +97,13 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    //Gets command from Smart Dashboard.
-    autonomousCommand = autoChooser.getSelected();
-    // schedule the autonomous command (example)
-    if (autonomousCommand != null) {
-      autonomousCommand.start();
-    }
-    
-    SmartDashboard.putString("String", SmartDashboard.getString("Auto Chooser Stage 1", "None"));
+    char[] fieldPos = DriverStation.getInstance().getGameSpecificMessage().toCharArray();
+    String autoPos = autoChooserPos.getSelected();
+    String autoTarget = autoChooserTarget.getSelected();
+    String targetCommand = autoPos+"-"+autoTarget+"-"+fieldPos[0]+fieldPos[1];
+    SmartDashboard.putString("Auto String", targetCommand);
+
+
   }
 
   /**
@@ -130,10 +128,12 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotPeriodic() {
-    if (!compressor.getPressureSwitchValue()) {
-      compressorController.set(Value.kForward);
-    } else {
-      compressorController.set(Value.kOff);
+    if (runCompressor) {
+      if (!compressor.getPressureSwitchValue()) {
+        compressorController.set(Value.kForward);
+      } else {
+        compressorController.set(Value.kOff);
+      }
     }
   }
 
@@ -147,6 +147,10 @@ public class Robot extends TimedRobot {
     SmartDashboard.putBoolean("Pressure Switch", true);
     SmartDashboard.putBoolean("Bool", operatorInput.stick.getRawButton(1));
     SmartDashboard.putNumber("Encoder", drivetrain.getLeftEncoder());
+
+    drivetrain.driveArcade(operatorInput.stick.getY(), operatorInput.stick.getZ());
+    SmartDashboard.putNumber("Joy y", operatorInput.stick.getY());
+    SmartDashboard.putNumber("Joy z", operatorInput.stick.getZ());
   }
 
   /**
