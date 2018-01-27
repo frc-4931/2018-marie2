@@ -7,21 +7,20 @@ public class FieldAnalyzer {
 
   private char fieldPos[]; // position of switches and scale
   private EnumMap<Strategy, String> strategyOptions = new EnumMap<>(Strategy.class);
-  private int robotStartingPos; // position of the robot before auto
+  private StartingPos robotStartingPos; // position of the robot before auto
   private char strategyPick[]; // selected strategy by the drive team
 
-  public FieldAnalyzer() {
-    strategyPick = SmartDashboard.getString("Strategy Field", "nnnnn").toLowerCase().toCharArray();
-    robotStartingPos = Integer.parseInt(SmartDashboard.getString("Position Selection", "1"));
-  }
-
   public void setFieldPosition(char[] fieldPosition) {
-    fieldPos = fieldPosition;
+    fieldPos = fieldPosition; // Removing bugs created more bugs
   }
 
   public void predetermineStrategy() {
+    strategyPick = SmartDashboard.getString("Strategy Field", "nnnnn").toLowerCase().toCharArray();
+    robotStartingPos = StartingPos
+        .valueOf(SmartDashboard.getString("Position Selection", StartingPos.LEFT.name()));
     for (Strategy s : Strategy.values()) {
       if (strategyPick[s.ordinal()] == 'y') {
+        int[][] point = Waypoints.WAYPOINTS.get(robotStartingPos).get(s);
         strategyOptions.put(s, "test");
       }
     }
