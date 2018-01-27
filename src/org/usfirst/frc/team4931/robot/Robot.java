@@ -7,6 +7,7 @@
 
 package org.usfirst.frc.team4931.robot;
 
+import org.usfirst.frc.team4931.robot.field.FieldAnalyzer;
 import org.usfirst.frc.team4931.robot.subsystems.Drivetrain;
 import org.usfirst.frc.team4931.robot.subsystems.Grabber;
 import org.usfirst.frc.team4931.robot.subsystems.Lift;
@@ -33,6 +34,7 @@ public class Robot extends TimedRobot {
   public static Drivetrain drivetrain;
   public static Grabber grabber;
   public static Lift lift;
+  private FieldAnalyzer fieldAnalyzer;
   public static Compressor compressor;
   public static Relay compressorController;
   public static boolean runCompressor;
@@ -48,6 +50,7 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     operatorInput = new OperatorInput();
     drivetrain = new Drivetrain();
+    fieldAnalyzer = new FieldAnalyzer();
     compressor = new Compressor(RobotMap.compressor);
     compressor.setClosedLoopControl(false);
     runCompressor = true;
@@ -57,13 +60,15 @@ public class Robot extends TimedRobot {
     SmartDashboard.putBoolean("Pressure Switch", compressor.getPressureSwitchValue());
 
     // Create position selector to the SmartDashboard
-    autoChooserPos.addDefault("Position 1", "pos1");
-    autoChooserPos.addObject("Position 2", "pos2");
-    autoChooserPos.addObject("Position 3", "pos3");
+    autoChooserPos.addDefault("Position 1", "1");
+    autoChooserPos.addObject("Position 2", "2");
+    autoChooserPos.addObject("Position 3", "3");
     SmartDashboard.putData("Position Selection", autoChooserPos);
 
     // Create strategy selector
     autoChooserTarget.addDefault("Default Strategy", "def");
+
+    fieldAnalyzer.predetermineStrategy();
   }
 
   /**
@@ -96,12 +101,12 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     char[] fieldPos = DriverStation.getInstance().getGameSpecificMessage().toCharArray();
+    fieldAnalyzer.setFieldPosition(fieldPos);
+    fieldAnalyzer.calculateStrategy();
     String autoPos = autoChooserPos.getSelected();
     String autoTarget = autoChooserTarget.getSelected();
     String targetCommand = autoPos + "-" + autoTarget + "-" + fieldPos[0] + fieldPos[1];
     SmartDashboard.putString("Auto String", targetCommand);
-
-
   }
 
   /**
