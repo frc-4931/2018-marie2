@@ -123,6 +123,7 @@ public class Robot extends TimedRobot {
     if (autonomousCommand != null) {
       autonomousCommand.cancel();
     }
+    drivetrain.switchHighGear();
   }
 
 
@@ -148,7 +149,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putBoolean("Bool", operatorInput.stick.getRawButton(1));
     SmartDashboard.putNumber("Encoder", drivetrain.getLeftEncoder());
 
-    drivetrain.driveArcade(operatorInput.stick.getY(), operatorInput.stick.getZ());
+    drivetrain.driveArcade(operatorInput.stick.getZ(), operatorInput.stick.getY());
     SmartDashboard.putNumber("Joy y", operatorInput.stick.getY());
     SmartDashboard.putNumber("Joy z", operatorInput.stick.getZ());
   }
