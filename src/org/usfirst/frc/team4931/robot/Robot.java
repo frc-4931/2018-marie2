@@ -7,6 +7,10 @@
 
 package org.usfirst.frc.team4931.robot;
 
+import org.usfirst.frc.team4931.robot.field.FieldAnalyzer;
+import org.usfirst.frc.team4931.robot.subsystems.Drivetrain;
+import org.usfirst.frc.team4931.robot.subsystems.Grabber;
+import org.usfirst.frc.team4931.robot.subsystems.Lift;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Relay;
@@ -16,18 +20,12 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import java.lang.reflect.Array;
-import org.usfirst.frc.team4931.robot.commands.CloseGrabber;
-import org.usfirst.frc.team4931.robot.subsystems.Drivetrain;
-import org.usfirst.frc.team4931.robot.subsystems.Grabber;
-import org.usfirst.frc.team4931.robot.subsystems.Lift;
 
 
 /**
- * The VM is configured to automatically run this class, and to call the
- * functions corresponding to each mode, as described in the TimedRobot
- * documentation. If you change the name of this class or the package after
- * creating this project, you must also update the build.properties file in the
+ * The VM is configured to automatically run this class, and to call the functions corresponding to
+ * each mode, as described in the TimedRobot documentation. If you change the name of this class or
+ * the package after creating this project, you must also update the build.properties file in the
  * project.
  */
 public class Robot extends TimedRobot {
@@ -36,20 +34,23 @@ public class Robot extends TimedRobot {
   public static Drivetrain drivetrain;
   public static Grabber grabber;
   public static Lift lift;
+  private FieldAnalyzer fieldAnalyzer;
   public static Compressor compressor;
   public static Relay compressorController;
   public static boolean runCompressor;
   SendableChooser<String> autoChooserPos = new SendableChooser<>();
+  SendableChooser<String> autoChooserTarget = new SendableChooser<>();
   Command autonomousCommand;
 
   /**
-   * This function is run when the robot is first started up and should be
-   * used for any initialization code.
+   * This function is run when the robot is first started up and should be used for any
+   * initialization code.
    */
   @Override
   public void robotInit() {
     operatorInput = new OperatorInput();
     drivetrain = new Drivetrain();
+    fieldAnalyzer = new FieldAnalyzer();
     compressor = new Compressor(RobotMap.compressor);
     compressor.setClosedLoopControl(false);
     runCompressor = true;
@@ -58,20 +59,23 @@ public class Robot extends TimedRobot {
 
     SmartDashboard.putBoolean("Pressure Switch", compressor.getPressureSwitchValue());
 
-    //Create position selector to the SmartDashboard
-    autoChooserPos.addDefault("Position 1", "pos1");
-    autoChooserPos.addObject("Position 2", "pos2");
-    autoChooserPos.addObject("Position 3", "pos3");
+    // Create position selector to the SmartDashboard
+    autoChooserPos.addDefault("Position 1", "1");
+    autoChooserPos.addObject("Position 2", "2");
+    autoChooserPos.addObject("Position 3", "3");
     SmartDashboard.putData("Position Selection", autoChooserPos);
 
-    //Create strategy selector
-    SmartDashboard.putString("Strategy String", "nnnnn");
+    // Create strategy selector
+    autoChooserTarget.addDefault("Default Strategy", "def");
+
+    fieldAnalyzer.predetermineStrategy();
   }
 
   /**
-   * This function is called once each time the robot enters Disabled mode.
-   * You can use it to reset any subsystem information you want to clear when
-   * the robot is disabled.
+   * This function is called once each time the robot enters Disabled mode. You can use it to reset
+   * any subsystem information you want to clear when the robot is disabled.EXCHANGE: //TODO: break;
+   * case SCALE_MID: //TODO break; case FLOOR: //TODO break; case SCALE_TOP: //TODO break; case
+   * SWITCH:
    */
   @Override
   public void disabledInit() {
@@ -84,15 +88,15 @@ public class Robot extends TimedRobot {
   }
 
   /**
-   * This autonomous (along with the chooser code above) shows how to select
-   * between different autonomous modes using the dashboard. The sendable
-   * chooser code works with the Java SmartDashboard. If you prefer the
-   * LabVIEW Dashboard, remove all of the chooser code and uncomment the
-   * getString code to get the auto name from the text box below the Gyro
+   * This autonomous (along with the chooser code above) shows how to select between different
+   * autonomous modes using the dashboard. The sendable chooser code works with the Java
+   * SmartDashboard. If you prefer the LabVIEW Dashboard, remove all of the chooser code and
+   * uncomment the getString code to get the auto name from the text box below the Gyro
    *
-   * <p>You can add additional auto modes by adding additional commands to the
-   * chooser code above (like the commented example) or additional comparisons
-   * to the switch structure below with additional strings & commands.
+   * <p>
+   * You can add additional auto modes by adding additional commands to the chooser code above (like
+   * the commented example) or additional comparisons to the switch structure below with additional
+   * strings & commands.
    */
   @Override
   public void autonomousInit() {
@@ -104,6 +108,13 @@ public class Robot extends TimedRobot {
     4) Scale opposite
     5) Drive forward
      */
+    char[] fieldPos = DriverStation.getInstance().getGameSpecificMessage().toCharArray();
+    fieldAnalyzer.setFieldPosition(fieldPos);
+    fieldAnalyzer.calculateStrategy();
+    String autoPos = autoChooserPos.getSelected();
+    String autoTarget = autoChooserTarget.getSelected();
+    String targetCommand = autoPos + "-" + autoTarget + "-" + fieldPos[0] + fieldPos[1];
+    SmartDashboard.putString("Auto String", targetCommand);
   }
 
   /**
