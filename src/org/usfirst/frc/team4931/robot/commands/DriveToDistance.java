@@ -17,8 +17,8 @@ public class DriveToDistance extends Command {
 
   @Override
   protected void initialize() {
-//    Robot.drivetrain.setLeftPIDTaret(targetDistance);
-//    Robot.drivetrain.setRightPIDTaret(targetDistance);
+    Robot.drivetrain.setLeftSetPoint(targetDistance);
+    Robot.drivetrain.setRightSetPoint(targetDistance);
   }
 
   @Override
