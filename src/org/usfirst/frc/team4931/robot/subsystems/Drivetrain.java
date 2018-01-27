@@ -4,6 +4,8 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.sensors.PigeonIMU;
+import com.ctre.phoenix.sensors.PigeonIMU.CalibrationMode;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
@@ -22,7 +24,7 @@ public class Drivetrain extends Subsystem {
   private static SpeedControllerGroup rightSideMotors;
   private static DifferentialDrive drivetrain;
   private static DoubleSolenoid gearBox;
-  private static ADXRS450_Gyro gyro;
+  private static PigeonIMU pigeon;
 
   public Drivetrain() {
     initialization();
@@ -56,7 +58,7 @@ public class Drivetrain extends Subsystem {
     drivetrain = new DifferentialDrive(leftSideMotors, rightSideMotors);
 
     //Create gyro senser
-    gyro = new ADXRS450_Gyro(RobotMap.gyroPort);
+    pigeon = new PigeonIMU(rightBackMotor);
   }
 
   @Override
@@ -148,8 +150,10 @@ public class Drivetrain extends Subsystem {
   /**
    * Reads the angle of the gyro.
    */
-  public double gyroReadAngle() {
-    return gyro.getAngle();
+  public double gyroReadYawAngle() {
+    double[] values = new double[3];
+    pigeon.getYawPitchRoll(values);
+    return values[0];
   }
 
   /**
@@ -157,22 +161,17 @@ public class Drivetrain extends Subsystem {
    *
    * @return The rate of the gyro
    */
-  public double gyroReadRate() {
-    return gyro.getRate();
+  public double gyroReadYawRate() {
+    double[] values = new double[3];
+    pigeon.getRawGyro(values);
+    return values[0];
   }
 
   /**
    * Resets the gyro.
    */
   public void gyroReset() {
-    gyro.reset();
-  }
-
-  /**
-   * CalibRATES the gyro.
-   */
-  public void gyroCalibrate() {
-    gyro.calibrate();
+    pigeon.setYaw(0, 50);
   }
 
   /**
