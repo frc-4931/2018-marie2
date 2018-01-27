@@ -10,6 +10,8 @@ package org.usfirst.frc.team4931.robot;
 import org.usfirst.frc.team4931.robot.subsystems.Drivetrain;
 import org.usfirst.frc.team4931.robot.subsystems.Grabber;
 import org.usfirst.frc.team4931.robot.subsystems.Lift;
+import com.ctre.phoenix.sensors.PigeonIMU;
+import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Relay;
@@ -53,6 +55,8 @@ public class Robot extends TimedRobot {
     runCompressor = true;
 
     compressorController = new Relay(0);
+    
+    CameraServer.getInstance().startAutomaticCapture();
 
     SmartDashboard.putBoolean("Pressure Switch", compressor.getPressureSwitchValue());
 
@@ -157,7 +161,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void testPeriodic() {
-    SmartDashboard.putBoolean("Bool", true);
-    SmartDashboard.putBoolean("TEST", true);
+    SmartDashboard.putNumber("Gyro Angle", drivetrain.gyroReadYawAngle());
+    SmartDashboard.putNumber("Gyro Rate", drivetrain.gyroReadYawRate());
   }
 }
