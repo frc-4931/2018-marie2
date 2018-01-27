@@ -40,7 +40,6 @@ public class Robot extends TimedRobot {
   public static Relay compressorController;
   public static boolean runCompressor;
   SendableChooser<String> autoChooserPos = new SendableChooser<>();
-  SendableChooser<String> autoChooserTarget = new SendableChooser<>();
   Command autonomousCommand;
 
   /**
@@ -66,7 +65,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putData("Position Selection", autoChooserPos);
 
     //Create strategy selector
-    autoChooserTarget.addDefault("Default Strategy", "def");
+    SmartDashboard.putString("Strategy String", "nnnnn");
   }
 
   /**
@@ -97,13 +96,14 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    char[] fieldPos = DriverStation.getInstance().getGameSpecificMessage().toCharArray();
-    String autoPos = autoChooserPos.getSelected();
-    String autoTarget = autoChooserTarget.getSelected();
-    String targetCommand = autoPos+"-"+autoTarget+"-"+fieldPos[0]+fieldPos[1];
-    SmartDashboard.putString("Auto String", targetCommand);
-
-
+    /*
+    string of Y & n for yes and no option section w/ fallthrough
+    1) Switch close
+    2) Scale close
+    3) Switch opposite
+    4) Scale opposite
+    5) Drive forward
+     */
   }
 
   /**
