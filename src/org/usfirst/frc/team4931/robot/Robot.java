@@ -1,16 +1,19 @@
 /*----------------------------------------------------------------------------*/
-/* Copyright (c) 2017-2018 FIRST. All Rights Reserved.                        */
-/* Open Source Software - may be modified and shared by FRC teams. The code   */
+/* Copyright (c) 2017-2018 FIRST. All Rights Reserved. */
+/* Open Source Software - may be modified and shared by FRC teams. The code */
 /* must be accompanied by the FIRST BSD license file in the root directory of */
-/* the project.                                                               */
+/* the project. */
 /*----------------------------------------------------------------------------*/
 
 package org.usfirst.frc.team4931.robot;
 
 import org.usfirst.frc.team4931.robot.field.FieldAnalyzer;
+import org.usfirst.frc.team4931.robot.field.StartingPos;
 import org.usfirst.frc.team4931.robot.subsystems.Drivetrain;
 import org.usfirst.frc.team4931.robot.subsystems.Grabber;
 import org.usfirst.frc.team4931.robot.subsystems.Lift;
+import com.ctre.phoenix.sensors.PigeonIMU;
+import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Relay;
@@ -57,18 +60,23 @@ public class Robot extends TimedRobot {
 
     compressorController = new Relay(0);
 
+    CameraServer.getInstance().startAutomaticCapture();
+
     SmartDashboard.putBoolean("Pressure Switch", compressor.getPressureSwitchValue());
+    SmartDashboard.putBoolean("Submit", false);
 
     // Create position selector to the SmartDashboard
-    autoChooserPos.addDefault("Position 1", "1");
-    autoChooserPos.addObject("Position 2", "2");
-    autoChooserPos.addObject("Position 3", "3");
+    for (StartingPos pos : StartingPos.values()) {
+      if (pos.ordinal() == 0) {
+        autoChooserPos.addDefault("Position 1", pos.name());
+      } else {
+        autoChooserPos.addObject("Position " + (pos.ordinal() + 1), pos.name());
+      }
+    }
     SmartDashboard.putData("Position Selection", autoChooserPos);
 
     // Create strategy selector
     autoChooserTarget.addDefault("Default Strategy", "def");
-
-    fieldAnalyzer.predetermineStrategy();
   }
 
   /**
@@ -100,15 +108,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    /*
-    string of Y & n for yes and no option section w/ fallthrough
-    1) Switch close
-    2) Scale close
-    3) Switch opposite
-    4) Scale opposite
-    5) Drive forward
-     */
-    char[] fieldPos = DriverStation.getInstance().getGameSpecificMessage().toCharArray();
+    char[] fieldPos =
+        DriverStation.getInstance().getGameSpecificMessage().toLowerCase().toCharArray();
     fieldAnalyzer.setFieldPosition(fieldPos);
     fieldAnalyzer.calculateStrategy();
     String autoPos = autoChooserPos.getSelected();
@@ -147,6 +148,10 @@ public class Robot extends TimedRobot {
         compressorController.set(Value.kOff);
       }
     }
+    if (SmartDashboard.getBoolean("Submit", false)) {
+      fieldAnalyzer.predetermineStrategy();
+      SmartDashboard.putBoolean("submit", false);
+    }
   }
 
   /**
@@ -170,7 +175,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void testPeriodic() {
-    SmartDashboard.putBoolean("Bool", true);
-    SmartDashboard.putBoolean("TEST", true);
+    SmartDashboard.putNumber("Gyro Angle", drivetrain.gyroReadYawAngle());
+    SmartDashboard.putNumber("Gyro Rate", drivetrain.gyroReadYawRate());
   }
 }
