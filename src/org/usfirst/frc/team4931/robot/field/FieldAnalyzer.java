@@ -21,7 +21,7 @@ public class FieldAnalyzer {
   private double maxJerk = 60.0;
 
   public void setFieldPosition(char[] fieldPosition) {
-    fieldPos = fieldPosition; // Removing bugs created more bugs
+    fieldPos = fieldPosition;
   }
 
   public void predetermineStrategy() {
@@ -40,8 +40,35 @@ public class FieldAnalyzer {
     }
   }
 
-  public void calculateStrategy() {
-
+  public TankModifier calculateStrategy() {
+    switch (robotStartingPos) {
+      case LEFT:
+        return pickStrategy('l', 'r');
+      case RIGHT:
+        return pickStrategy('r', 'l');
+      default:
+        if (strategyOptions.containsKey(Strategy.SWITCH_SAME)) {
+          return strategyOptions.get(Strategy.SWITCH_SAME);
+        } else if (strategyOptions.containsKey(Strategy.SWITCH_OPPOSITE)) {
+          return strategyOptions.get(Strategy.SWITCH_OPPOSITE);
+        }
+        return strategyOptions.get(Strategy.DRIVE_FORWARD);
+    }
   }
 
+  private TankModifier pickStrategy(char sameChar, char oppositeChar) {
+    if (fieldPos[0] == sameChar && strategyOptions.containsKey(Strategy.SWITCH_SAME)) {
+      return strategyOptions.get(Strategy.SWITCH_SAME);
+    } else if (fieldPos[1] == sameChar && strategyOptions.containsKey(Strategy.SCALE_SAME)) {
+      return strategyOptions.get(Strategy.SCALE_SAME);
+    } else if (fieldPos[0] == oppositeChar
+        && strategyOptions.containsKey(Strategy.SWITCH_OPPOSITE)) {
+      return strategyOptions.get(Strategy.SWITCH_OPPOSITE);
+    } else if (fieldPos[1] == oppositeChar
+        && strategyOptions.containsKey(Strategy.SCALE_OPPOSITE)) {
+      return strategyOptions.get(Strategy.SCALE_OPPOSITE);
+    } else {
+      return strategyOptions.get(Strategy.DRIVE_FORWARD);
+    }
+  }
 }
