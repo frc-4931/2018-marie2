@@ -8,6 +8,7 @@
 package org.usfirst.frc.team4931.robot;
 
 import org.usfirst.frc.team4931.robot.field.FieldAnalyzer;
+import org.usfirst.frc.team4931.robot.field.StartingPos;
 import org.usfirst.frc.team4931.robot.subsystems.Drivetrain;
 import org.usfirst.frc.team4931.robot.subsystems.Grabber;
 import org.usfirst.frc.team4931.robot.subsystems.Lift;
@@ -62,17 +63,20 @@ public class Robot extends TimedRobot {
     CameraServer.getInstance().startAutomaticCapture();
 
     SmartDashboard.putBoolean("Pressure Switch", compressor.getPressureSwitchValue());
+    SmartDashboard.putBoolean("Submit", false);
 
     // Create position selector to the SmartDashboard
-    autoChooserPos.addDefault("Position 1", "1");
-    autoChooserPos.addObject("Position 2", "2");
-    autoChooserPos.addObject("Position 3", "3");
+    for (StartingPos pos : StartingPos.values()) {
+      if (pos.ordinal() == 0) {
+        autoChooserPos.addDefault("Position 1", pos.name());
+      } else {
+        autoChooserPos.addObject("Position " + (pos.ordinal() + 1), pos.name());
+      }
+    }
     SmartDashboard.putData("Position Selection", autoChooserPos);
 
     // Create strategy selector
     autoChooserTarget.addDefault("Default Strategy", "def");
-
-    fieldAnalyzer.predetermineStrategy();
   }
 
   /**
@@ -104,7 +108,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    char[] fieldPos = DriverStation.getInstance().getGameSpecificMessage().toCharArray();
+    char[] fieldPos =
+        DriverStation.getInstance().getGameSpecificMessage().toLowerCase().toCharArray();
     fieldAnalyzer.setFieldPosition(fieldPos);
     fieldAnalyzer.calculateStrategy();
     String autoPos = autoChooserPos.getSelected();
@@ -142,6 +147,10 @@ public class Robot extends TimedRobot {
       } else {
         compressorController.set(Value.kOff);
       }
+    }
+    if (SmartDashboard.getBoolean("Submit", false)) {
+      fieldAnalyzer.predetermineStrategy();
+      SmartDashboard.putBoolean("submit", false);
     }
   }
 
