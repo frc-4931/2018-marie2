@@ -19,7 +19,7 @@ public class OperatorInput {
 
   //// CREATING BUTTONS
   // One type of button is a joystick button which is any button on a
-  //// joystick.
+  //// joystick.   
   // You create one by telling it which joystick it's on and which button
   // number it is.
   Joystick stick = new Joystick(0);

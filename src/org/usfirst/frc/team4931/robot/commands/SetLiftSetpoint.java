@@ -7,7 +7,10 @@ import org.usfirst.frc.team4931.robot.subsystems.FixedLiftHeight;
 public class SetLiftSetpoint extends Command {
 
   private FixedLiftHeight liftHeight;
-
+/**
+ * Sets the lift setpoint
+ * @param liftHeight
+ */
   public SetLiftSetpoint(FixedLiftHeight liftHeight) {
     this.liftHeight = liftHeight;
     requires(Robot.lift);
