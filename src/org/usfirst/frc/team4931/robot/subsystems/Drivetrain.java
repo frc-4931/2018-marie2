@@ -5,8 +5,6 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.sensors.PigeonIMU;
-import com.ctre.phoenix.sensors.PigeonIMU.CalibrationMode;
-import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
@@ -48,8 +46,8 @@ public class Drivetrain extends Subsystem {
     rightSideMotors = new SpeedControllerGroup(rightFrontMotor, rightBackMotor);
 
     //Configure encoders
-    leftFrontMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 50);
-    rightFrontMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 50);
+    leftFrontMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 50);
+    rightFrontMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 50);
 
     //Configure pneumatics for 2 speed gearboxes
     gearBox = new DoubleSolenoid(RobotMap.gearBox[0], RobotMap.gearBox[1]);
