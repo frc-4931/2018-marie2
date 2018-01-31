@@ -28,7 +28,7 @@ public class RobotMap {
   public static final boolean rightFrontMotorInverted = false;
   public static final boolean rightBackMotorInverted = false;
 
-  public static final int encoderPPR = 1024;
+  public static final int encoderPPR = 120;
 
   /**
    * [0] is forward position port, [1] is backward position port
