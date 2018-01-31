@@ -55,7 +55,7 @@ public class Lift extends Subsystem {
 //  }
   /**
    * Sets the lift height
-   * @param liftHeight
+   * @param liftHeight The desired height to move to.
    */
   public void setLiftHeight(FixedLiftHeight liftHeight) {
     switch (liftHeight) {
