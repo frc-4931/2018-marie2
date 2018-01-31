@@ -6,7 +6,6 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 /**
  * Includes everything the grabber is with
- * @author shawn
  *
  */
 public class Grabber extends Subsystem {

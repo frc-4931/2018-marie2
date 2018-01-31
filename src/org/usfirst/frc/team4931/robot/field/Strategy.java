@@ -1,7 +1,6 @@
 package org.usfirst.frc.team4931.robot.field;
 /**
  * Categorizes the drive strategies of autonomous.
- * @author shawn
  *
  */
 public enum Strategy {

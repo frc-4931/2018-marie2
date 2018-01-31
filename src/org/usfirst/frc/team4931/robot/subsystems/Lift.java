@@ -7,7 +7,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team4931.robot.RobotMap;
 /**
  * Includes everything the lift is with
- * @author shawn
  *
  */
 public class Lift extends Subsystem {

@@ -14,7 +14,6 @@ import jaci.pathfinder.Waypoint;
 
 /**
  * This function tells us each waypoint based on positions and strategies.
- * @author shawn
  *
  */
 public class Waypoints {

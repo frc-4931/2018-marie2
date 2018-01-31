@@ -4,7 +4,6 @@ import org.usfirst.frc.team4931.robot.Robot;
 import edu.wpi.first.wpilibj.command.Command;
 /**
  * Makes the robot turn to a specific angle
- * @author shawn
  *
  */
 public class TurnToAngle extends Command {

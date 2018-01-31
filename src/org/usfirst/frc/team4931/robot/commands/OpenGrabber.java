@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj.command.Command;
 import org.usfirst.frc.team4931.robot.Robot;
 /**
  * Opens the grabber
- * @author shawn
  *
  */
 public class OpenGrabber extends Command {
