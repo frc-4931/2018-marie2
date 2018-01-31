@@ -53,8 +53,9 @@ public class FieldAnalyzer {
           pickedStrategy = Strategy.SWITCH_SAME;
         } else if (strategyOptions.containsKey(Strategy.SWITCH_OPPOSITE)) {
           pickedStrategy = Strategy.SWITCH_OPPOSITE;
+        } else {
+          pickedStrategy = Strategy.DRIVE_FORWARD;
         }
-        pickedStrategy = Strategy.DRIVE_FORWARD;
     }
     pickedTrajectory = strategyOptions.get(pickedStrategy);
   }
