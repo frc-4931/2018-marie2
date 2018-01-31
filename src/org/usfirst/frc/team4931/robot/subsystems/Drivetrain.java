@@ -16,8 +16,6 @@ import org.usfirst.frc.team4931.robot.RobotMap;
 
 /**
  * Determines the driving mechanism
- * 
- *
  */
 public class Drivetrain extends Subsystem {
 
