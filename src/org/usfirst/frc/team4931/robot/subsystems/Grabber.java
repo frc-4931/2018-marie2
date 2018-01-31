@@ -4,12 +4,17 @@ import org.usfirst.frc.team4931.robot.RobotMap;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
-
+/**
+ * This defines the major component of the grabber subsystem.
+ */
 public class Grabber extends Subsystem {
   private DoubleSolenoid leftPneumatic;
   private DoubleSolenoid rightPneumatic; {
     
   }
+  /**
+   * Creates a new grabber. This sets up the motors and potentiometers neccecary for grabbing
+   */
   public Grabber() {
     initialization();
   }
@@ -26,7 +31,7 @@ public class Grabber extends Subsystem {
   }
 
   /**
-   * Spins the wheels of the grabber to suck in and take control of a power cube
+   * Closes the grabber to get the cube
    */
   public void captureCube() {
     leftPneumatic.set(Value.kReverse);
@@ -34,7 +39,7 @@ public class Grabber extends Subsystem {
   }
 
   /**
-   * Spins the wheels of the grabber to eject the power cube
+   * Opens the grabber to release the cube
    */
   public void releaseCube() {
     leftPneumatic.set(Value.kForward);
