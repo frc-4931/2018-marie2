@@ -13,7 +13,11 @@ import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import org.usfirst.frc.team4931.robot.RobotMap;
-
+/**
+ * Determines the driving mechanism
+ * @author shawn
+ *
+ */
 public class Drivetrain extends Subsystem {
 
   private static WPI_TalonSRX leftFrontMotor;
@@ -29,7 +33,9 @@ public class Drivetrain extends Subsystem {
   public Drivetrain() {
     initialization();
   }
-
+/**
+ * Initializes each motors.
+ */
   public void initialization() {
     //Configure drive motors
     leftFrontMotor = new WPI_TalonSRX(RobotMap.leftFrontMotorPort);

@@ -5,7 +5,11 @@ import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team4931.robot.RobotMap;
-
+/**
+ * Includes everything the lift is with
+ * @author shawn
+ *
+ */
 public class Lift extends Subsystem {
 
   private static final double kP_real = 4;
@@ -22,7 +26,10 @@ public class Lift extends Subsystem {
     addChild("Motor", liftMotor);
     addChild("Potentiometer", potentiometer);
   }
-
+/**
+ * the boolean is finished
+ * @return
+ */
   public boolean isFinished() {
     return true;
   }
@@ -46,7 +53,10 @@ public class Lift extends Subsystem {
 //  protected void usePIDOutput(double power) {
 //    liftMotor.set(power);
 //  }
-  
+  /**
+   * Sets the lift height
+   * @param liftHeight
+   */
   public void setLiftHeight(FixedLiftHeight liftHeight) {
     switch (liftHeight) {
       case EXCHANGE:

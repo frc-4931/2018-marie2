@@ -41,7 +41,9 @@ public class FieldAnalyzer {
       }
     }
   }
-
+/**
+ * This calculates the strategy for autonomous.
+ */
   public void calculateStrategy() {
     switch (robotStartingPos) {
       case LEFT:

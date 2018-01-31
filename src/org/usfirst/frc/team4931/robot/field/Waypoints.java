@@ -12,12 +12,22 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import jaci.pathfinder.Waypoint;
 
+/**
+ * This function tells us each waypoint based on positions and strategies.
+ * @author shawn
+ *
+ */
 public class Waypoints {
+  /**
+   * Creates a map for our waypoints.
+   */
   public static Map<StartingPos, Map<Strategy, List<Waypoint>>> WAYPOINTS =
       new EnumMap<>(StartingPos.class);
 
 
-
+/**
+ * The waypoints for autonomous.
+ */
   public static double[][][] POS1 = {{ // SWITCH_SAME
       {0, 24, 0}, {11, 25, -35}, {14, 20, -90}},
       { // SCALE_SAME
