@@ -19,9 +19,11 @@ public class FieldAnalyzer {
   private double maxSpeed = 4.0;
   private double maxAcceleration = 3.0;
   private double maxJerk = 60.0;
+  private Strategy pickedStrategy;
+  private TankModifier pickedTrajectory;
 
   public void setFieldPosition(char[] fieldPosition) {
-    fieldPos = fieldPosition; // Removing bugs created more bugs
+    fieldPos = fieldPosition;
   }
 
   public void predetermineStrategy() {
@@ -41,7 +43,43 @@ public class FieldAnalyzer {
   }
 
   public void calculateStrategy() {
-
+    switch (robotStartingPos) {
+      case LEFT:
+        pickStrategy('l', 'r');
+      case RIGHT:
+        pickStrategy('r', 'l');
+      default:
+        if (strategyOptions.containsKey(Strategy.SWITCH_SAME)) {
+          pickedStrategy = Strategy.SWITCH_SAME;
+        } else if (strategyOptions.containsKey(Strategy.SWITCH_OPPOSITE)) {
+          pickedStrategy = Strategy.SWITCH_OPPOSITE;
+        }
+        pickedStrategy = Strategy.DRIVE_FORWARD;
+    }
+    pickedTrajectory = strategyOptions.get(pickedStrategy);
   }
 
+  private void pickStrategy(char sameChar, char oppositeChar) {
+    if (fieldPos[0] == sameChar && strategyOptions.containsKey(Strategy.SWITCH_SAME)){
+      pickedStrategy = Strategy.SWITCH_SAME;
+    } else if (fieldPos[1] == sameChar && strategyOptions.containsKey(Strategy.SCALE_SAME)) {
+      pickedStrategy = Strategy.SCALE_SAME;
+    } else if (fieldPos[0] == oppositeChar
+        && strategyOptions.containsKey(Strategy.SWITCH_OPPOSITE)) {
+      pickedStrategy = Strategy.SWITCH_OPPOSITE;
+    } else if (fieldPos[1] == oppositeChar
+        && strategyOptions.containsKey(Strategy.SCALE_OPPOSITE)) {
+      pickedStrategy = Strategy.SCALE_OPPOSITE;
+    } else {
+      pickedStrategy = Strategy.DRIVE_FORWARD;
+    }
+  }
+  
+  public Strategy getPickedStrategy() {
+    return pickedStrategy;
+  }
+  
+  public TankModifier getPickedTrajectory() {
+    return pickedTrajectory;
+  }
 }
