@@ -5,14 +5,16 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 /**
- * Includes everything the grabber is with
- *
+ * This defines the major component of the grabber subsystem.
  */
 public class Grabber extends Subsystem {
   private DoubleSolenoid leftPneumatic;
   private DoubleSolenoid rightPneumatic; {
     
   }
+  /**
+   * Creates a new grabber. This sets up the motors and potentiometers neccecary for grabbing
+   */
   public Grabber() {
     initialization();
   }

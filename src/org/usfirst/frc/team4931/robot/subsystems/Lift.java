@@ -6,8 +6,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team4931.robot.RobotMap;
 /**
- * Includes everything the lift is with
- *
+ * This defines the major component of the lift subsystem.
  */
 public class Lift extends Subsystem {
 
@@ -16,7 +15,9 @@ public class Lift extends Subsystem {
   private WPI_TalonSRX liftMotor;
   private AnalogPotentiometer potentiometer;
 
-
+/**
+ * Creates a new lift. This sets up the motors and potentiometers necessary for lifting
+ */
   public Lift() {
 //    super(kP_real, kI_real, 0);
 //    setAbsoluteTolerance(0.005);
@@ -26,8 +27,8 @@ public class Lift extends Subsystem {
     addChild("Potentiometer", potentiometer);
   }
 /**
- * the boolean is finished
- * @return
+ * Used to determine if the lift has reached its height
+ * @return true when the lift is at its height
  */
   public boolean isFinished() {
     return true;
