@@ -7,12 +7,6 @@
 
 package org.usfirst.frc.team4931.robot;
 
-import org.usfirst.frc.team4931.robot.field.FieldAnalyzer;
-import org.usfirst.frc.team4931.robot.field.StartingPos;
-import org.usfirst.frc.team4931.robot.subsystems.Drivetrain;
-import org.usfirst.frc.team4931.robot.subsystems.Grabber;
-import org.usfirst.frc.team4931.robot.subsystems.Lift;
-import com.ctre.phoenix.sensors.PigeonIMU;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -23,6 +17,11 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import org.usfirst.frc.team4931.robot.field.FieldAnalyzer;
+import org.usfirst.frc.team4931.robot.field.StartingPos;
+import org.usfirst.frc.team4931.robot.subsystems.Drivetrain;
+import org.usfirst.frc.team4931.robot.subsystems.Grabber;
+import org.usfirst.frc.team4931.robot.subsystems.Lift;
 
 
 /**
@@ -63,6 +62,7 @@ public class Robot extends TimedRobot {
     CameraServer.getInstance().startAutomaticCapture();
 
     SmartDashboard.putBoolean("Pressure Switch", compressor.getPressureSwitchValue());
+    SmartDashboard.putString("Strategy Field", "nnnnn");
     SmartDashboard.putBoolean("Submit", false);
 
     // Create position selector to the SmartDashboard
@@ -74,9 +74,6 @@ public class Robot extends TimedRobot {
       }
     }
     SmartDashboard.putData("Position Selection", autoChooserPos);
-
-    // Create strategy selector
-    autoChooserTarget.addDefault("Default Strategy", "def");
   }
 
   /**
@@ -112,10 +109,6 @@ public class Robot extends TimedRobot {
         DriverStation.getInstance().getGameSpecificMessage().toLowerCase().toCharArray();
     fieldAnalyzer.setFieldPosition(fieldPos);
     fieldAnalyzer.calculateStrategy();
-    String autoPos = autoChooserPos.getSelected();
-    String autoTarget = autoChooserTarget.getSelected();
-    String targetCommand = autoPos + "-" + autoTarget + "-" + fieldPos[0] + fieldPos[1];
-    SmartDashboard.putString("Auto String", targetCommand);
   }
 
   /**
