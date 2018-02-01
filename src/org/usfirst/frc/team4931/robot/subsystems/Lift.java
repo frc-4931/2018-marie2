@@ -10,14 +10,22 @@ import org.usfirst.frc.team4931.robot.RobotMap;
  */
 public class Lift extends Subsystem {
   private WPI_TalonSRX liftMotor;
+  private double setPoint;
 
 /**
- * Creates a new lift. This sets up the motors and potentiometers necessary for lifting
+ * Creates a new lift. This sets up the motors and potentiometers necessary for lifting.
  */
   public Lift() {
     liftMotor = new WPI_TalonSRX(RobotMap.liftMotorPort);
     liftMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
     liftMotor.setSelectedSensorPosition(0, 0, 0);
+  }
+
+  /**
+   * @return if the lift has reached it's desired set point yet.
+   */
+  public boolean isAtTarget() {
+    return (liftMotor.getSelectedSensorPosition(0) >= setPoint);
   }
 
   @Override
@@ -31,20 +39,21 @@ public class Lift extends Subsystem {
   public void setLiftHeight(FixedLiftHeight liftHeight) {
     switch (liftHeight) {
       case SCALE_TOP:
-        liftMotor.set(ControlMode.MotionMagic, 480); //TODO set proper height value
+        setPoint = 480; //TODO set proper height value
         break;
       case SCALE_MID:
-        liftMotor.set(ControlMode.MotionMagic, 360); //TODO set proper height value
+        setPoint = 360; //TODO set proper height value
         break;
       case SWITCH:
-        liftMotor.set(ControlMode.MotionMagic, 240); //TODO set proper height value
+        setPoint = 240; //TODO set proper height value
         break;
       case EXCHANGE:
-        liftMotor.set(ControlMode.MotionMagic, 120); //TODO set proper height value
+        setPoint = 120; //TODO set proper height value
         break;
       case FLOOR:
-        liftMotor.set(ControlMode.MotionMagic, 0); //TODO set proper height value
+        setPoint = 0; //TODO set proper height value
         break;
     }
+    liftMotor.set(ControlMode.MotionMagic, setPoint);
   }
 }

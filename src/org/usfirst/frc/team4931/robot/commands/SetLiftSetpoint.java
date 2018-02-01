@@ -24,6 +24,6 @@ public class SetLiftSetpoint extends Command {
 
   @Override
   protected boolean isFinished() {
-    return Robot.lift.isFinished();
+    return Robot.lift.isAtTarget();
   }
 }
