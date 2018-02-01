@@ -71,7 +71,7 @@ public class Grabber extends Subsystem {
     setPoint = grabberPosition;
   }
 
-  public FixedGrabberPosition getPosition() {
+  public FixedGrabberPosition getCurrentPosition() {
     if (limitSwitchLow.get())
       return FixedGrabberPosition.LOW;
     else if (limitSwitchMid.get())
@@ -81,10 +81,10 @@ public class Grabber extends Subsystem {
   }
 
   public boolean isAtSetPoint() {
-    return isAtPosition() && (getPosition() == setPoint);
+    return isAtAnyPosition() && (getCurrentPosition() == setPoint);
   }
 
-  private boolean isAtPosition() {
+  private boolean isAtAnyPosition() {
     return limitSwitchLow.get() || limitSwitchMid.get() || limitSwitchHigh.get();
   }
 
