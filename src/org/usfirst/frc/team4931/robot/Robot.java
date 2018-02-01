@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import org.usfirst.frc.team4931.robot.commands.Autonomous;
 import org.usfirst.frc.team4931.robot.field.FieldAnalyzer;
 import org.usfirst.frc.team4931.robot.field.StartingPos;
 import org.usfirst.frc.team4931.robot.subsystems.Drivetrain;
@@ -42,7 +43,7 @@ public class Robot extends TimedRobot {
   public static boolean runCompressor;
   SendableChooser<String> autoChooserPos = new SendableChooser<>();
   SendableChooser<String> autoChooserTarget = new SendableChooser<>();
-  Command autonomousCommand;
+  private Autonomous autonomousCommand;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -56,7 +57,7 @@ public class Robot extends TimedRobot {
     compressor = new Compressor(RobotMap.compressor);
     compressor.setClosedLoopControl(false);
     runCompressor = true;
-
+    autonomousCommand = new Autonomous();
     compressorController = new Relay(0);
 
     CameraServer.getInstance().startAutomaticCapture();
@@ -109,6 +110,9 @@ public class Robot extends TimedRobot {
         DriverStation.getInstance().getGameSpecificMessage().toLowerCase().toCharArray();
     fieldAnalyzer.setFieldPosition(fieldPos);
     fieldAnalyzer.calculateStrategy();
+    autonomousCommand.setPickedStrategy(fieldAnalyzer.getPickedStrategy());
+    autonomousCommand.setPickedTrajectory(fieldAnalyzer.getPickedTrajectory());
+    autonomousCommand.start();
   }
 
   /**
