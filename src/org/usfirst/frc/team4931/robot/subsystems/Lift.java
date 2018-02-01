@@ -17,6 +17,7 @@ public class Lift extends Subsystem {
  */
   public Lift() {
     liftMotor = new WPI_TalonSRX(RobotMap.liftMotorPort);
+    liftMotor.setInverted(RobotMap.liftMotorInverted);
     liftMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
     liftMotor.setSelectedSensorPosition(0, 0, 0);
   }
