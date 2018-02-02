@@ -1,6 +1,7 @@
 package org.usfirst.frc.team4931.robot.commands;
 
 import org.usfirst.frc.team4931.robot.field.Strategy;
+import org.usfirst.frc.team4931.robot.subsystems.GrabberPosition;
 import static org.usfirst.frc.team4931.robot.subsystems.FixedLiftHeight.*;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import jaci.pathfinder.modifiers.TankModifier;
@@ -10,7 +11,7 @@ import jaci.pathfinder.modifiers.TankModifier;
 public class Autonomous extends CommandGroup {
 
   public Autonomous() {
-//    addParallel(new ChangeGrabberPosCommand(/*pos*/));
+    addParallel(new GrabberChangePosition(GrabberPosition.MIDDLE));
   }
 
   public void setPickedStrategy(Strategy strategy) {
