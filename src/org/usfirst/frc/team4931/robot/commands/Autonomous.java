@@ -11,10 +11,6 @@ public class Autonomous extends CommandGroup {
 
   public Autonomous() {
 //    addParallel(new ChangeGrabberPosCommand(/*pos*/));
-    //FIXME; We need to have the strategy in here from all of our data.
-//    addParallel(new SetLiftSetpoint());
-    //FIXME; We need to pass the trajectories.
-//    addParallel(new DriveToDistance());
   }
 
   public void setPickedStrategy(Strategy strategy) {
@@ -31,7 +27,8 @@ public class Autonomous extends CommandGroup {
         addParallel(new SetLiftSetpoint(SWITCH));
     }
   }
+  
   public void setPickedTrajectory(TankModifier tankModifier) {
-    
+    addParallel(new DriveByTrajectory(tankModifier));
   }
 }
