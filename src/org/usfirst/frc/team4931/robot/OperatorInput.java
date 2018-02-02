@@ -42,7 +42,7 @@ public class OperatorInput {
     shiftLowGear.whenPressed(new Command() {
       @Override
       protected void initialize() {
-        Robot.drivetrain.swithLowGear();
+        Robot.drivetrain.switchLowGear();
       }
 
       @Override

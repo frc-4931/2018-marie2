@@ -22,6 +22,7 @@ import org.usfirst.frc.team4931.robot.field.FieldAnalyzer;
 import org.usfirst.frc.team4931.robot.field.StartingPos;
 import org.usfirst.frc.team4931.robot.subsystems.Drivetrain;
 import org.usfirst.frc.team4931.robot.subsystems.Grabber;
+import org.usfirst.frc.team4931.robot.subsystems.GrabberPosition;
 import org.usfirst.frc.team4931.robot.subsystems.Lift;
 
 
@@ -54,11 +55,13 @@ public class Robot extends TimedRobot {
     operatorInput = new OperatorInput();
     drivetrain = new Drivetrain();
     fieldAnalyzer = new FieldAnalyzer();
+
     compressor = new Compressor(RobotMap.compressor);
     compressor.setClosedLoopControl(false);
     runCompressor = true;
-    autonomousCommand = new Autonomous();
     compressorController = new Relay(0);
+
+    autonomousCommand = new Autonomous();
 
     CameraServer.getInstance().startAutomaticCapture();
 
@@ -75,6 +78,9 @@ public class Robot extends TimedRobot {
       }
     }
     SmartDashboard.putData("Position Selection", autoChooserPos);
+
+    grabber.calculateCurrentPosition();
+    grabber.goToSetPoint(GrabberPosition.HIGH);
   }
 
   /**
@@ -149,6 +155,7 @@ public class Robot extends TimedRobot {
       fieldAnalyzer.predetermineStrategy();
       SmartDashboard.putBoolean("submit", false);
     }
+    grabber.calculateCurrentPositionAndMove();
   }
 
   /**
