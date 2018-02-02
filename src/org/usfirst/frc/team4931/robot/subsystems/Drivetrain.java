@@ -17,12 +17,8 @@ import org.usfirst.frc.team4931.robot.RobotMap;
  */
 public class Drivetrain extends Subsystem {
 
-  private static WPI_TalonSRX leftFrontMotor;
-  private static WPI_TalonSRX leftBackMotor;
-  private static WPI_TalonSRX rightFrontMotor;
-  private static WPI_TalonSRX rightBackMotor;
-  private static SpeedControllerGroup leftSideMotors;
-  private static SpeedControllerGroup rightSideMotors;
+  private WPI_TalonSRX leftFrontMotor, leftBackMotor, rightFrontMotor, rightBackMotor;
+  private static SpeedControllerGroup leftSideMotors, rightSideMotors;
   private static DifferentialDrive drivetrain;
   private static DoubleSolenoid gearBox;
   private static PigeonIMU pigeon;
