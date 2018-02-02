@@ -91,14 +91,14 @@ public class Drivetrain extends Subsystem {
   /**
    * Returns value of left encoder in revolutions.
    */
-  public double getLeftEncoder() {
+  public int getLeftEncoder() {
     return leftFrontMotor.getSelectedSensorPosition(0);
   }
 
   /**
    * Returns value of right encoder in revolutions.
    */
-  public double getRightEncoder() {
+  public int getRightEncoder() {
     return rightFrontMotor.getSelectedSensorPosition(0);
   }
 
