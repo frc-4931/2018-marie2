@@ -1,6 +1,9 @@
 package org.usfirst.frc.team4931.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
+import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
+import com.ctre.phoenix.motorcontrol.RemoteLimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.DigitalInput;
 import org.usfirst.frc.team4931.robot.RobotMap;
@@ -30,9 +33,35 @@ public class Grabber extends Subsystem {
     rightGrabberMotor.setInverted(RobotMap.rightGrabberMotorInverted);
     leftGrabberMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute, 0, 0);
 
-    limitSwitchLow = new DigitalInput(RobotMap.limitSwitchLowPort);
+//    limitSwitchLow = new DigitalInput(RobotMap.limitSwitchLowPort);
     limitSwitchMid = new DigitalInput(RobotMap.limitSwitchMidPort);
-    limitSwitchHigh = new DigitalInput(RobotMap.limitSwitchHighPort);
+//    limitSwitchHigh = new DigitalInput(RobotMap.limitSwitchHighPort);
+
+    leftGrabberMotor.configForwardLimitSwitchSource(RemoteLimitSwitchSource.RemoteTalonSRX, LimitSwitchNormal.NormallyOpen, RobotMap.rightGrabberMotorPort, 0);
+    leftGrabberMotor.configReverseLimitSwitchSource(RemoteLimitSwitchSource.RemoteTalonSRX, LimitSwitchNormal.NormallyOpen, RobotMap.rightGrabberMotorPort, 0);
+    rightGrabberMotor.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen, 0);
+    rightGrabberMotor.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen, 0);
+  }
+
+  /**
+   * @return true when the high limit switch is closed
+   */
+  private boolean getHighLimitSwitch() {
+    return leftGrabberMotor.getSensorCollection().isFwdLimitSwitchClosed();
+  }
+
+  /**
+   * @return true when the middle limit switch is closed
+   */
+  private boolean getMiddleLimitSwitch() {
+    return limitSwitchMid.get();
+  }
+
+  /**
+   * @return true when the low limit switch is closed
+   */
+  private boolean getLowLimitSwitch() {
+    return leftGrabberMotor.getSensorCollection().isRevLimitSwitchClosed();
   }
 
   @Override
@@ -57,6 +86,9 @@ public class Grabber extends Subsystem {
     rightPneumatic.set(Value.kForward);
   }
 
+  /**
+   * Moves the grabber towards the target set point.
+   */
   public void goToSetPoint() {
     if (setPoint.ordinal() > currentGrabberPosition.ordinal()) {
       //Move grabber up
@@ -67,19 +99,27 @@ public class Grabber extends Subsystem {
     }
   }
 
+  /**
+   * Sets the target position of the grabber and starts it moving towards it.
+   *
+   * @param position the target position.
+   */
   public void goToSetPoint(GrabberPosition position) {
     setPoint = position;
     goToSetPoint();
   }
 
+  /**
+   * Calculates the current position and saves it.
+   */
   public void calculateCurrentPosition() {
-    if (limitSwitchLow.get()) {
+    if (getLowLimitSwitch()) {
       currentGrabberPosition = GrabberPosition.LOW;
       lastAbsoluteGrabberPosition = currentGrabberPosition;
-    } else if (limitSwitchMid.get()) {
+    } else if (getMiddleLimitSwitch()) {
       currentGrabberPosition = GrabberPosition.MIDDLE;
       lastAbsoluteGrabberPosition = currentGrabberPosition;
-    } else if (limitSwitchHigh.get()) {
+    } else if (getHighLimitSwitch()) {
       currentGrabberPosition = GrabberPosition.HIGH;
       lastAbsoluteGrabberPosition = currentGrabberPosition;
     } else {
@@ -100,17 +140,32 @@ public class Grabber extends Subsystem {
     }
   }
 
+  /**
+   * Calculate the current portion and set the motor to move towards the set point.
+   */
   public void calculateCurrentPositionAndMove() {
     calculateCurrentPosition();
     goToSetPoint();
   }
 
+  /**
+   * @return the current grabber position.
+   */
   public GrabberPosition getCurrentGrabberPosition() {
     return currentGrabberPosition;
   }
 
+  /**
+   * @return the last physical switch the grabber was at.
+   */
   public GrabberPosition getLastAbsoluteGrabberPosition() {
     return lastAbsoluteGrabberPosition;
   }
 
+  /**
+   * @return if the grabber is at it's target position.
+   */
+  public boolean atTargetPosition() {
+    return currentGrabberPosition == setPoint;
+  }
 }

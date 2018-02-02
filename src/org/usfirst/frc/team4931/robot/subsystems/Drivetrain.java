@@ -142,7 +142,7 @@ public class Drivetrain extends Subsystem {
   /**
    * Switches the Drivetrain to the low speed gear.
    */
-  public void swithLowGear() {
+  public void switchLowGear() {
     gearBox.set(Value.kReverse);
   }
 

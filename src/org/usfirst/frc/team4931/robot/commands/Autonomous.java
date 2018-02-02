@@ -10,11 +10,13 @@ import jaci.pathfinder.modifiers.TankModifier;
  */
 public class Autonomous extends CommandGroup {
 
-  public Autonomous() {
+  public Autonomous(Strategy strategy, TankModifier tankModifier) {
     addParallel(new GrabberChangePosition(GrabberPosition.MIDDLE));
+    setLiftHeight(strategy);
+    addParallel(new DriveByTrajectory(tankModifier));
   }
 
-  public void setPickedStrategy(Strategy strategy) {
+  public void setLiftHeight(Strategy strategy) {
     switch (strategy) {
       case SWITCH_SAME:
       case SWITCH_OPPOSITE:
@@ -27,9 +29,5 @@ public class Autonomous extends CommandGroup {
       case DRIVE_FORWARD:
         addParallel(new SetLiftSetpoint(SWITCH));
     }
-  }
-  
-  public void setPickedTrajectory(TankModifier tankModifier) {
-    addParallel(new DriveByTrajectory(tankModifier));
   }
 }
