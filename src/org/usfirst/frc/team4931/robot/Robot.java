@@ -61,8 +61,6 @@ public class Robot extends TimedRobot {
     runCompressor = true;
     compressorController = new Relay(0);
 
-    autonomousCommand = new Autonomous();
-
     CameraServer.getInstance().startAutomaticCapture();
 
     SmartDashboard.putBoolean("Pressure Switch", compressor.getPressureSwitchValue());
@@ -116,8 +114,7 @@ public class Robot extends TimedRobot {
         DriverStation.getInstance().getGameSpecificMessage().toLowerCase().toCharArray();
     fieldAnalyzer.setFieldPosition(fieldPos);
     fieldAnalyzer.calculateStrategy();
-    autonomousCommand.setPickedStrategy(fieldAnalyzer.getPickedStrategy());
-    autonomousCommand.setPickedTrajectory(fieldAnalyzer.getPickedTrajectory());
+    autonomousCommand = new Autonomous(fieldAnalyzer.getPickedStrategy(), fieldAnalyzer.getPickedTrajectory());
     autonomousCommand.start();
   }
 
