@@ -3,8 +3,6 @@ package org.usfirst.frc.team4931.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team4931.robot.RobotMap;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -18,7 +16,7 @@ public class Grabber extends Subsystem {
   private DoubleSolenoid leftPneumatic, rightPneumatic;
   private WPI_TalonSRX leftGrabberMotor, rightGrabberMotor;
   private DigitalInput limitSwitchLow, limitSwitchMid, limitSwitchHigh;
-  private FixedGrabberPosition setPoint;
+  private GrabberPosition setPoint, lastAbsoluteGrabberPosition, currentGrabberPosition;
 
   /**
    * Creates a new grabber. This sets up the motors and pneumatics neccecary for grabbing.
@@ -59,33 +57,60 @@ public class Grabber extends Subsystem {
     rightPneumatic.set(Value.kForward);
   }
 
-  public void goToPosition(FixedGrabberPosition grabberPosition) {
-    switch (grabberPosition) { //TODO make code to start motor moving until it reaches the target position
-      case LOW:
-        break;
-      case MIDDLE:
-        break;
-      case HIGH:
-        break;
+  public void goToSetPoint() {
+    if (setPoint.ordinal() > currentGrabberPosition.ordinal()) {
+      //Move grabber up
+    } else if (setPoint.ordinal() < currentGrabberPosition.ordinal()) {
+      //Move grabber down
+    } else {
+      //Stop grabber
     }
-    setPoint = grabberPosition;
   }
 
-  public FixedGrabberPosition getCurrentPosition() {
-    if (limitSwitchLow.get())
-      return FixedGrabberPosition.LOW;
-    else if (limitSwitchMid.get())
-      return FixedGrabberPosition.MIDDLE;
-    else
-      return FixedGrabberPosition.HIGH;
+  public void goToSetPoint(GrabberPosition position) {
+    setPoint = position;
+    goToSetPoint();
   }
 
-  public boolean isAtSetPoint() {
-    return isAtAnyPosition() && (getCurrentPosition() == setPoint);
+  public void calculateCurrentPosition() {
+    if (limitSwitchLow.get()) {
+      currentGrabberPosition = GrabberPosition.LOW;
+      lastAbsoluteGrabberPosition = currentGrabberPosition;
+    } else if (limitSwitchMid.get()) {
+      currentGrabberPosition = GrabberPosition.MIDDLE;
+      lastAbsoluteGrabberPosition = currentGrabberPosition;
+    } else if (limitSwitchHigh.get()) {
+      currentGrabberPosition = GrabberPosition.HIGH;
+      lastAbsoluteGrabberPosition = currentGrabberPosition;
+    } else {
+      switch (lastAbsoluteGrabberPosition) {
+        case LOW:
+          currentGrabberPosition = GrabberPosition.LOW_MIDDLE;
+          break;
+        case MIDDLE:
+          if (setPoint.ordinal() > GrabberPosition.MIDDLE.ordinal())
+            currentGrabberPosition = GrabberPosition.MIDDLE_HIGH;
+          else
+            currentGrabberPosition = GrabberPosition.LOW_MIDDLE;
+          break;
+        case HIGH:
+          currentGrabberPosition = GrabberPosition.MIDDLE_HIGH;
+          break;
+      }
+    }
   }
 
-  private boolean isAtAnyPosition() {
-    return limitSwitchLow.get() || limitSwitchMid.get() || limitSwitchHigh.get();
+  public void calculateCurrentPositionAndMove() {
+    calculateCurrentPosition();
+    goToSetPoint();
+  }
+
+  public GrabberPosition getCurrentGrabberPosition() {
+    return currentGrabberPosition;
+  }
+
+  public GrabberPosition getLastAbsoluteGrabberPosition() {
+    return lastAbsoluteGrabberPosition;
   }
 
 }
