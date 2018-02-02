@@ -9,7 +9,7 @@ public class SetLiftSetpoint extends Command {
   private FixedLiftHeight liftHeight;
 /**
  * Sets the lift setpoint
- * @param liftHeight
+ * @param liftHeight The desired height to move to
  */
   public SetLiftSetpoint(FixedLiftHeight liftHeight) {
     this.liftHeight = liftHeight;
