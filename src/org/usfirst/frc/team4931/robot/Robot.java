@@ -7,24 +7,28 @@
 
 package org.usfirst.frc.team4931.robot;
 
+import org.usfirst.frc.team4931.robot.commands.Autonomous;
+import org.usfirst.frc.team4931.robot.commands.CloseGrabber;
+import org.usfirst.frc.team4931.robot.commands.GrabberChangePosition;
+import org.usfirst.frc.team4931.robot.commands.OpenGrabber;
+import org.usfirst.frc.team4931.robot.commands.SetLiftSetpoint;
+import org.usfirst.frc.team4931.robot.field.FieldAnalyzer;
+import org.usfirst.frc.team4931.robot.field.StartingPos;
+import org.usfirst.frc.team4931.robot.subsystems.Drivetrain;
+import org.usfirst.frc.team4931.robot.subsystems.FixedLiftHeight;
+import org.usfirst.frc.team4931.robot.subsystems.Grabber;
+import org.usfirst.frc.team4931.robot.subsystems.GrabberPosition;
+import org.usfirst.frc.team4931.robot.subsystems.Lift;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.Relay.Value;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.InstantCommand;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import org.usfirst.frc.team4931.robot.commands.Autonomous;
-import org.usfirst.frc.team4931.robot.field.FieldAnalyzer;
-import org.usfirst.frc.team4931.robot.field.StartingPos;
-import org.usfirst.frc.team4931.robot.subsystems.Drivetrain;
-import org.usfirst.frc.team4931.robot.subsystems.Grabber;
-import org.usfirst.frc.team4931.robot.subsystems.GrabberPosition;
-import org.usfirst.frc.team4931.robot.subsystems.Lift;
 
 
 /**
@@ -42,7 +46,7 @@ public class Robot extends TimedRobot {
   private FieldAnalyzer fieldAnalyzer;
   public static Compressor compressor;
   public static Relay compressorController;
-  public static boolean runCompressor;
+  public static boolean runCompressor = false;
   SendableChooser<String> autoChooserPos = new SendableChooser<>();
   SendableChooser<String> autoChooserTarget = new SendableChooser<>();
   private Autonomous autonomousCommand;
@@ -171,6 +175,21 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Joy z", operatorInput.getDriverController().getZ());
   }
 
+  @Override
+  public void testInit() {
+    runCompressor = false;
+    SmartDashboard.putData("Open Grabber", new OpenGrabber());
+    SmartDashboard.putData("Close Grabber", new CloseGrabber());
+    SmartDashboard.putData("Change Grabber Position Low", new GrabberChangePosition(GrabberPosition.LOW));
+    SmartDashboard.putData("Change Grabber Position Mid", new GrabberChangePosition(GrabberPosition.MIDDLE));
+    SmartDashboard.putData("Change Grabber Position High", new GrabberChangePosition(GrabberPosition.HIGH));
+    SmartDashboard.putData("Lift Floor", new SetLiftSetpoint(FixedLiftHeight.FLOOR));
+    SmartDashboard.putData("Lift Scale Mid", new SetLiftSetpoint(FixedLiftHeight.SCALE_MID));
+    SmartDashboard.putData("Lift Scale Top", new SetLiftSetpoint(FixedLiftHeight.SCALE_TOP));
+    SmartDashboard.putData("Lift Exchange", new SetLiftSetpoint(FixedLiftHeight.EXCHANGE));
+    SmartDashboard.putData("Lift Switch", new SetLiftSetpoint(FixedLiftHeight.SWITCH));
+  }
+  
   /**
    * This function is called periodically during test mode.
    */
