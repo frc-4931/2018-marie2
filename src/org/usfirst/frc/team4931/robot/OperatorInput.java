@@ -7,6 +7,7 @@
 
 package org.usfirst.frc.team4931.robot;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
@@ -24,25 +25,16 @@ public class OperatorInput {
   // You create one by telling it which joystick it's on and which button
   // number it is.
   Joystick stick = new Joystick(0);
-  Button button = new JoystickButton(stick, 1);
-  Button shiftHighGear = new JoystickButton(stick, 2);
-  Button shiftLowGear = new JoystickButton(stick, 3);
+  Button trigger = new JoystickButton(stick, 1);
+  Button shiftGear = new JoystickButton(stick, 2);
   {
-    shiftHighGear.whenPressed(new Command() {
+    shiftGear.whenPressed(new Command() {
       @Override
       protected void initialize() {
-        Robot.drivetrain.switchHighGear();
-      }
-
-      @Override
-      protected boolean isFinished() {
-        return true;
-      }
-    });
-    shiftLowGear.whenPressed(new Command() {
-      @Override
-      protected void initialize() {
-        Robot.drivetrain.switchLowGear();
+        if (Robot.drivetrain.getGearState() == DoubleSolenoid.Value.kForward)
+          Robot.drivetrain.switchLowGear();
+        else
+          Robot.drivetrain.switchHighGear();
       }
 
       @Override

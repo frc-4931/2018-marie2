@@ -9,6 +9,7 @@ package org.usfirst.frc.team4931.robot;
 
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.Relay.Value;
@@ -52,16 +53,19 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-    operatorInput = new OperatorInput();
     drivetrain = new Drivetrain();
     fieldAnalyzer = new FieldAnalyzer();
+    operatorInput = new OperatorInput();
 
     compressor = new Compressor(RobotMap.compressor);
     compressor.setClosedLoopControl(false);
     runCompressor = true;
     compressorController = new Relay(0);
 
+    grabber = new Grabber();
+
     CameraServer.getInstance().startAutomaticCapture();
+    operatorInput.stick.getThrottle();
 
     SmartDashboard.putBoolean("Pressure Switch", compressor.getPressureSwitchValue());
     SmartDashboard.putString("Strategy Field", "nnnnn");
@@ -141,6 +145,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotPeriodic() {
+    Scheduler.getInstance().run();
+
     if (runCompressor) {
       if (!compressor.getPressureSwitchValue()) {
         compressorController.set(Value.kForward);
@@ -164,11 +170,14 @@ public class Robot extends TimedRobot {
 
     SmartDashboard.putBoolean("Pressure Switch", true);
     SmartDashboard.putBoolean("Bool", operatorInput.stick.getRawButton(1));
-    SmartDashboard.putNumber("Encoder", drivetrain.getLeftEncoder());
+    SmartDashboard.putNumber("Left Encoder", drivetrain.getLeftEncoder());
+    SmartDashboard.putNumber("Right Encoder", drivetrain.getRightEncoder());
 
-    drivetrain.driveArcade(operatorInput.stick.getZ(), operatorInput.stick.getY());
+    drivetrain.driveArcade(operatorInput.stick.getY(), -operatorInput.stick.getZ());
     SmartDashboard.putNumber("Joy y", operatorInput.stick.getY());
     SmartDashboard.putNumber("Joy z", operatorInput.stick.getZ());
+    SmartDashboard.putBoolean("High Gear", (drivetrain.getGearState() == DoubleSolenoid.Value.kForward));
+    drivetrain.printSpeed();
   }
 
   /**
