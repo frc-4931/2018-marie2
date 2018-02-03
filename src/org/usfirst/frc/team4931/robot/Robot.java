@@ -13,6 +13,8 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.Relay.Value;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.command.InstantCommand;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -66,7 +68,12 @@ public class Robot extends TimedRobot {
 
     SmartDashboard.putBoolean("Pressure Switch", compressor.getPressureSwitchValue());
     SmartDashboard.putString("Strategy Field", "nnnnn");
-    SmartDashboard.putBoolean("Submit", false);
+    SmartDashboard.putData("Submit", new InstantCommand() {
+      @Override
+      protected void initialize() {
+        fieldAnalyzer.predetermineStrategy();
+      }
+    });
 
     // Create position selector to the SmartDashboard
     for (StartingPos pos : StartingPos.values()) {
@@ -148,10 +155,6 @@ public class Robot extends TimedRobot {
       } else {
         compressorController.set(Value.kOff);
       }
-    }
-    if (SmartDashboard.getBoolean("Submit", false)) {
-      fieldAnalyzer.predetermineStrategy();
-      SmartDashboard.putBoolean("submit", false);
     }
     grabber.calculateCurrentPositionAndMove();
   }
