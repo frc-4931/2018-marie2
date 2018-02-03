@@ -52,6 +52,8 @@ public class Drivetrain extends Subsystem {
     // Configure encoders
     leftBackMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
     rightBackMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
+    leftBackMotor.setSensorPhase(!RobotMap.leftSideEncoderInverted);
+    rightBackMotor.setSensorPhase(!RobotMap.rightSideEncoderInverted);
 
     // Configure pneumatics for 2 speed gearboxes
     gearBox = new DoubleSolenoid(RobotMap.compressor, RobotMap.gearBox[0], RobotMap.gearBox[1]);
@@ -87,7 +89,7 @@ public class Drivetrain extends Subsystem {
    * @param rightSpeed - speed for right side
    */
   public void driveTank(double leftSpeed, double rightSpeed) {
-    drivetrain.tankDrive(leftSpeed, rightSpeed);
+    drivetrain.tankDrive(leftSpeed, rightSpeed, false);
   }
 
   /**

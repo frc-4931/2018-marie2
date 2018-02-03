@@ -54,7 +54,7 @@ public class OperatorInput {
   }
 
   private Joystick liftController() {
-    Joystick controller = new Joystick (RobotMap.liftControllerPort);
+    Joystick controller = new Joystick(RobotMap.liftControllerPort);
     // talk to drive team about button arrangement
     Button openGrabber = new JoystickButton(controller, 1);
     Button closeGrabber = new JoystickButton(controller, 2);
