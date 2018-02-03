@@ -163,12 +163,10 @@ public class Robot extends TimedRobot {
     Scheduler.getInstance().run();
 
     SmartDashboard.putBoolean("Pressure Switch", true);
-    SmartDashboard.putBoolean("Bool", operatorInput.stick.getRawButton(1));
+    SmartDashboard.putBoolean("Bool", operatorInput.getDriverController().getRawButton(1));
     SmartDashboard.putNumber("Encoder", drivetrain.getLeftEncoder());
-
-    drivetrain.driveArcade(operatorInput.stick.getZ(), operatorInput.stick.getY());
-    SmartDashboard.putNumber("Joy y", operatorInput.stick.getY());
-    SmartDashboard.putNumber("Joy z", operatorInput.stick.getZ());
+    SmartDashboard.putNumber("Joy y", operatorInput.getDriverController().getY());
+    SmartDashboard.putNumber("Joy z", operatorInput.getDriverController().getZ());
   }
 
   /**
