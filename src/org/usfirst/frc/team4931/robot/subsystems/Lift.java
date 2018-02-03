@@ -5,6 +5,7 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import org.usfirst.frc.team4931.robot.RobotMap;
+import org.usfirst.frc.team4931.robot.commands.LiftWithJoystick;
 /**
  * This defines the major component of the lift subsystem.
  */
@@ -31,7 +32,7 @@ public class Lift extends Subsystem {
 
   @Override
   protected void initDefaultCommand() {
-    // TODO Auto-generated method stub
+    setDefaultCommand(new LiftWithJoystick());
   }
   /**
    * Sets the lift height
@@ -56,5 +57,9 @@ public class Lift extends Subsystem {
         break;
     }
     liftMotor.set(ControlMode.MotionMagic, setPoint);
+  }
+  
+  public void lift(double speed) {
+    liftMotor.set(ControlMode.PercentOutput, speed);
   }
 }
