@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team4931.robot.RobotMap;
 import org.usfirst.frc.team4931.robot.commands.DriveWithJoystick;
 
@@ -49,17 +50,17 @@ public class Drivetrain extends Subsystem {
     rightSideMotors = new SpeedControllerGroup(rightFrontMotor, rightBackMotor);
 
     // Configure encoders
-    leftFrontMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 50);
-    rightFrontMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 50);
+    leftBackMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
+    rightBackMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
 
     // Configure pneumatics for 2 speed gearboxes
-    gearBox = new DoubleSolenoid(RobotMap.gearBox[0], RobotMap.gearBox[1]);
+    gearBox = new DoubleSolenoid(RobotMap.compressor, RobotMap.gearBox[0], RobotMap.gearBox[1]);
 
     // Create drivetrain from left and right side motor groups
     drivetrain = new DifferentialDrive(leftSideMotors, rightSideMotors);
 
     // Create gyro senser
-    pigeon = new PigeonIMU(rightBackMotor);
+    pigeon = new PigeonIMU(rightFrontMotor);
   }
 
   @Override
@@ -76,7 +77,7 @@ public class Drivetrain extends Subsystem {
   public void driveArcade(double speed, double rotation, double throttle) {
     double trueThrottle = (throttle + 1)/2;
     // Values are switched because wpi is stupid and somehow switches the values
-    drivetrain.arcadeDrive((Math.copySign(rotation * rotation, rotation) * trueThrottle), (Math.copySign(speed * speed, speed) * trueThrottle));
+    drivetrain.arcadeDrive((Math.copySign(rotation * rotation, rotation) * trueThrottle), (Math.copySign(speed * speed, speed) * trueThrottle), false);
   }
 
   /**
@@ -93,14 +94,14 @@ public class Drivetrain extends Subsystem {
    * Returns value of left encoder in revolutions.
    */
   public int getLeftEncoder() {
-    return leftFrontMotor.getSelectedSensorPosition(0);
+    return leftBackMotor.getSelectedSensorPosition(0);
   }
 
   /**
    * Returns value of right encoder in revolutions.
    */
   public int getRightEncoder() {
-    return rightFrontMotor.getSelectedSensorPosition(0);
+    return rightBackMotor.getSelectedSensorPosition(0);
   }
 
   /**
@@ -152,6 +153,13 @@ public class Drivetrain extends Subsystem {
   }
 
   /**
+   * @return the gearbox position
+   */
+  public Value getGearState() {
+    return gearBox.get();
+  }
+
+  /**
    * Reads the angle of the gyro.
    */
   public double gyroReadYawAngle() {
@@ -185,6 +193,13 @@ public class Drivetrain extends Subsystem {
     leftSideMotors.disable();
     rightSideMotors.disable();
     gearBox.set(Value.kOff);
+  }
+
+  public void printSpeed() {
+    SmartDashboard.putNumber("LFront", leftFrontMotor.get());
+    SmartDashboard.putNumber("LRear", leftBackMotor.get());
+    SmartDashboard.putNumber("RFront", rightFrontMotor.get());
+    SmartDashboard.putNumber("RRear", rightBackMotor.get());
   }
 
 }

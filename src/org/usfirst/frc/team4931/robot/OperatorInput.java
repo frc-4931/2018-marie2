@@ -24,25 +24,20 @@ import edu.wpi.first.wpilibj.command.InstantCommand;
  */
 public class OperatorInput {
 
-  //// CREATING BUTTONS
-  // One type of button is a joystick button which is any button on a
-  //// joystick.   
-  // You create one by telling it which joystick it's on and which button
-  // number it is.
   private Joystick driverController;
   private Joystick liftController;
-  
-  
+
+
   public OperatorInput() {
     driverController = tankDriveController();
     liftController = liftController();
   }
-  
+
   private Joystick tankDriveController() {
     Joystick controller = new Joystick (RobotMap.driverControllerPort);
     Button shiftHighGear = new JoystickButton(controller, 2);
     Button shiftLowGear = new JoystickButton(controller, 1);
-    
+
     shiftHighGear.whenPressed(new InstantCommand() {
       @Override
       protected void initialize() {
@@ -57,7 +52,7 @@ public class OperatorInput {
     });
     return controller;
   }
-  
+
   private Joystick liftController() {
     Joystick controller = new Joystick (RobotMap.liftControllerPort);
     // talk to drive team about button arrangement
@@ -71,7 +66,7 @@ public class OperatorInput {
     Button floor = new JoystickButton(controller, 11);
     Button switchHeight = new JoystickButton(controller, 8);
     Button exchange = new JoystickButton(controller, 10);
-    
+
     openGrabber.whenPressed(new OpenGrabber());
     closeGrabber.whenPressed(new CloseGrabber());
     grabberMid.whenPressed(new GrabberChangePosition(GrabberPosition.MIDDLE));
@@ -84,11 +79,11 @@ public class OperatorInput {
     exchange.whenPressed(new SetLiftSetpoint(FixedLiftHeight.EXCHANGE));
     return controller;
   }
-  
+
   public Joystick getDriverController() {
     return driverController;
   }
-  
+
   public Joystick getLiftController() {
     return liftController;
   }

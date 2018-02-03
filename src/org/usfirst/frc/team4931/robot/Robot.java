@@ -13,7 +13,6 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.Relay.Value;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.InstantCommand;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -53,14 +52,16 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-    operatorInput = new OperatorInput();
     drivetrain = new Drivetrain();
     fieldAnalyzer = new FieldAnalyzer();
+    operatorInput = new OperatorInput();
 
     compressor = new Compressor(RobotMap.compressor);
     compressor.setClosedLoopControl(false);
     runCompressor = true;
     compressorController = new Relay(0);
+
+    grabber = new Grabber();
 
     CameraServer.getInstance().startAutomaticCapture();
 
@@ -120,7 +121,8 @@ public class Robot extends TimedRobot {
         DriverStation.getInstance().getGameSpecificMessage().toLowerCase().toCharArray();
     fieldAnalyzer.setFieldPosition(fieldPos);
     fieldAnalyzer.calculateStrategy();
-    autonomousCommand = new Autonomous(fieldAnalyzer.getPickedStrategy(), fieldAnalyzer.getPickedTrajectory());
+    autonomousCommand = new Autonomous(fieldAnalyzer.getPickedStrategy(),
+        fieldAnalyzer.getPickedTrajectory());
     autonomousCommand.start();
   }
 
