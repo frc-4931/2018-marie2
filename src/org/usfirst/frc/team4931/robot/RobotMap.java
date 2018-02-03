@@ -25,23 +25,29 @@ public class RobotMap {
   public static final int rightBackMotorPort = 4;
   public static final boolean leftFrontMotorInverted = false;
   public static final boolean leftBackMotorInverted = false;
-  public static final boolean rightFrontMotorInverted = false;
-  public static final boolean rightBackMotorInverted = false;
+  public static final boolean rightFrontMotorInverted = true;
+  public static final boolean rightBackMotorInverted = true;
 
-  public static final int encoderPPR = 1024;
+  public static final int encoderPPR = 120;
 
   /**
    * [0] is forward position port, [1] is backward position port
    */
-  public static final int[] gearBox = {4, 5};
+  public static final int[] gearBox = {0, 1};
+
   public static final int[] leftGrabberPorts = {2, 3};
-  public static final int[] rightGrabberPorts = {0, 1};
-  
+  public static final int[] rightGrabberPorts = {4, 5};
+  public static final int leftGrabberMotorPort = 7;
+  public static final int rightGrabberMotorPort = 8;
+  public static final boolean leftGrabberMotorInverted = false;
+  public static final boolean rightGrabberMotorInverted = true;
+  public static final int limitSwitchLowPort = 0;
+  public static final int limitSwitchMidPort = 0;
+  public static final int limitSwitchHighPort = 2;
+
   public static final int compressor = 6;
 
-  public static final SPI.Port gyroPort = SPI.Port.kOnboardCS0;
-
-  public static final int liftMotorPort = 7;
+  public static final int liftMotorPort = 5;
   public static final boolean liftMotorInverted = false;
 
   // If you are using multiple modules, make sure to define both the port

@@ -7,10 +7,12 @@
 
 package org.usfirst.frc.team4931.robot;
 
+import org.usfirst.frc.team4931.robot.commands.Autonomous;
 import org.usfirst.frc.team4931.robot.field.FieldAnalyzer;
 import org.usfirst.frc.team4931.robot.field.StartingPos;
 import org.usfirst.frc.team4931.robot.subsystems.Drivetrain;
 import org.usfirst.frc.team4931.robot.subsystems.Grabber;
+import org.usfirst.frc.team4931.robot.subsystems.GrabberPosition;
 import org.usfirst.frc.team4931.robot.subsystems.Lift;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.Compressor;
@@ -18,7 +20,6 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.Relay.Value;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -42,7 +43,7 @@ public class Robot extends TimedRobot {
   public static boolean runCompressor;
   SendableChooser<String> autoChooserPos = new SendableChooser<>();
   SendableChooser<String> autoChooserTarget = new SendableChooser<>();
-  Command autonomousCommand;
+  private Autonomous autonomousCommand;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -53,15 +54,16 @@ public class Robot extends TimedRobot {
     operatorInput = new OperatorInput();
     drivetrain = new Drivetrain();
     fieldAnalyzer = new FieldAnalyzer();
+
     compressor = new Compressor(RobotMap.compressor);
     compressor.setClosedLoopControl(false);
     runCompressor = true;
-
     compressorController = new Relay(0);
-    
+
     CameraServer.getInstance().startAutomaticCapture();
 
     SmartDashboard.putBoolean("Pressure Switch", compressor.getPressureSwitchValue());
+    SmartDashboard.putString("Strategy Field", "nnnnn");
     SmartDashboard.putBoolean("Submit", false);
 
     // Create position selector to the SmartDashboard
@@ -74,8 +76,8 @@ public class Robot extends TimedRobot {
     }
     SmartDashboard.putData("Position Selection", autoChooserPos);
 
-    // Create strategy selector
-    autoChooserTarget.addDefault("Default Strategy", "def");
+    grabber.calculateCurrentPosition();
+    grabber.goToSetPoint(GrabberPosition.HIGH);
   }
 
   /**
@@ -111,10 +113,8 @@ public class Robot extends TimedRobot {
         DriverStation.getInstance().getGameSpecificMessage().toLowerCase().toCharArray();
     fieldAnalyzer.setFieldPosition(fieldPos);
     fieldAnalyzer.calculateStrategy();
-    String autoPos = autoChooserPos.getSelected();
-    String autoTarget = autoChooserTarget.getSelected();
-    String targetCommand = autoPos + "-" + autoTarget + "-" + fieldPos[0] + fieldPos[1];
-    SmartDashboard.putString("Auto String", targetCommand);
+    autonomousCommand = new Autonomous(fieldAnalyzer.getPickedStrategy(), fieldAnalyzer.getPickedTrajectory());
+    autonomousCommand.start();
   }
 
   /**
@@ -151,6 +151,7 @@ public class Robot extends TimedRobot {
       fieldAnalyzer.predetermineStrategy();
       SmartDashboard.putBoolean("submit", false);
     }
+    grabber.calculateCurrentPositionAndMove();
   }
 
   /**

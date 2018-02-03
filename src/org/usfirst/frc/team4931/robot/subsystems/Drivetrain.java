@@ -12,14 +12,13 @@ import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 
+/**
+ * Determines the driving mechanism
+ */
 public class Drivetrain extends Subsystem {
 
-  private static WPI_TalonSRX leftFrontMotor;
-  private static WPI_TalonSRX leftBackMotor;
-  private static WPI_TalonSRX rightFrontMotor;
-  private static WPI_TalonSRX rightBackMotor;
-  private static SpeedControllerGroup leftSideMotors;
-  private static SpeedControllerGroup rightSideMotors;
+  private WPI_TalonSRX leftFrontMotor, leftBackMotor, rightFrontMotor, rightBackMotor;
+  private static SpeedControllerGroup leftSideMotors, rightSideMotors;
   private static DifferentialDrive drivetrain;
   private static DoubleSolenoid gearBox;
   private static PigeonIMU pigeon;
@@ -28,8 +27,11 @@ public class Drivetrain extends Subsystem {
     initialization();
   }
 
+  /**
+   * Initializes each motors.
+   */
   public void initialization() {
-    //Configure drive motors
+    // Configure drive motors
     leftFrontMotor = new WPI_TalonSRX(RobotMap.leftFrontMotorPort);
     leftBackMotor = new WPI_TalonSRX(RobotMap.leftBackMotorPort);
     rightFrontMotor = new WPI_TalonSRX(RobotMap.rightFrontMotorPort);
@@ -45,23 +47,22 @@ public class Drivetrain extends Subsystem {
     leftSideMotors = new SpeedControllerGroup(leftFrontMotor, leftBackMotor);
     rightSideMotors = new SpeedControllerGroup(rightFrontMotor, rightBackMotor);
 
-    //Configure encoders
+    // Configure encoders
     leftFrontMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 50);
     rightFrontMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 50);
 
-    //Configure pneumatics for 2 speed gearboxes
+    // Configure pneumatics for 2 speed gearboxes
     gearBox = new DoubleSolenoid(RobotMap.gearBox[0], RobotMap.gearBox[1]);
 
-    //Create drivetrain from left and right side motor groups
+    // Create drivetrain from left and right side motor groups
     drivetrain = new DifferentialDrive(leftSideMotors, rightSideMotors);
 
-    //Create gyro senser
+    // Create gyro senser
     pigeon = new PigeonIMU(rightBackMotor);
   }
 
   @Override
-  protected void initDefaultCommand() {
-  }
+  protected void initDefaultCommand() {}
 
   /**
    * Sets speed of Drivetrain.
@@ -86,14 +87,14 @@ public class Drivetrain extends Subsystem {
   /**
    * Returns value of left encoder in revolutions.
    */
-  public double getLeftEncoder() {
+  public int getLeftEncoder() {
     return leftFrontMotor.getSelectedSensorPosition(0);
   }
 
   /**
    * Returns value of right encoder in revolutions.
    */
-  public double getRightEncoder() {
+  public int getRightEncoder() {
     return rightFrontMotor.getSelectedSensorPosition(0);
   }
 
@@ -141,7 +142,7 @@ public class Drivetrain extends Subsystem {
   /**
    * Switches the Drivetrain to the low speed gear.
    */
-  public void swithLowGear() {
+  public void switchLowGear() {
     gearBox.set(Value.kReverse);
   }
 
