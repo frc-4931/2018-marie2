@@ -16,9 +16,9 @@ public class FieldAnalyzer {
   private StartingPos robotStartingPos; // position of the robot before auto
   private char strategyPick[]; // selected strategy by the drive team
   private double dt = 0.05; // time between each different straight path on the curve
-  private double maxSpeed = 4.0;
-  private double maxAcceleration = 3.0;
-  private double maxJerk = 60.0;
+  private double maxSpeed = 4.0; //TODO Set max speed
+  private double maxAcceleration = 3.0; //TODO Set max acceleration
+  private double maxJerk = 60.0; //TODO Set max jerk
   private Strategy pickedStrategy;
   private TankModifier pickedTrajectory;
 

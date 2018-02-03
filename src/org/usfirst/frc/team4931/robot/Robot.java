@@ -42,8 +42,7 @@ public class Robot extends TimedRobot {
   public static Compressor compressor;
   public static Relay compressorController;
   public static boolean runCompressor;
-  SendableChooser<String> autoChooserPos = new SendableChooser<>();
-  SendableChooser<String> autoChooserTarget = new SendableChooser<>();
+  private SendableChooser<String> autoChooserPos = new SendableChooser<>();
   private Autonomous autonomousCommand;
 
   /**
@@ -54,7 +53,6 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     drivetrain = new Drivetrain();
     fieldAnalyzer = new FieldAnalyzer();
-    operatorInput = new OperatorInput();
 
     compressor = new Compressor(RobotMap.compressor);
     compressor.setClosedLoopControl(false);
@@ -62,6 +60,9 @@ public class Robot extends TimedRobot {
     compressorController = new Relay(0);
 
     grabber = new Grabber();
+    lift = new Lift();
+
+    operatorInput = new OperatorInput();
 
     CameraServer.getInstance().startAutomaticCapture();
 
@@ -76,11 +77,7 @@ public class Robot extends TimedRobot {
 
     // Create position selector to the SmartDashboard
     for (StartingPos pos : StartingPos.values()) {
-      if (pos.ordinal() == 0) {
-        autoChooserPos.addDefault("Position 1", pos.name());
-      } else {
         autoChooserPos.addObject("Position " + (pos.ordinal() + 1), pos.name());
-      }
     }
     SmartDashboard.putData("Position Selection", autoChooserPos);
 
@@ -90,9 +87,7 @@ public class Robot extends TimedRobot {
 
   /**
    * This function is called once each time the robot enters Disabled mode. You can use it to reset
-   * any subsystem information you want to clear when the robot is disabled.EXCHANGE: //TODO: break;
-   * case SCALE_MID: //TODO break; case FLOOR: //TODO break; case SCALE_TOP: //TODO break; case
-   * SWITCH:
+   * any subsystem information you want to clear when the robot is disabled.
    */
   @Override
   public void disabledInit() {
@@ -173,11 +168,25 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Joy z", operatorInput.getDriverController().getZ());
   }
 
+  @Override
+  public void testInit() {
+    SmartDashboard.putNumber("Left Speed", 0);
+    SmartDashboard.putNumber("Right Speed", 0);
+  }
+
   /**
    * This function is called periodically during test mode.
    */
   @Override
   public void testPeriodic() {
+    Scheduler.getInstance().run();
+
+    double leftSide = SmartDashboard.getNumber("Left Speed", 0);
+    double rightSide = SmartDashboard.getNumber("Right Speed", 0);
+    drivetrain.driveTank(leftSide, rightSide);
+    drivetrain.printSpeed();
+
+
     SmartDashboard.putNumber("Gyro Angle", drivetrain.gyroReadYawAngle());
     SmartDashboard.putNumber("Gyro Rate", drivetrain.gyroReadYawRate());
   }
