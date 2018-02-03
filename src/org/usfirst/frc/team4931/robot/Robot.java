@@ -202,7 +202,6 @@ public class Robot extends TimedRobot {
     drivetrain.driveTank(leftSide, rightSide);
     drivetrain.printSpeed();
 
-
     SmartDashboard.putNumber("Gyro Angle", drivetrain.gyroReadYawAngle());
     SmartDashboard.putNumber("Gyro Rate", drivetrain.gyroReadYawRate());
   }
