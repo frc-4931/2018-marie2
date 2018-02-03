@@ -7,11 +7,10 @@
 
 package org.usfirst.frc.team4931.robot;
 
-import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
-import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.command.InstantCommand;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -25,23 +24,58 @@ public class OperatorInput {
   // You create one by telling it which joystick it's on and which button
   // number it is.
   Joystick stick = new Joystick(0);
-  Button trigger = new JoystickButton(stick, 1);
-  Button shiftGear = new JoystickButton(stick, 2);
+  Button button = new JoystickButton(stick, 1);
+  Button shiftHighGear = new JoystickButton(stick, 2);
+  Button shiftLowGear = new JoystickButton(stick, 3);
   {
-    shiftGear.whenPressed(new Command() {
+    shiftHighGear.whenPressed(new Command() {
       @Override
       protected void initialize() {
-        if (Robot.drivetrain.getGearState() == DoubleSolenoid.Value.kForward)
-          Robot.drivetrain.switchLowGear();
-        else
-          Robot.drivetrain.switchHighGear();
-      }
-
-      @Override
-      protected boolean isFinished() {
-        return true;
+        Robot.drivetrain.switchHighGear();
       }
     });
+    shiftLowGear.whenPressed(new InstantCommand() {
+      @Override
+      protected void initialize() {
+        Robot.drivetrain.switchLowGear();
+      }
+    });
+    return controller;
+  }
+
+  private Joystick liftController() {
+    Joystick controller = new Joystick (RobotMap.liftControllerPort);
+    // talk to drive team about button arrangement
+    Button openGrabber = new JoystickButton(controller, 1);
+    Button closeGrabber = new JoystickButton(controller, 2);
+    Button grabberMid = new JoystickButton(controller, 3);
+    Button grabberLow = new JoystickButton(controller, 4);
+    Button grabberHigh = new JoystickButton(controller, 5);
+    Button scaleHigh = new JoystickButton(controller, 7);
+    Button scaleMid = new JoystickButton(controller, 9);
+    Button floor = new JoystickButton(controller, 11);
+    Button switchHeight = new JoystickButton(controller, 8);
+    Button exchange = new JoystickButton(controller, 10);
+
+    openGrabber.whenPressed(new OpenGrabber());
+    closeGrabber.whenPressed(new CloseGrabber());
+    grabberMid.whenPressed(new GrabberChangePosition(GrabberPosition.MIDDLE));
+    grabberLow.whenPressed(new GrabberChangePosition(GrabberPosition.LOW));
+    grabberHigh.whenPressed(new GrabberChangePosition(GrabberPosition.HIGH));
+    scaleHigh.whenPressed(new SetLiftSetpoint(FixedLiftHeight.SCALE_TOP));
+    scaleMid.whenPressed(new SetLiftSetpoint(FixedLiftHeight.SCALE_MID));
+    floor.whenPressed(new SetLiftSetpoint(FixedLiftHeight.FLOOR));
+    switchHeight.whenPressed(new SetLiftSetpoint(FixedLiftHeight.SWITCH));
+    exchange.whenPressed(new SetLiftSetpoint(FixedLiftHeight.EXCHANGE));
+    return controller;
+  }
+
+  public Joystick getDriverController() {
+    return driverController;
+  }
+
+  public Joystick getLiftController() {
+    return liftController;
   }
 
 }

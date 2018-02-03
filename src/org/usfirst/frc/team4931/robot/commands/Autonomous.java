@@ -1,6 +1,8 @@
 package org.usfirst.frc.team4931.robot.commands;
 
+import static org.usfirst.frc.team4931.robot.field.Strategy.*;
 import org.usfirst.frc.team4931.robot.field.Strategy;
+import org.usfirst.frc.team4931.robot.subsystems.FixedLiftHeight;
 import org.usfirst.frc.team4931.robot.subsystems.GrabberPosition;
 import static org.usfirst.frc.team4931.robot.subsystems.FixedLiftHeight.*;
 import edu.wpi.first.wpilibj.command.CommandGroup;
@@ -12,22 +14,24 @@ public class Autonomous extends CommandGroup {
 
   public Autonomous(Strategy strategy, TankModifier tankModifier) {
     addParallel(new GrabberChangePosition(GrabberPosition.MIDDLE));
-    setLiftHeight(strategy);
+    addParallel(new SetLiftSetpoint(calcLiftHeight(strategy)));
     addParallel(new DriveByTrajectory(tankModifier));
+    
+    if ((strategy == SWITCH_SAME) || (strategy == SWITCH_OPPOSITE) || (strategy == SCALE_SAME) || (strategy == SCALE_OPPOSITE)) {
+      addSequential(new OpenGrabber());
+    }
   }
 
-  public void setLiftHeight(Strategy strategy) {
+  private FixedLiftHeight calcLiftHeight(Strategy strategy) {
     switch (strategy) {
       case SWITCH_SAME:
       case SWITCH_OPPOSITE:
-        addParallel(new SetLiftSetpoint(SWITCH));
-        break;
+        return SWITCH;
       case SCALE_OPPOSITE:
       case SCALE_SAME:
-        addParallel(new SetLiftSetpoint(SCALE_TOP));
-        break;
-      case DRIVE_FORWARD:
-        addParallel(new SetLiftSetpoint(SWITCH));
+        return SCALE_TOP;
+      default:
+        return SWITCH;
     }
   }
 }

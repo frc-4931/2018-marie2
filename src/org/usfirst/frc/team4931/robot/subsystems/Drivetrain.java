@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team4931.robot.RobotMap;
+import org.usfirst.frc.team4931.robot.commands.DriveWithJoystick;
 
 /**
  * Determines the driving mechanism
@@ -63,7 +64,9 @@ public class Drivetrain extends Subsystem {
   }
 
   @Override
-  protected void initDefaultCommand() {}
+  protected void initDefaultCommand() {
+    setDefaultCommand(new DriveWithJoystick());
+  }
 
   /**
    * Sets speed of Drivetrain.
@@ -71,8 +74,10 @@ public class Drivetrain extends Subsystem {
    * @param speed - speed of motors
    * @param rotation - difference between left and right
    */
-  public void driveArcade(double speed, double rotation) {
-    drivetrain.arcadeDrive(speed, rotation);
+  public void driveArcade(double speed, double rotation, double throttle) {
+    double trueThrottle = (throttle + 1)/2;
+    // Values are switched because wpi is stupid and somehow switches the values
+    drivetrain.arcadeDrive((Math.copySign(rotation * rotation, rotation) * trueThrottle), (Math.copySign(speed * speed, speed) * trueThrottle));
   }
 
   /**
