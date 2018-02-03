@@ -77,7 +77,7 @@ public class Drivetrain extends Subsystem {
   public void driveArcade(double speed, double rotation, double throttle) {
     double trueThrottle = (throttle + 1)/2;
     // Values are switched because wpi is stupid and somehow switches the values
-    drivetrain.arcadeDrive((Math.copySign(rotation * rotation, rotation) * trueThrottle), (Math.copySign(speed * speed, speed) * trueThrottle));
+    drivetrain.arcadeDrive((Math.copySign(rotation * rotation, rotation) * trueThrottle), (Math.copySign(speed * speed, speed) * trueThrottle), false);
   }
 
   /**

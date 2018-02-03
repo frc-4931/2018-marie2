@@ -17,7 +17,7 @@ public class Autonomous extends CommandGroup {
     addParallel(new SetLiftSetpoint(calcLiftHeight(strategy)));
     addParallel(new DriveByTrajectory(tankModifier));
     
-    if ((strategy == SWITCH_SAME) || (strategy == SWITCH_OPPOSITE) || (strategy == SCALE_SAME) || (strategy == SCALE_OPPOSITE)) {
+    if (strategy != DRIVE_FORWARD) {
       addSequential(new OpenGrabber());
     }
   }

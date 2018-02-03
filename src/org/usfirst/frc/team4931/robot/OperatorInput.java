@@ -7,6 +7,12 @@
 
 package org.usfirst.frc.team4931.robot;
 
+import org.usfirst.frc.team4931.robot.commands.CloseGrabber;
+import org.usfirst.frc.team4931.robot.commands.GrabberChangePosition;
+import org.usfirst.frc.team4931.robot.commands.OpenGrabber;
+import org.usfirst.frc.team4931.robot.commands.SetLiftSetpoint;
+import org.usfirst.frc.team4931.robot.subsystems.FixedLiftHeight;
+import org.usfirst.frc.team4931.robot.subsystems.GrabberPosition;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
@@ -18,17 +24,21 @@ import edu.wpi.first.wpilibj.command.InstantCommand;
  */
 public class OperatorInput {
 
-  //// CREATING BUTTONS
-  // One type of button is a joystick button which is any button on a
-  //// joystick.   
-  // You create one by telling it which joystick it's on and which button
-  // number it is.
-  Joystick stick = new Joystick(0);
-  Button button = new JoystickButton(stick, 1);
-  Button shiftHighGear = new JoystickButton(stick, 2);
-  Button shiftLowGear = new JoystickButton(stick, 3);
-  {
-    shiftHighGear.whenPressed(new Command() {
+  private Joystick driverController;
+  private Joystick liftController;
+
+
+  public OperatorInput() {
+    driverController = tankDriveController();
+    liftController = liftController();
+  }
+
+  private Joystick tankDriveController() {
+    Joystick controller = new Joystick (RobotMap.driverControllerPort);
+    Button shiftHighGear = new JoystickButton(controller, 2);
+    Button shiftLowGear = new JoystickButton(controller, 1);
+
+    shiftHighGear.whenPressed(new InstantCommand() {
       @Override
       protected void initialize() {
         Robot.drivetrain.switchHighGear();
