@@ -6,6 +6,11 @@ import jaci.pathfinder.modifiers.TankModifier;
 import org.usfirst.frc.team4931.robot.Robot;
 import org.usfirst.frc.team4931.robot.RobotMap;
 
+/**
+ * @author shawn ely
+ *
+ * Drives the drivetrain in the trajectory that was determined.
+ */
 public class DriveByTrajectory extends Command {
   private EncoderFollower leftEncoderFollower;
   private EncoderFollower rightEncoderFollower;
@@ -20,6 +25,9 @@ public class DriveByTrajectory extends Command {
     Robot.drivetrain.resetRightEncoder();
    }
 
+  /**
+   * Sets the motor speed based on the encoder readings along the trajectory
+   */
   @Override
   protected void execute() {
     double leftSpeed = leftEncoderFollower.calculate(Robot.drivetrain.getLeftEncoder());
@@ -27,6 +35,9 @@ public class DriveByTrajectory extends Command {
     Robot.drivetrain.driveTank(leftSpeed, rightSpeed);
   }
 
+  /**
+   * returns isFinished() when both encoders are finished
+   */
   @Override
   protected boolean isFinished() {
     return leftEncoderFollower.isFinished() && rightEncoderFollower.isFinished();
