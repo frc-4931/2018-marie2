@@ -67,13 +67,18 @@ public class Drivetrain extends Subsystem {
     pigeon = new PigeonIMU(rightFrontMotor);
   }
 
+  /**
+   * Sets the default command to manual control. When manual input is
+   * detected, all other automated commands will be shut off
+   * automatically.
+   */
   @Override
   protected void initDefaultCommand() {
     setDefaultCommand(new DriveWithJoystick());
   }
 
   /**
-   * Sets speed of Drivetrain.
+   * Calculates and sets speed of Drivetrain.
    *
    * @param speed - speed of motors
    * @param rotation - difference between left and right
