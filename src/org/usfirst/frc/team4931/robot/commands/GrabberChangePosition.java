@@ -20,8 +20,7 @@ public class GrabberChangePosition extends Command {
   
   @Override
   public boolean isFinished() {
-    // FIXME pull value from Grabber
-    return true;
+    return Robot.grabber.atTargetPosition();
   }
 
 }

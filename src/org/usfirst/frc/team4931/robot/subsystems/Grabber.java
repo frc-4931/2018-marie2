@@ -8,6 +8,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.DigitalInput;
 import org.usfirst.frc.team4931.robot.RobotMap;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 /**
@@ -15,6 +16,8 @@ import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
  */
 public class Grabber extends Subsystem {
   private final double NORMAL_MOVE_SPEED = 0.5;
+  private boolean open; 
+  
 
   private DoubleSolenoid leftPneumatic, rightPneumatic;
   private WPI_TalonSRX leftGrabberMotor, rightGrabberMotor;
@@ -66,7 +69,6 @@ public class Grabber extends Subsystem {
 
   @Override
   protected void initDefaultCommand() {
-    // TODO Auto-generated method stub
 
   }
 
@@ -76,6 +78,7 @@ public class Grabber extends Subsystem {
   public void captureCube() {
     leftPneumatic.set(Value.kReverse);
     rightPneumatic.set(Value.kReverse);
+    open = false;
   }
 
   /**
@@ -84,6 +87,7 @@ public class Grabber extends Subsystem {
   public void releaseCube() {
     leftPneumatic.set(Value.kForward);
     rightPneumatic.set(Value.kForward);
+    open = true;
   }
 
   /**
@@ -170,5 +174,6 @@ public class Grabber extends Subsystem {
   }
   
   public void log() {
+    SmartDashboard.putBoolean("GrabberOpen", open);
   }
 }

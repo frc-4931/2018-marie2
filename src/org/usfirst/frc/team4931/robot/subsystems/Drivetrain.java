@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team4931.robot.RobotMap;
 import org.usfirst.frc.team4931.robot.commands.DriveWithJoystick;
 
@@ -23,6 +24,8 @@ public class Drivetrain extends Subsystem {
   private static DifferentialDrive drivetrain;
   private static DoubleSolenoid gearBox;
   private static PigeonIMU pigeon;
+  private static final double MAX_VELOCITY_LOW_GEAR = 10; //TODO set max velocity in Pulses/100ms
+  private static final double MAX_VELOCITY_HIGH_GEAR = 10; //TODO set max velocity in Pulses/100ms
 
   public Drivetrain() {
     initialization();
@@ -49,26 +52,33 @@ public class Drivetrain extends Subsystem {
     rightSideMotors = new SpeedControllerGroup(rightFrontMotor, rightBackMotor);
 
     // Configure encoders
-    leftFrontMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 50);
-    rightFrontMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 50);
+    leftBackMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
+    rightBackMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
+    leftBackMotor.setSensorPhase(!RobotMap.leftSideEncoderInverted);
+    rightBackMotor.setSensorPhase(!RobotMap.rightSideEncoderInverted);
 
     // Configure pneumatics for 2 speed gearboxes
-    gearBox = new DoubleSolenoid(RobotMap.gearBox[0], RobotMap.gearBox[1]);
+    gearBox = new DoubleSolenoid(RobotMap.compressor, RobotMap.gearBox[0], RobotMap.gearBox[1]);
 
     // Create drivetrain from left and right side motor groups
     drivetrain = new DifferentialDrive(leftSideMotors, rightSideMotors);
 
     // Create gyro senser
-    pigeon = new PigeonIMU(rightBackMotor);
+    pigeon = new PigeonIMU(rightFrontMotor);
   }
 
+  /**
+   * Sets the default command to manual control. When manual input is
+   * detected, all other automated commands will be shut off
+   * automatically.
+   */
   @Override
   protected void initDefaultCommand() {
     setDefaultCommand(new DriveWithJoystick());
   }
 
   /**
-   * Sets speed of Drivetrain.
+   * Calculates and sets speed of Drivetrain.
    *
    * @param speed - speed of motors
    * @param rotation - difference between left and right
@@ -76,7 +86,7 @@ public class Drivetrain extends Subsystem {
   public void driveArcade(double speed, double rotation, double throttle) {
     double trueThrottle = (throttle + 1)/2;
     // Values are switched because wpi is stupid and somehow switches the values
-    drivetrain.arcadeDrive((Math.copySign(rotation * rotation, rotation) * trueThrottle), (Math.copySign(speed * speed, speed) * trueThrottle));
+    drivetrain.arcadeDrive((Math.copySign(rotation * rotation, rotation) * trueThrottle), (Math.copySign(speed * speed, speed) * trueThrottle), false);
   }
 
   /**
@@ -86,21 +96,35 @@ public class Drivetrain extends Subsystem {
    * @param rightSpeed - speed for right side
    */
   public void driveTank(double leftSpeed, double rightSpeed) {
-    drivetrain.tankDrive(leftSpeed, rightSpeed);
+    drivetrain.tankDrive(leftSpeed, rightSpeed, false);
   }
 
   /**
    * Returns value of left encoder in revolutions.
    */
   public int getLeftEncoder() {
-    return leftFrontMotor.getSelectedSensorPosition(0);
+    return leftBackMotor.getSelectedSensorPosition(0);
   }
 
   /**
    * Returns value of right encoder in revolutions.
    */
   public int getRightEncoder() {
-    return rightFrontMotor.getSelectedSensorPosition(0);
+    return rightBackMotor.getSelectedSensorPosition(0);
+  }
+
+  /**
+   * @return the velocity of the left side in Pulses/100ms
+   */
+  public double getLeftVelocity() {
+    return rightBackMotor.getSelectedSensorVelocity(0);
+  }
+
+  /**
+   * @return the velocity of the right in Pulses/100ms
+   */
+  public double getRightVelocity() {
+    return rightBackMotor.getSelectedSensorVelocity(0);
   }
 
   /**
@@ -152,6 +176,13 @@ public class Drivetrain extends Subsystem {
   }
 
   /**
+   * @return the gearbox position
+   */
+  public Value getGearState() {
+    return gearBox.get();
+  }
+
+  /**
    * Reads the angle of the gyro.
    */
   public double gyroReadYawAngle() {
@@ -187,6 +218,45 @@ public class Drivetrain extends Subsystem {
     gearBox.set(Value.kOff);
   }
 
+
   public void log() {
+    SmartDashboard.putNumber("LFront", leftFrontMotor.get());
+    SmartDashboard.putNumber("LRear", leftBackMotor.get());
+    SmartDashboard.putNumber("RFront", rightFrontMotor.get());
+    SmartDashboard.putNumber("RRear", rightBackMotor.get());
+    SmartDashboard.putNumber("Gyro Angle", gyroReadYawAngle());
+    SmartDashboard.putNumber("Gyro Rate", gyroReadYawRate());
+  }
+
+  /**
+   * Reads the velocity of the motors and compares it to our target velocity, and shirts up or down based on the information.
+   */
+  public void autoShift() {
+    double leftSpeed, rightSpeed;
+    boolean leftMotorStrain, rightMotorStrain;
+    double leftTargetSpeed = leftSideMotors.get();
+    double rightTargetSpeed = rightSideMotors.get();
+
+    if (getGearState() == Value.kForward) {
+      leftSpeed = getLeftVelocity() / MAX_VELOCITY_HIGH_GEAR;
+      rightSpeed = getRightVelocity() / MAX_VELOCITY_HIGH_GEAR;
+
+      leftMotorStrain = (leftTargetSpeed - leftSpeed) < 0.25;
+      rightMotorStrain = (rightTargetSpeed - rightSpeed) < 0.25;
+
+      if (leftMotorStrain || rightMotorStrain)
+        switchLowGear();
+    } else if (getGearState() == Value.kReverse) {
+      leftSpeed = getLeftVelocity() / MAX_VELOCITY_LOW_GEAR;
+      rightSpeed = getRightVelocity() / MAX_VELOCITY_LOW_GEAR;
+
+      leftMotorStrain = (leftTargetSpeed - leftSpeed) < 0.25;
+      rightMotorStrain = (rightTargetSpeed - rightSpeed) < 0.25;
+
+      boolean highSpeed = leftTargetSpeed >= 0.8 && rightTargetSpeed >= 0.8;
+
+      if (highSpeed && (!leftMotorStrain && !rightMotorStrain))
+        switchHighGear();
+    }
   }
 }
