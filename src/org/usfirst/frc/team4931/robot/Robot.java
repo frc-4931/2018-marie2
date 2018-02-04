@@ -7,6 +7,7 @@
 
 package org.usfirst.frc.team4931.robot;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import org.usfirst.frc.team4931.robot.commands.Autonomous;
 import org.usfirst.frc.team4931.robot.commands.CloseGrabber;
 import org.usfirst.frc.team4931.robot.commands.GrabberChangePosition;
@@ -165,6 +166,8 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     Scheduler.getInstance().run();
+
+    drivetrain.autoShift();
 
     SmartDashboard.putBoolean("Pressure Switch", true);
     SmartDashboard.putBoolean("Bool", operatorInput.getDriverController().getRawButton(1));
