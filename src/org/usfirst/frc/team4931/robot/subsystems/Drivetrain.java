@@ -218,14 +218,14 @@ public class Drivetrain extends Subsystem {
     gearBox.set(Value.kOff);
   }
 
-  /**
-   * Prints all the target motor speeds to the SmartDashboard
-   */
-  public void printSpeed() {
+
+  public void log() {
     SmartDashboard.putNumber("LFront", leftFrontMotor.get());
     SmartDashboard.putNumber("LRear", leftBackMotor.get());
     SmartDashboard.putNumber("RFront", rightFrontMotor.get());
     SmartDashboard.putNumber("RRear", rightBackMotor.get());
+    SmartDashboard.putNumber("Gyro Angle", gyroReadYawAngle());
+    SmartDashboard.putNumber("Gyro Rate", gyroReadYawRate());
   }
 
   /**
@@ -259,5 +259,4 @@ public class Drivetrain extends Subsystem {
         switchHighGear();
     }
   }
-
 }
