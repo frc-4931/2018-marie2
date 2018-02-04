@@ -170,12 +170,15 @@ public class Robot extends TimedRobot {
     drivetrain.autoShift();
 
     SmartDashboard.putBoolean("Pressure Switch", true);
-    SmartDashboard.putBoolean("Bool", operatorInput.getDriverController().getRawButton(1));
+    SmartDashboard.putBoolean("Is In Low Gear", operatorInput.getDriverController().getRawButton(1));
     SmartDashboard.putNumber("Encoder", drivetrain.getLeftEncoder());
     SmartDashboard.putNumber("Joy y", operatorInput.getDriverController().getY());
     SmartDashboard.putNumber("Joy z", operatorInput.getDriverController().getZ());
   }
 
+  /**
+   * Test code for displaying values on Smart Dashboard
+   */
   @Override
   public void testInit() {
     runCompressor = false;
