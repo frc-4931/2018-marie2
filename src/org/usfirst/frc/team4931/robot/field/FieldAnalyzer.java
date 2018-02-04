@@ -34,9 +34,9 @@ public class FieldAnalyzer {
         Trajectory.Config.SAMPLES_FAST, dt, maxSpeed, maxAcceleration, maxJerk);
     for (Strategy s : Strategy.values()) {
       if (strategyPick[s.ordinal()] == 'y') {
-        List<Waypoint> point = Waypoints.WAYPOINTS.get(robotStartingPos).get(s);
+        Waypoint[] point = Waypoints.WAYPOINTS.get(robotStartingPos).get(s);
         TankModifier tankModifier =
-            new TankModifier(Pathfinder.generate(point.toArray(new Waypoint[] {}), config));
+            new TankModifier(Pathfinder.generate(point, config));
         strategyOptions.put(s, tankModifier);
       }
     }
