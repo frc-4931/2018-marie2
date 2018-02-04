@@ -24,6 +24,8 @@ public class Drivetrain extends Subsystem {
   private static DifferentialDrive drivetrain;
   private static DoubleSolenoid gearBox;
   private static PigeonIMU pigeon;
+  private static final double MAX_VELOCITY_LOW_GEAR = 10; //TODO set max velocity in Pulses/100ms
+  private static final double MAX_VELOCITY_HIGH_GEAR = 10; //TODO set max velocity in Pulses/100ms
 
   public Drivetrain() {
     initialization();
@@ -67,7 +69,7 @@ public class Drivetrain extends Subsystem {
 
   /**
    * Sets the default command to manual control. When manual input is
-   * detected, all other automated commands will be shut off 
+   * detected, all other automated commands will be shut off
    * automatically.
    */
   @Override
@@ -109,6 +111,20 @@ public class Drivetrain extends Subsystem {
    */
   public int getRightEncoder() {
     return rightBackMotor.getSelectedSensorPosition(0);
+  }
+
+  /**
+   * @return the velocity of the left side in Pulses/100ms
+   */
+  public double getLeftVelocity() {
+    return rightBackMotor.getSelectedSensorVelocity(0);
+  }
+
+  /**
+   * @return the velocity of the right in Pulses/100ms
+   */
+  public double getRightVelocity() {
+    return rightBackMotor.getSelectedSensorVelocity(0);
   }
 
   /**
@@ -203,13 +219,45 @@ public class Drivetrain extends Subsystem {
   }
 
   /**
-   * Prints speed values of motors on the Smart Dashboard
+   * Prints all the target motor speeds to the SmartDashboard
    */
   public void printSpeed() {
     SmartDashboard.putNumber("LFront", leftFrontMotor.get());
     SmartDashboard.putNumber("LRear", leftBackMotor.get());
     SmartDashboard.putNumber("RFront", rightFrontMotor.get());
     SmartDashboard.putNumber("RRear", rightBackMotor.get());
+  }
+
+  /**
+   * Reads the velocity of the motors and compares it to our target velocity, and shirts up or down based on the information.
+   */
+  public void autoShift() {
+    double leftSpeed, rightSpeed;
+    boolean leftMotorStrain, rightMotorStrain;
+    double leftTargetSpeed = leftSideMotors.get();
+    double rightTargetSpeed = rightSideMotors.get();
+
+    if (getGearState() == Value.kForward) {
+      leftSpeed = getLeftVelocity() / MAX_VELOCITY_HIGH_GEAR;
+      rightSpeed = getRightVelocity() / MAX_VELOCITY_HIGH_GEAR;
+
+      leftMotorStrain = (leftTargetSpeed - leftSpeed) < 0.25;
+      rightMotorStrain = (rightTargetSpeed - rightSpeed) < 0.25;
+
+      if (leftMotorStrain || rightMotorStrain)
+        switchLowGear();
+    } else if (getGearState() == Value.kReverse) {
+      leftSpeed = getLeftVelocity() / MAX_VELOCITY_LOW_GEAR;
+      rightSpeed = getRightVelocity() / MAX_VELOCITY_LOW_GEAR;
+
+      leftMotorStrain = (leftTargetSpeed - leftSpeed) < 0.25;
+      rightMotorStrain = (rightTargetSpeed - rightSpeed) < 0.25;
+
+      boolean highSpeed = leftTargetSpeed >= 0.8 && rightTargetSpeed >= 0.8;
+
+      if (highSpeed && (!leftMotorStrain && !rightMotorStrain))
+        switchHighGear();
+    }
   }
 
 }
