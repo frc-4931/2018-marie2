@@ -168,4 +168,7 @@ public class Grabber extends Subsystem {
   public boolean atTargetPosition() {
     return currentGrabberPosition == setPoint;
   }
+  
+  public void log() {
+  }
 }

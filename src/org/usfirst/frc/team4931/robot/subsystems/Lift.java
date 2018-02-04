@@ -62,4 +62,8 @@ public class Lift extends Subsystem {
   public void lift(double speed) {
     liftMotor.set(ControlMode.PercentOutput, speed);
   }
+  
+  public void log() {
+  }
+  
 }

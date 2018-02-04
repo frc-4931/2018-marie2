@@ -198,4 +198,10 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Gyro Angle", drivetrain.gyroReadYawAngle());
     SmartDashboard.putNumber("Gyro Rate", drivetrain.gyroReadYawRate());
   }
+  
+  private void log() {
+    drivetrain.log();
+    grabber.log();
+    lift.log();
+  }
 }

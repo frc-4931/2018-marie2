@@ -187,4 +187,6 @@ public class Drivetrain extends Subsystem {
     gearBox.set(Value.kOff);
   }
 
+  public void log() {
+  }
 }
