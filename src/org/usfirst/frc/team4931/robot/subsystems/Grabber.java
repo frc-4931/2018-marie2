@@ -16,9 +16,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
  */
 public class Grabber extends Subsystem {
   private final double NORMAL_MOVE_SPEED = 0.5;
-  private boolean open; 
-  
-
+  private boolean open;
   private DoubleSolenoid leftPneumatic, rightPneumatic;
   private WPI_TalonSRX leftGrabberMotor, rightGrabberMotor;
   private DigitalInput limitSwitchLow, limitSwitchMid, limitSwitchHigh;
@@ -175,5 +173,6 @@ public class Grabber extends Subsystem {
   
   public void log() {
     SmartDashboard.putBoolean("GrabberOpen", open);
+    SmartDashboard.putString("GrabberPosition", currentGrabberPosition.name());
   }
 }
