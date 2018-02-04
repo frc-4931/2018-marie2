@@ -253,7 +253,7 @@ public class Drivetrain extends Subsystem {
       leftMotorStrain = (leftTargetSpeed - leftSpeed) < 0.25;
       rightMotorStrain = (rightTargetSpeed - rightSpeed) < 0.25;
 
-      boolean highSpeed = leftTargetSpeed >= .8 && rightTargetSpeed >= .8;
+      boolean highSpeed = leftTargetSpeed >= 0.8 && rightTargetSpeed >= 0.8;
 
       if (highSpeed && (!leftMotorStrain && !rightMotorStrain))
         switchHighGear();
