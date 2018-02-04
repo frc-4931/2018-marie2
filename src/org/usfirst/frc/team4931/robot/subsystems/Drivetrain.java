@@ -229,7 +229,7 @@ public class Drivetrain extends Subsystem {
   }
 
   /**
-   * Reads the velocity of the motors and compares it to our target velocity, and shirts up or down based on the information.
+   * Reads the velocity of the motors and compares it to our target velocity, and shifts up or down based on the information.
    */
   public void autoShift() {
     double leftSpeed, rightSpeed;
