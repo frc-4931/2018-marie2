@@ -7,7 +7,6 @@
 
 package org.usfirst.frc.team4931.robot;
 
-import edu.wpi.first.wpilibj.DoubleSolenoid;
 import org.usfirst.frc.team4931.robot.commands.Autonomous;
 import org.usfirst.frc.team4931.robot.commands.CloseGrabber;
 import org.usfirst.frc.team4931.robot.commands.GrabberChangePosition;
@@ -72,7 +71,6 @@ public class Robot extends TimedRobot {
 
     CameraServer.getInstance().startAutomaticCapture();
 
-    SmartDashboard.putBoolean("Pressure Switch", compressor.getPressureSwitchValue());
     SmartDashboard.putString("Strategy Field", "nnnnn");
     SmartDashboard.putData("Submit", new InstantCommand() {
       @Override
@@ -103,6 +101,7 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledPeriodic() {
     Scheduler.getInstance().run();
+    log();
   }
 
   /**
@@ -133,6 +132,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
     Scheduler.getInstance().run();
+    log();
   }
 
   @Override
@@ -166,14 +166,13 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     Scheduler.getInstance().run();
-
+    
     drivetrain.autoShift();
 
     SmartDashboard.putBoolean("Pressure Switch", true);
     SmartDashboard.putBoolean("Is In Low Gear", operatorInput.getDriverController().getRawButton(1));
     SmartDashboard.putNumber("Encoder", drivetrain.getLeftEncoder());
-    SmartDashboard.putNumber("Joy y", operatorInput.getDriverController().getY());
-    SmartDashboard.putNumber("Joy z", operatorInput.getDriverController().getZ());
+    log();
   }
 
   /**
@@ -206,15 +205,14 @@ public class Robot extends TimedRobot {
     double leftSide = SmartDashboard.getNumber("Left Speed", 0);
     double rightSide = SmartDashboard.getNumber("Right Speed", 0);
     drivetrain.driveTank(leftSide, rightSide);
-    drivetrain.printSpeed();
-
-    SmartDashboard.putNumber("Gyro Angle", drivetrain.gyroReadYawAngle());
-    SmartDashboard.putNumber("Gyro Rate", drivetrain.gyroReadYawRate());
+    log();
   }
   
   private void log() {
     drivetrain.log();
     grabber.log();
     lift.log();
+    
+    SmartDashboard.putBoolean("Pressure Switch", compressor.getPressureSwitchValue());
   }
 }
