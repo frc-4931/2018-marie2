@@ -229,7 +229,7 @@ public class Drivetrain extends Subsystem {
   }
 
   /**
-   * Reads the velocity of the motors and compares it to our target velocity, and shirts up or down based on the information.
+   * Reads the velocity of the motors and compares it to our target velocity, and shifts up or down based on the information.
    */
   public void autoShift() {
     double leftSpeed, rightSpeed;
@@ -237,26 +237,26 @@ public class Drivetrain extends Subsystem {
     double leftTargetSpeed = leftSideMotors.get();
     double rightTargetSpeed = rightSideMotors.get();
 
-    if (getGearState() == Value.kForward) {
+    if (getGearState() == Value.kForward) { //High Gear
       leftSpeed = getLeftVelocity() / MAX_VELOCITY_HIGH_GEAR;
       rightSpeed = getRightVelocity() / MAX_VELOCITY_HIGH_GEAR;
+      leftMotorStrain = (Math.abs(leftSpeed) / Math.abs(leftTargetSpeed)) < 0.5;
+      rightMotorStrain = (Math.abs(rightSpeed) / Math.abs(rightTargetSpeed)) < 0.5;
 
-      leftMotorStrain = (leftTargetSpeed - leftSpeed) < 0.25;
-      rightMotorStrain = (rightTargetSpeed - rightSpeed) < 0.25;
-
-      if (leftMotorStrain || rightMotorStrain)
+      if (leftMotorStrain || rightMotorStrain) {
         switchLowGear();
-    } else if (getGearState() == Value.kReverse) {
+      }
+    } else if (getGearState() == Value.kReverse) { //Low Gear
       leftSpeed = getLeftVelocity() / MAX_VELOCITY_LOW_GEAR;
       rightSpeed = getRightVelocity() / MAX_VELOCITY_LOW_GEAR;
+      leftMotorStrain = (Math.abs(leftSpeed) / Math.abs(leftTargetSpeed)) < 0.5;
+      rightMotorStrain = (Math.abs(rightSpeed) / Math.abs(rightTargetSpeed)) < 0.5;
 
-      leftMotorStrain = (leftTargetSpeed - leftSpeed) < 0.25;
-      rightMotorStrain = (rightTargetSpeed - rightSpeed) < 0.25;
+      boolean highSpeed = leftSpeed >= 0.9 && rightSpeed >= 0.9;
 
-      boolean highSpeed = leftTargetSpeed >= 0.8 && rightTargetSpeed >= 0.8;
-
-      if (highSpeed && (!leftMotorStrain && !rightMotorStrain))
+      if (highSpeed && (!leftMotorStrain && !rightMotorStrain)) {
         switchHighGear();
+      }
     }
   }
 }
