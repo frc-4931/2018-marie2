@@ -41,10 +41,12 @@ public class DriveByTrajectory extends Command {
     double leftCorrection = correction;
     double rightCorrection = correction;
 
-    if (Math.abs(leftSpeed + correction) > 1.0)
+    if (Math.abs(leftSpeed + correction) > 1.0) {
       rightCorrection += (leftSpeed > 0) ? (leftSpeed + correction) - 1 : (leftSpeed + correction) + 1;
-    if (Math.abs(rightSpeed - correction) > 1.0)
-      leftCorrection += (rightSpeed > 0) ? (rightSpeed + correction) - 1: (rightSpeed + correction) + 1;
+    }
+    if (Math.abs(rightSpeed - correction) > 1.0) {
+      leftCorrection += (rightSpeed > 0) ? (rightSpeed + correction) - 1 : (rightSpeed + correction) + 1;
+    }
 
     Robot.drivetrain.driveTank(leftSpeed+leftCorrection, rightSpeed-rightCorrection);
   }

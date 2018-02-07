@@ -243,8 +243,9 @@ public class Drivetrain extends Subsystem {
       leftMotorStrain = (Math.abs(leftSpeed) / Math.abs(leftTargetSpeed)) < 0.5;
       rightMotorStrain = (Math.abs(rightSpeed) / Math.abs(rightTargetSpeed)) < 0.5;
 
-      if (leftMotorStrain || rightMotorStrain)
+      if (leftMotorStrain || rightMotorStrain) {
         switchLowGear();
+      }
     } else if (getGearState() == Value.kReverse) { //Low Gear
       leftSpeed = getLeftVelocity() / MAX_VELOCITY_LOW_GEAR;
       rightSpeed = getRightVelocity() / MAX_VELOCITY_LOW_GEAR;
@@ -253,8 +254,9 @@ public class Drivetrain extends Subsystem {
 
       boolean highSpeed = leftSpeed >= 0.9 && rightSpeed >= 0.9;
 
-      if (highSpeed && (!leftMotorStrain && !rightMotorStrain))
+      if (highSpeed && (!leftMotorStrain && !rightMotorStrain)) {
         switchHighGear();
+      }
     }
   }
 }
