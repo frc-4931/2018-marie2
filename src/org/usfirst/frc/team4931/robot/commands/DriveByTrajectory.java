@@ -52,7 +52,7 @@ public class DriveByTrajectory extends Command {
   }
 
   /**
-   * returns isFinished() when both encoders are finished
+   * @return true when both encoders are finished
    */
   @Override
   protected boolean isFinished() {

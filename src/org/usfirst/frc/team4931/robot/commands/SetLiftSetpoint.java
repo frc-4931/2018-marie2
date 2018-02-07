@@ -24,7 +24,7 @@ public class SetLiftSetpoint extends Command {
   }
 
   /**
-   * returns isFinished() when the lift reaches the target
+   * @return true when the lift reaches the target
    */
   @Override
   protected boolean isFinished() {
