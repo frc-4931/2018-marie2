@@ -5,9 +5,8 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
- * @author dj wickman
- * 
  * Allows the manual control of the lifting mechanism with the joystick.
+ * @author dj wickman
  */
 public class LiftWithJoystick extends Command {
   

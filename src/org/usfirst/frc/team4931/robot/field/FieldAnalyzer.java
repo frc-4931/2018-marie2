@@ -10,12 +10,11 @@ import jaci.pathfinder.Waypoint;
 import jaci.pathfinder.modifiers.TankModifier;
 
 /**
- * @author dj wickman and shawn ely
- * 
  * Uses the position of the field, the robot starting position, and the
  * inputed desired autonomous routines to determine the proper autonomous
  * mode strategy. Each strategy has a set of waypoints used as
  * trajectories that is further described in the Waypoints class.
+ * @author dj wickman and shawn ely
  */
 public class FieldAnalyzer {
 
