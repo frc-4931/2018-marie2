@@ -23,6 +23,9 @@ public class SetLiftSetpoint extends Command {
     Robot.lift.setLiftHeight(liftHeight);
   }
 
+  /**
+   * returns isFinished() when the lift reaches the target
+   */
   @Override
   protected boolean isFinished() {
     return Robot.lift.isAtTarget();
