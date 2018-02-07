@@ -7,9 +7,9 @@ import org.usfirst.frc.team4931.robot.Robot;
 import org.usfirst.frc.team4931.robot.RobotMap;
 
 /**
- * @author shawn ely
- *
  * Drives the drivetrain in the trajectory that was determined.
+ * 
+ * @author shawn ely
  */
 public class DriveByTrajectory extends Command {
   private EncoderFollower leftEncoderFollower;

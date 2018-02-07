@@ -5,9 +5,9 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
- * @author dj wickman
- *
  * Allows manual control of the drivetrain with the joystick. 
+ * 
+ * @author dj wickman
  */
 public class DriveWithJoystick extends Command {
   
