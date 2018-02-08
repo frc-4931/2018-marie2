@@ -85,7 +85,6 @@ public class Robot extends TimedRobot {
     }
     SmartDashboard.putData("Position Selection", autoChooserPos);
 
-    grabber.calculateCurrentPosition();
     grabber.goToSetPoint(GrabberPosition.HIGH);
   }
 
@@ -157,7 +156,6 @@ public class Robot extends TimedRobot {
         compressorController.set(Value.kOff);
       }
     }
-    grabber.calculateCurrentPositionAndMove();
   }
 
   /**
@@ -184,7 +182,8 @@ public class Robot extends TimedRobot {
     SmartDashboard.putData("Open Grabber", new OpenGrabber());
     SmartDashboard.putData("Close Grabber", new CloseGrabber());
     SmartDashboard.putData("Change Grabber Position Low", new GrabberChangePosition(GrabberPosition.LOW));
-    SmartDashboard.putData("Change Grabber Position Mid", new GrabberChangePosition(GrabberPosition.MIDDLE));
+    SmartDashboard.putData("Change Grabber Position Exchange", new GrabberChangePosition(GrabberPosition.EXCHANGE));
+    SmartDashboard.putData("Change Grabber Position Shoot", new GrabberChangePosition(GrabberPosition.SHOOT));
     SmartDashboard.putData("Change Grabber Position High", new GrabberChangePosition(GrabberPosition.HIGH));
     SmartDashboard.putData("Lift Floor", new SetLiftSetpoint(FixedLiftHeight.FLOOR));
     SmartDashboard.putData("Lift Scale Mid", new SetLiftSetpoint(FixedLiftHeight.SCALE_MID));

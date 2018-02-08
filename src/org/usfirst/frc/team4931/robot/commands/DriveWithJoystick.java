@@ -16,8 +16,7 @@ public class DriveWithJoystick extends Command {
   }
   
   /**
-   * Feeds the input of the Joystick into the driveArchade() method in
-   * the Drivetrain class.
+   * Sets the speed of the motors based on joystick input
    */
   @Override
   protected void execute() {
@@ -34,8 +33,7 @@ public class DriveWithJoystick extends Command {
   }
   
   /**
-   * Ends the manual motion of the drivetrain. Will be used when the input
-   * from the joystick ends.
+   * Will never be called as the command never ends peacefully
    */
   @Override
   protected void end() {

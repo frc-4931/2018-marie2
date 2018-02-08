@@ -42,23 +42,7 @@ public class Lift extends Subsystem {
    */
   public void setLiftHeight(FixedLiftHeight liftHeight) {
     this.liftHeight = liftHeight;
-    switch (liftHeight) {
-      case SCALE_TOP:
-        setPoint = 480; //TODO set proper height value
-        break;
-      case SCALE_MID:
-        setPoint = 360; //TODO set proper height value
-        break;
-      case SWITCH:
-        setPoint = 240; //TODO set proper height value
-        break;
-      case EXCHANGE:
-        setPoint = 120; //TODO set proper height value
-        break;
-      case FLOOR:
-        setPoint = 0; //TODO set proper height value
-        break;
-    }
+    setPoint = liftHeight.position();
     liftMotor.set(ControlMode.MotionMagic, setPoint);
   }
   

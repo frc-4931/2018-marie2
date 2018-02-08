@@ -58,9 +58,10 @@ public class OperatorInput {
     // talk to drive team about button arrangement
     Button openGrabber = new JoystickButton(controller, 1);
     Button closeGrabber = new JoystickButton(controller, 2);
-    Button grabberMid = new JoystickButton(controller, 3);
+    Button grabberExchange = new JoystickButton(controller, 3);
     Button grabberLow = new JoystickButton(controller, 4);
     Button grabberHigh = new JoystickButton(controller, 5);
+    Button grabberShoot = new JoystickButton(controller, 6);
     Button scaleHigh = new JoystickButton(controller, 7);
     Button scaleMid = new JoystickButton(controller, 9);
     Button floor = new JoystickButton(controller, 11);
@@ -69,7 +70,8 @@ public class OperatorInput {
 
     openGrabber.whenPressed(new OpenGrabber());
     closeGrabber.whenPressed(new CloseGrabber());
-    grabberMid.whenPressed(new GrabberChangePosition(GrabberPosition.MIDDLE));
+    grabberExchange.whenPressed(new GrabberChangePosition(GrabberPosition.EXCHANGE));
+    grabberExchange.whenPressed(new GrabberChangePosition(GrabberPosition.SHOOT));
     grabberLow.whenPressed(new GrabberChangePosition(GrabberPosition.LOW));
     grabberHigh.whenPressed(new GrabberChangePosition(GrabberPosition.HIGH));
     scaleHigh.whenPressed(new SetLiftSetpoint(FixedLiftHeight.SCALE_TOP));
