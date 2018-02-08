@@ -43,7 +43,6 @@ public class RobotMap {
   public static final int rightGrabberMotorPort = 8;
   public static final boolean leftGrabberMotorInverted = false;
   public static final boolean rightGrabberMotorInverted = true;
-  public static final int limitSwitchMidPort = 0;
 
   public static final int compressor = 6;
 

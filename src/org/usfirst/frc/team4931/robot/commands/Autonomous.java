@@ -17,7 +17,7 @@ public class Autonomous extends CommandGroup {
    * Runs the autonomous
    */
   public Autonomous(Strategy strategy, TankModifier tankModifier) {
-    addParallel(new GrabberChangePosition(GrabberPosition.MIDDLE)); // sets claw position to middle position
+    addParallel(new GrabberChangePosition(GrabberPosition.EXCHANGE)); // sets claw position to middle position
     addParallel(new SetLiftSetpoint(calcLiftHeight(strategy))); // raises lift based on the calculated strategy
     addParallel(new DriveByTrajectory(tankModifier)); // drives the calculated trajectory
     
