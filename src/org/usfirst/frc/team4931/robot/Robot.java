@@ -14,6 +14,7 @@ import org.usfirst.frc.team4931.robot.commands.OpenGrabber;
 import org.usfirst.frc.team4931.robot.commands.SetLiftSetpoint;
 import org.usfirst.frc.team4931.robot.field.FieldAnalyzer;
 import org.usfirst.frc.team4931.robot.field.StartingPos;
+import org.usfirst.frc.team4931.robot.subsystems.Climber;
 import org.usfirst.frc.team4931.robot.subsystems.Drivetrain;
 import org.usfirst.frc.team4931.robot.subsystems.FixedLiftHeight;
 import org.usfirst.frc.team4931.robot.subsystems.Grabber;
@@ -43,6 +44,7 @@ public class Robot extends TimedRobot {
   public static Drivetrain drivetrain;
   public static Grabber grabber;
   public static Lift lift;
+  public static Climber climber;
   private FieldAnalyzer fieldAnalyzer;
   public static Compressor compressor;
   public static Relay compressorController;
@@ -66,6 +68,7 @@ public class Robot extends TimedRobot {
 
     grabber = new Grabber();
     lift = new Lift();
+    climber = new Climber();
 
     operatorInput = new OperatorInput();
 
@@ -184,6 +187,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putData("Lift Switch", new SetLiftSetpoint(FixedLiftHeight.SWITCH));
     SmartDashboard.putNumber("Left Speed", 0);
     SmartDashboard.putNumber("Right Speed", 0);
+    SmartDashboard.putNumber("Lift set point", 0);
   }
 
   /**
@@ -195,7 +199,9 @@ public class Robot extends TimedRobot {
 
     double leftSide = SmartDashboard.getNumber("Left Speed", 0);
     double rightSide = SmartDashboard.getNumber("Right Speed", 0);
+    int setpoint = (int)SmartDashboard.getNumber("Lift set point", 0);
     drivetrain.driveTank(leftSide, rightSide);
+    grabber.goToSetPoint(setpoint);
     log();
   }
   
