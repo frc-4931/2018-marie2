@@ -31,7 +31,6 @@ public class Waypoints {
     Map<Strategy, Waypoint[]> points = new EnumMap<>(Strategy.class);
     points.put(SWITCH_SAME, new Waypoint[] {new Waypoint(0, 24, 0), new Waypoint(11, 25, -35),
         new Waypoint(14, 20, -90)});
-
     points.put(SCALE_SAME, new Waypoint[] {new Waypoint(0, 24, 0), new Waypoint(20, 25, 0),
         new Waypoint(27, 21, -90)});
     points.put(SWITCH_OPPOSITE, new Waypoint[] {new Waypoint(0, 24, 0), new Waypoint(15, 24, 0),
