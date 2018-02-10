@@ -19,7 +19,7 @@ public class Grabber extends Subsystem {
   private final double NORMAL_MOVE_SPEED = 0.5;
   private boolean open;
   private DoubleSolenoid leftPneumatic, rightPneumatic;
-  private WPI_TalonSRX leftGrabberMotor, rightGrabberMotor;
+  private WPI_TalonSRX grabberMotor;
   private double setPoint;
 
   /**
@@ -28,14 +28,10 @@ public class Grabber extends Subsystem {
   public Grabber() {
     leftPneumatic = new DoubleSolenoid(RobotMap.leftGrabberPorts[0], RobotMap.leftGrabberPorts[1]);
     rightPneumatic = new DoubleSolenoid(RobotMap.rightGrabberPorts[0], RobotMap.rightGrabberPorts[1]);
-    leftGrabberMotor = new WPI_TalonSRX(RobotMap.leftGrabberMotorPort);
-    rightGrabberMotor = new WPI_TalonSRX(RobotMap.rightGrabberMotorPort);
-    leftGrabberMotor.setInverted(RobotMap.leftGrabberMotorInverted);
-    rightGrabberMotor.setInverted(RobotMap.rightGrabberMotorInverted);
-    leftGrabberMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute, 0, 0);
-    rightGrabberMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute, 0, 0);
-    leftGrabberMotor.setSensorPhase(RobotMap.leftGrabberMotorInverted);
-    rightGrabberMotor.setSensorPhase(RobotMap.rightGrabberMotorInverted);
+    grabberMotor = new WPI_TalonSRX(RobotMap.grabberMotorPort);
+    grabberMotor.setInverted(RobotMap.grabberMotorInverted);
+    grabberMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute, 0, 0);
+    grabberMotor.setSensorPhase(RobotMap.grabberMotorInverted);
   }
 
   @Override
@@ -75,13 +71,11 @@ public class Grabber extends Subsystem {
    */
   public void goToSetPoint(double position) {
     setPoint = position;
-    leftGrabberMotor.set(ControlMode.Position, position);
-    rightGrabberMotor.set(ControlMode.Position, position);
+    grabberMotor.set(ControlMode.Position, position);
   }
   
   public void changePosition(double position) {
-    leftGrabberMotor.set(ControlMode.PercentOutput, position);
-    rightGrabberMotor.set(ControlMode.PercentOutput, position);
+    grabberMotor.set(ControlMode.PercentOutput, position);
   }
 
   /**
@@ -96,21 +90,19 @@ public class Grabber extends Subsystem {
    * @return the current grabber position.
    */
   public double getCurrentPosition() {
-    return leftGrabberMotor.getSelectedSensorPosition(0);
+    return grabberMotor.getSelectedSensorPosition(0);
   }
 
   /**
    * @return if the grabber is at it's target position.
    */
   public boolean atTargetPosition() {
-    return fuzzyEqual(leftGrabberMotor.getSelectedSensorPosition(0), setPoint) && fuzzyEqual(rightGrabberMotor.getSelectedSensorPosition(0), setPoint);
+    return fuzzyEqual(grabberMotor.getSelectedSensorPosition(0), setPoint);
   }
   
   public void log() {
     SmartDashboard.putBoolean("GrabberOpen", open);
-    SmartDashboard.putNumber("Grabber Position Left", leftGrabberMotor.getSelectedSensorPosition(0));
-    SmartDashboard.putNumber("Grabber Position Right", rightGrabberMotor.getSelectedSensorPosition(0));
-    SmartDashboard.putNumber("Grabber Speed Left", leftGrabberMotor.get());
-    SmartDashboard.putNumber("Grabber Speed Right", rightGrabberMotor.get());
+    SmartDashboard.putNumber("Grabber Position", grabberMotor.getSelectedSensorPosition(0));
+    SmartDashboard.putNumber("Grabber Speed", grabberMotor.get());
   }
 }
