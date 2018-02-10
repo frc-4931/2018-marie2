@@ -43,7 +43,7 @@ public class Grabber extends Subsystem {
   }
 
   /**
-   * @return whether a and b are almost equal
+   * @return whether a and b are close to or equal to each other
    */
   private boolean fuzzyEqual(double a, double b) {
     return Math.abs(a-b) < 5;
