@@ -56,22 +56,22 @@ public class OperatorInput {
   private Joystick liftController() {
     Joystick controller = new Joystick(RobotMap.liftControllerPort);
     // talk to drive team about button arrangement
-    Button openGrabber = new JoystickButton(controller, 1);
-    Button closeGrabber = new JoystickButton(controller, 2);
-    Button grabberExchange = new JoystickButton(controller, 3);
-    Button grabberLow = new JoystickButton(controller, 4);
-    Button grabberHigh = new JoystickButton(controller, 5);
-    Button grabberShoot = new JoystickButton(controller, 6);
-    Button scaleHigh = new JoystickButton(controller, 7);
-    Button scaleMid = new JoystickButton(controller, 9);
-    Button floor = new JoystickButton(controller, 11);
-    Button switchHeight = new JoystickButton(controller, 8);
-    Button exchange = new JoystickButton(controller, 10);
+    Button openGrabber = new JoystickButton(controller, 2); // thumb button
+    Button closeGrabber = new JoystickButton(controller, 1); // trigger
+    Button grabberExchange = new JoystickButton(controller, 4); // bottom right button 
+    Button grabberLow = new JoystickButton(controller, 3); // bottom left button
+    Button grabberHigh = new JoystickButton(controller, 6); // top right button
+    Button grabberShoot = new JoystickButton(controller, 5); // top right button
+    Button scaleHigh = new JoystickButton(controller, 11);
+    Button scaleMid = new JoystickButton(controller, 10);
+    Button floor = new JoystickButton(controller, 7);
+    Button switchHeight = new JoystickButton(controller, 9);
+    Button exchange = new JoystickButton(controller, 8);
 
     openGrabber.whenPressed(new OpenGrabber());
     closeGrabber.whenPressed(new CloseGrabber());
     grabberExchange.whenPressed(new GrabberChangePosition(GrabberPosition.EXCHANGE));
-    grabberExchange.whenPressed(new GrabberChangePosition(GrabberPosition.SHOOT));
+    grabberShoot.whenPressed(new GrabberChangePosition(GrabberPosition.SHOOT));
     grabberLow.whenPressed(new GrabberChangePosition(GrabberPosition.LOW));
     grabberHigh.whenPressed(new GrabberChangePosition(GrabberPosition.HIGH));
     scaleHigh.whenPressed(new SetLiftSetpoint(FixedLiftHeight.SCALE_TOP));
