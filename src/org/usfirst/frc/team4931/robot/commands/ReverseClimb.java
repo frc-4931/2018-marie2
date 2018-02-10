@@ -1,5 +1,22 @@
 package org.usfirst.frc.team4931.robot.commands;
 
-public class ReverseClimb {
+import org.usfirst.frc.team4931.robot.Robot;
+import edu.wpi.first.wpilibj.command.Command;
+
+public class ReverseClimb extends Command {
+
+  public ReverseClimb() {
+    requires(Robot.climber);
+  }
+  
+  @Override
+  public void start() {
+    Robot.climber.reverse();
+  }
+  
+  @Override
+  protected boolean isFinished() {
+    return true;
+  }
 
 }
