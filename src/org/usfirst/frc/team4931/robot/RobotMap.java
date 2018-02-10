@@ -25,10 +25,12 @@ public class RobotMap {
   public static final int rightBackMotorPort = 4;
   public static final boolean leftFrontMotorInverted = false;
   public static final boolean leftBackMotorInverted = false;
-  public static final boolean rightFrontMotorInverted = true;
-  public static final boolean rightBackMotorInverted = true;
+  public static final boolean rightFrontMotorInverted = false;
+  public static final boolean rightBackMotorInverted = false;
+  public static final boolean rightSideEncoderInverted = false;
+  public static final boolean leftSideEncoderInverted = false;
 
-  public static final int encoderPPR = 120;
+  public static final int encoderPPR = 120 * 4; //Multiplied for 4x encoding
 
   /**
    * [0] is forward position port, [1] is backward position port
@@ -39,16 +41,15 @@ public class RobotMap {
   public static final int[] rightGrabberPorts = {4, 5};
   public static final int leftGrabberMotorPort = 7;
   public static final int rightGrabberMotorPort = 8;
-  public static final boolean leftGrabberMotorInverted = false;
-  public static final boolean rightGrabberMotorInverted = true;
-  public static final int limitSwitchLowPort = 0;
-  public static final int limitSwitchMidPort = 0;
-  public static final int limitSwitchHighPort = 2;
+  public static final boolean leftGrabberMotorInverted = true;
+  public static final boolean rightGrabberMotorInverted = false;
 
   public static final int compressor = 6;
 
   public static final int liftMotorPort = 5;
   public static final boolean liftMotorInverted = false;
+
+  public static final int climberMotorPort = 9;
   
   public static final int driverControllerPort = 0;
   public static final int liftControllerPort = 1;

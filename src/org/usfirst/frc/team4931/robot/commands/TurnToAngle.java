@@ -25,7 +25,6 @@ public class TurnToAngle extends Command {
 
   @Override
   protected boolean isFinished() {
-    // TODO Auto-generated method stub
     if (Math.abs(Robot.drivetrain.gyroReadYawAngle()) >= Math.abs(angle)) {
       return true;
     } else {

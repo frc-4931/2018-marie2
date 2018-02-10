@@ -4,6 +4,10 @@ import org.usfirst.frc.team4931.robot.Robot;
 import org.usfirst.frc.team4931.robot.subsystems.GrabberPosition;
 import edu.wpi.first.wpilibj.command.Command;
 
+/**
+ * Rotates the grabber to the set position
+ * @author dj wickman
+ */
 public class GrabberChangePosition extends Command {
   private GrabberPosition position;
   
@@ -20,8 +24,7 @@ public class GrabberChangePosition extends Command {
   
   @Override
   public boolean isFinished() {
-    // FIXME pull value from Grabber
-    return true;
+    return Robot.grabber.atTargetPosition();
   }
 
 }

@@ -1,13 +1,14 @@
 package org.usfirst.frc.team4931.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
 import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.RemoteLimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-import edu.wpi.first.wpilibj.DigitalInput;
 import org.usfirst.frc.team4931.robot.RobotMap;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 /**
@@ -15,11 +16,10 @@ import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
  */
 public class Grabber extends Subsystem {
   private final double NORMAL_MOVE_SPEED = 0.5;
-
+  private boolean open;
   private DoubleSolenoid leftPneumatic, rightPneumatic;
   private WPI_TalonSRX leftGrabberMotor, rightGrabberMotor;
-  private DigitalInput limitSwitchLow, limitSwitchMid, limitSwitchHigh;
-  private GrabberPosition setPoint, lastAbsoluteGrabberPosition, currentGrabberPosition;
+  private double setPoint;
 
   /**
    * Creates a new grabber. This sets up the motors and pneumatics neccecary for grabbing.
@@ -32,42 +32,21 @@ public class Grabber extends Subsystem {
     leftGrabberMotor.setInverted(RobotMap.leftGrabberMotorInverted);
     rightGrabberMotor.setInverted(RobotMap.rightGrabberMotorInverted);
     leftGrabberMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute, 0, 0);
-
-//    limitSwitchLow = new DigitalInput(RobotMap.limitSwitchLowPort);
-    limitSwitchMid = new DigitalInput(RobotMap.limitSwitchMidPort);
-//    limitSwitchHigh = new DigitalInput(RobotMap.limitSwitchHighPort);
-
-    leftGrabberMotor.configForwardLimitSwitchSource(RemoteLimitSwitchSource.RemoteTalonSRX, LimitSwitchNormal.NormallyOpen, RobotMap.rightGrabberMotorPort, 0);
-    leftGrabberMotor.configReverseLimitSwitchSource(RemoteLimitSwitchSource.RemoteTalonSRX, LimitSwitchNormal.NormallyOpen, RobotMap.rightGrabberMotorPort, 0);
-    rightGrabberMotor.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen, 0);
-    rightGrabberMotor.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen, 0);
-  }
-
-  /**
-   * @return true when the high limit switch is closed
-   */
-  private boolean getHighLimitSwitch() {
-    return leftGrabberMotor.getSensorCollection().isFwdLimitSwitchClosed();
-  }
-
-  /**
-   * @return true when the middle limit switch is closed
-   */
-  private boolean getMiddleLimitSwitch() {
-    return limitSwitchMid.get();
-  }
-
-  /**
-   * @return true when the low limit switch is closed
-   */
-  private boolean getLowLimitSwitch() {
-    return leftGrabberMotor.getSensorCollection().isRevLimitSwitchClosed();
+    rightGrabberMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute, 0, 0);
+    leftGrabberMotor.setSensorPhase(RobotMap.leftGrabberMotorInverted);
+    rightGrabberMotor.setSensorPhase(RobotMap.rightGrabberMotorInverted);
   }
 
   @Override
   protected void initDefaultCommand() {
-    // TODO Auto-generated method stub
 
+  }
+
+  /**
+   * @return whether a and b are almost equal
+   */
+  private boolean fuzzyEqual(double a, double b) {
+    return Math.abs(a-b) < 5;
   }
 
   /**
@@ -76,6 +55,7 @@ public class Grabber extends Subsystem {
   public void captureCube() {
     leftPneumatic.set(Value.kReverse);
     rightPneumatic.set(Value.kReverse);
+    open = false;
   }
 
   /**
@@ -84,88 +64,47 @@ public class Grabber extends Subsystem {
   public void releaseCube() {
     leftPneumatic.set(Value.kForward);
     rightPneumatic.set(Value.kForward);
-  }
-
-  /**
-   * Moves the grabber towards the target set point.
-   */
-  public void goToSetPoint() {
-    if (setPoint.ordinal() > currentGrabberPosition.ordinal()) {
-      //Move grabber up
-    } else if (setPoint.ordinal() < currentGrabberPosition.ordinal()) {
-      //Move grabber down
-    } else {
-      //Stop grabber
-    }
+    open = true;
   }
 
   /**
    * Sets the target position of the grabber and starts it moving towards it.
    *
-   * @param position the target position.
+   * @param position the target position in encoder counts.
+   */
+  public void goToSetPoint(double position) {
+    setPoint = position;
+    leftGrabberMotor.set(ControlMode.Position, position);
+    rightGrabberMotor.set(ControlMode.Position, position);
+  }
+
+  /**
+   * Sets the target position of the grabber and starts it moving towards it.
+   * @param position the target position of type GrabberPosition
    */
   public void goToSetPoint(GrabberPosition position) {
-    setPoint = position;
-    goToSetPoint();
-  }
-
-  /**
-   * Calculates the current position and saves it.
-   */
-  public void calculateCurrentPosition() {
-    if (getLowLimitSwitch()) {
-      currentGrabberPosition = GrabberPosition.LOW;
-      lastAbsoluteGrabberPosition = currentGrabberPosition;
-    } else if (getMiddleLimitSwitch()) {
-      currentGrabberPosition = GrabberPosition.MIDDLE;
-      lastAbsoluteGrabberPosition = currentGrabberPosition;
-    } else if (getHighLimitSwitch()) {
-      currentGrabberPosition = GrabberPosition.HIGH;
-      lastAbsoluteGrabberPosition = currentGrabberPosition;
-    } else {
-      switch (lastAbsoluteGrabberPosition) {
-        case LOW:
-          currentGrabberPosition = GrabberPosition.LOW_MIDDLE;
-          break;
-        case MIDDLE:
-          if (setPoint.ordinal() > GrabberPosition.MIDDLE.ordinal())
-            currentGrabberPosition = GrabberPosition.MIDDLE_HIGH;
-          else
-            currentGrabberPosition = GrabberPosition.LOW_MIDDLE;
-          break;
-        case HIGH:
-          currentGrabberPosition = GrabberPosition.MIDDLE_HIGH;
-          break;
-      }
-    }
-  }
-
-  /**
-   * Calculate the current portion and set the motor to move towards the set point.
-   */
-  public void calculateCurrentPositionAndMove() {
-    calculateCurrentPosition();
-    goToSetPoint();
+    goToSetPoint(position.position());
   }
 
   /**
    * @return the current grabber position.
    */
-  public GrabberPosition getCurrentGrabberPosition() {
-    return currentGrabberPosition;
-  }
-
-  /**
-   * @return the last physical switch the grabber was at.
-   */
-  public GrabberPosition getLastAbsoluteGrabberPosition() {
-    return lastAbsoluteGrabberPosition;
+  public double getCurrentPosition() {
+    return leftGrabberMotor.getSelectedSensorPosition(0);
   }
 
   /**
    * @return if the grabber is at it's target position.
    */
   public boolean atTargetPosition() {
-    return currentGrabberPosition == setPoint;
+    return fuzzyEqual(leftGrabberMotor.getSelectedSensorPosition(0), setPoint) && fuzzyEqual(rightGrabberMotor.getSelectedSensorPosition(0), setPoint);
+  }
+  
+  public void log() {
+    SmartDashboard.putBoolean("GrabberOpen", open);
+    SmartDashboard.putNumber("Grabber Position Left", leftGrabberMotor.getSelectedSensorPosition(0));
+    SmartDashboard.putNumber("Grabber Position Right", rightGrabberMotor.getSelectedSensorPosition(0));
+    SmartDashboard.putNumber("Grabber Speed Left", leftGrabberMotor.get());
+    SmartDashboard.putNumber("Grabber Speed Right", rightGrabberMotor.get());
   }
 }

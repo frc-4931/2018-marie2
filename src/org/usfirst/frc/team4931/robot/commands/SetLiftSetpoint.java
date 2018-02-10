@@ -12,6 +12,7 @@ public class SetLiftSetpoint extends Command {
  * @param liftHeight The desired height to move to
  */
   public SetLiftSetpoint(FixedLiftHeight liftHeight) {
+    setInterruptible(true);
     this.liftHeight = liftHeight;
     requires(Robot.lift);
   }
@@ -22,6 +23,9 @@ public class SetLiftSetpoint extends Command {
     Robot.lift.setLiftHeight(liftHeight);
   }
 
+  /**
+   * @return true when the lift reaches the target
+   */
   @Override
   protected boolean isFinished() {
     return Robot.lift.isAtTarget();

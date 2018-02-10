@@ -4,6 +4,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team4931.robot.RobotMap;
 import org.usfirst.frc.team4931.robot.commands.LiftWithJoystick;
 /**
@@ -12,7 +13,8 @@ import org.usfirst.frc.team4931.robot.commands.LiftWithJoystick;
 public class Lift extends Subsystem {
   private WPI_TalonSRX liftMotor;
   private double setPoint;
-
+  private FixedLiftHeight liftHeight;
+  
 /**
  * Creates a new lift. This sets up the motors and potentiometers necessary for lifting.
  */
@@ -39,27 +41,18 @@ public class Lift extends Subsystem {
    * @param liftHeight The desired height to move to.
    */
   public void setLiftHeight(FixedLiftHeight liftHeight) {
-    switch (liftHeight) {
-      case SCALE_TOP:
-        setPoint = 480; //TODO set proper height value
-        break;
-      case SCALE_MID:
-        setPoint = 360; //TODO set proper height value
-        break;
-      case SWITCH:
-        setPoint = 240; //TODO set proper height value
-        break;
-      case EXCHANGE:
-        setPoint = 120; //TODO set proper height value
-        break;
-      case FLOOR:
-        setPoint = 0; //TODO set proper height value
-        break;
-    }
+    this.liftHeight = liftHeight;
+    setPoint = liftHeight.position();
     liftMotor.set(ControlMode.MotionMagic, setPoint);
   }
   
   public void lift(double speed) {
     liftMotor.set(ControlMode.PercentOutput, speed);
   }
+  
+  public void log() {
+    SmartDashboard.putString("LiftHeight", liftHeight.name());
+    SmartDashboard.putNumber("LiftMotorSpeed", liftMotor.get());
+  }
+  
 }
