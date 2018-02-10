@@ -2,9 +2,6 @@ package org.usfirst.frc.team4931.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
-import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
-import com.ctre.phoenix.motorcontrol.RemoteLimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import org.usfirst.frc.team4931.robot.RobotMap;
 import org.usfirst.frc.team4931.robot.commands.ChangeGrabberPosition;
@@ -18,7 +15,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 public class Grabber extends Subsystem {
   private final double NORMAL_MOVE_SPEED = 0.5;
   private boolean open;
-  private DoubleSolenoid leftPneumatic, rightPneumatic;
+  private DoubleSolenoid pneumatic;
   private WPI_TalonSRX grabberMotor;
   private double setPoint;
 
@@ -26,8 +23,7 @@ public class Grabber extends Subsystem {
    * Creates a new grabber. This sets up the motors and pneumatics neccecary for grabbing.
    */
   public Grabber() {
-    leftPneumatic = new DoubleSolenoid(RobotMap.leftGrabberPorts[0], RobotMap.leftGrabberPorts[1]);
-    rightPneumatic = new DoubleSolenoid(RobotMap.rightGrabberPorts[0], RobotMap.rightGrabberPorts[1]);
+    pneumatic = new DoubleSolenoid(RobotMap.grabberPorts[0], RobotMap.grabberPorts[1]);
     grabberMotor = new WPI_TalonSRX(RobotMap.grabberMotorPort);
     grabberMotor.setInverted(RobotMap.grabberMotorInverted);
     grabberMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute, 0, 0);
@@ -50,8 +46,7 @@ public class Grabber extends Subsystem {
    * Closes the grabber to get the cube
    */
   public void captureCube() {
-    leftPneumatic.set(Value.kReverse);
-    rightPneumatic.set(Value.kReverse);
+    pneumatic.set(Value.kReverse);
     open = false;
   }
 
@@ -59,8 +54,7 @@ public class Grabber extends Subsystem {
    * Opens the grabber to release the cube
    */
   public void releaseCube() {
-    leftPneumatic.set(Value.kForward);
-    rightPneumatic.set(Value.kForward);
+    pneumatic.set(Value.kForward);
     open = true;
   }
 
