@@ -33,6 +33,8 @@ public class Grabber extends Subsystem {
     rightGrabberMotor.setInverted(RobotMap.rightGrabberMotorInverted);
     leftGrabberMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute, 0, 0);
     rightGrabberMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute, 0, 0);
+    leftGrabberMotor.setSensorPhase(RobotMap.leftGrabberMotorInverted);
+    rightGrabberMotor.setSensorPhase(RobotMap.rightGrabberMotorInverted);
   }
 
   @Override
@@ -88,18 +90,21 @@ public class Grabber extends Subsystem {
    * @return the current grabber position.
    */
   public double getCurrentPosition() {
-    return leftGrabberMotor.get();
+    return leftGrabberMotor.getSelectedSensorPosition(0);
   }
 
   /**
    * @return if the grabber is at it's target position.
    */
   public boolean atTargetPosition() {
-    return fuzzyEqual(leftGrabberMotor.get(), setPoint) && fuzzyEqual(rightGrabberMotor.get(), setPoint);
+    return fuzzyEqual(leftGrabberMotor.getSelectedSensorPosition(0), setPoint) && fuzzyEqual(rightGrabberMotor.getSelectedSensorPosition(0), setPoint);
   }
   
   public void log() {
     SmartDashboard.putBoolean("GrabberOpen", open);
-    SmartDashboard.putNumber("GrabberPosition", getCurrentPosition());
+    SmartDashboard.putNumber("Grabber Position Left", leftGrabberMotor.getSelectedSensorPosition(0));
+    SmartDashboard.putNumber("Grabber Position Right", rightGrabberMotor.getSelectedSensorPosition(0));
+    SmartDashboard.putNumber("Grabber Speed Left", leftGrabberMotor.get());
+    SmartDashboard.putNumber("Grabber Speed Right", rightGrabberMotor.get());
   }
 }

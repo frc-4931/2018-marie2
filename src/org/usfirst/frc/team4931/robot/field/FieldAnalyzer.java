@@ -70,34 +70,37 @@ public class FieldAnalyzer {
     switch (robotStartingPos) {
       case LEFT:
         pickStrategy('l', 'r');
+        break;
       case RIGHT:
         pickStrategy('r', 'l');
-      default:
-        if (strategyOptions.containsKey(Strategy.SWITCH_SAME)) {
+        break;
+      default: //Left siwtch/scale = _SAME. Right switch/scale = OPPOSITE
+        pickStrategy('l', 'r');
+        break;
+
+        //Commented out because I'm unsure whether we atually wanted this logic that doesn't change based the field setup
+        /*if (strategyOptions.containsKey(Strategy.SWITCH_SAME)) {
           pickedStrategy = Strategy.SWITCH_SAME;
         } else if (strategyOptions.containsKey(Strategy.SWITCH_OPPOSITE)) {
           pickedStrategy = Strategy.SWITCH_OPPOSITE;
         } else {
           pickedStrategy = Strategy.DRIVE_FORWARD;
-        }
+        }*/
     }
     pickedTrajectory = strategyOptions.get(pickedStrategy);
   }
   
   /**
-   * Used by calculateStrategy() to calculate the strategy for the left
-   * and right positions
+   * Selects the best strategy based on field setup from the pre-rendered strategies.
    */
   private void pickStrategy(char sameChar, char oppositeChar) {
     if (fieldPos[0] == sameChar && strategyOptions.containsKey(Strategy.SWITCH_SAME)){
       pickedStrategy = Strategy.SWITCH_SAME;
     } else if (fieldPos[1] == sameChar && strategyOptions.containsKey(Strategy.SCALE_SAME)) {
       pickedStrategy = Strategy.SCALE_SAME;
-    } else if (fieldPos[0] == oppositeChar
-        && strategyOptions.containsKey(Strategy.SWITCH_OPPOSITE)) {
+    } else if (fieldPos[0] == oppositeChar && strategyOptions.containsKey(Strategy.SWITCH_OPPOSITE)) {
       pickedStrategy = Strategy.SWITCH_OPPOSITE;
-    } else if (fieldPos[1] == oppositeChar
-        && strategyOptions.containsKey(Strategy.SCALE_OPPOSITE)) {
+    } else if (fieldPos[1] == oppositeChar && strategyOptions.containsKey(Strategy.SCALE_OPPOSITE)) {
       pickedStrategy = Strategy.SCALE_OPPOSITE;
     } else {
       pickedStrategy = Strategy.DRIVE_FORWARD;
