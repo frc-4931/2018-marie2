@@ -13,7 +13,7 @@ public class OpenGrabber extends Command {
   }
 
   @Override
-  public void start() {
+  protected void initialize() {
     Robot.grabber.captureCube();
   }
 

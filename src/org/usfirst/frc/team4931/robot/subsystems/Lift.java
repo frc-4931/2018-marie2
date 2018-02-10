@@ -23,6 +23,7 @@ public class Lift extends Subsystem {
     liftMotor.setInverted(RobotMap.liftMotorInverted);
     liftMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
     liftMotor.setSelectedSensorPosition(0, 0, 0);
+    liftHeight = FixedLiftHeight.FLOOR;
   }
 
   /**
@@ -36,23 +37,37 @@ public class Lift extends Subsystem {
   protected void initDefaultCommand() {
     setDefaultCommand(new LiftWithJoystick());
   }
+
   /**
    * Sets the lift height
-   * @param liftHeight The desired height to move to.
+   * @param liftHeight The desired height to move to as defined by the preset lift heights
    */
   public void setLiftHeight(FixedLiftHeight liftHeight) {
     this.liftHeight = liftHeight;
     setPoint = liftHeight.position();
     liftMotor.set(ControlMode.MotionMagic, setPoint);
   }
-  
-  public void lift(double speed) {
+
+  /**
+   * Sets the lift height
+   * @param position The desired height to move to in encoder counts
+   */
+  public void setLiftHeight(double position) {
+    setPoint = position;
+    liftMotor.set(ControlMode.MotionMagic, setPoint);
+  }
+
+  /**
+   * Sets the speed of the lift motor
+   * @param speed the speed in +/- percent
+   */
+  public void setSpeed(double speed) {
     liftMotor.set(ControlMode.PercentOutput, speed);
   }
-  
+
   public void log() {
-    SmartDashboard.putString("LiftHeight", liftHeight.name());
-    SmartDashboard.putNumber("LiftMotorSpeed", liftMotor.get());
+    SmartDashboard.putString("Lift Height", liftHeight.name());
+    SmartDashboard.putNumber("Lift Motor Speed", liftMotor.get());
   }
   
 }

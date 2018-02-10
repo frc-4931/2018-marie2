@@ -15,7 +15,7 @@ public class LiftWithJoystick extends Command {
   }
   
   /**
-   * Calculates the speed of the manual lift based on the scale of the 
+   * Calculates the speed of the manual lift based on the scale of the
    * joystick and the throttle of the joystick and returns that calculated
    * value.
    */
@@ -31,7 +31,7 @@ public class LiftWithJoystick extends Command {
    */
   @Override
   protected void execute() {
-    Robot.lift.lift(calculateSpeed());
+    Robot.lift.setSpeed(calculateSpeed());
   }
   /**
    * keeps the command from stopping on its own
@@ -47,7 +47,7 @@ public class LiftWithJoystick extends Command {
    */
   @Override
   protected void end() {
-    Robot.lift.lift(0);
+    Robot.lift.setSpeed(0);
   }
   
 }

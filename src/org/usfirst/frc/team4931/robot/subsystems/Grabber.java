@@ -4,7 +4,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import org.usfirst.frc.team4931.robot.RobotMap;
-import org.usfirst.frc.team4931.robot.commands.ChangeGrabberPosition;
+import org.usfirst.frc.team4931.robot.commands.GrabberMoveWithPOV;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -32,7 +32,7 @@ public class Grabber extends Subsystem {
 
   @Override
   protected void initDefaultCommand() {
-    setDefaultCommand(new ChangeGrabberPosition());
+    setDefaultCommand(new GrabberMoveWithPOV());
   }
 
   /**
@@ -67,9 +67,13 @@ public class Grabber extends Subsystem {
     setPoint = position;
     grabberMotor.set(ControlMode.Position, position);
   }
-  
-  public void changePosition(double position) {
-    grabberMotor.set(ControlMode.PercentOutput, position);
+
+  /**
+   * Sets the speed of the grabber rotation
+   * @param speed the speed in of roation in +/- percent
+   */
+  public void setSpeed(double speed) {
+    grabberMotor.set(ControlMode.PercentOutput, speed);
   }
 
   /**
