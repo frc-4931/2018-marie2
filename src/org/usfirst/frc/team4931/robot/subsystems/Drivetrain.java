@@ -1,5 +1,6 @@
 package org.usfirst.frc.team4931.robot.subsystems;
 
+import org.usfirst.frc.team4931.robot.RobotMap;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -11,8 +12,8 @@ import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import org.usfirst.frc.team4931.robot.RobotMap;
 import org.usfirst.frc.team4931.robot.commands.DriveWithJoystick;
+
 
 /**
  * Determines the driving mechanism
