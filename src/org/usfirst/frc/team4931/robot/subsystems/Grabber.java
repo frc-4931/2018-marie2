@@ -7,6 +7,7 @@ import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.RemoteLimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import org.usfirst.frc.team4931.robot.RobotMap;
+import org.usfirst.frc.team4931.robot.commands.ChangeGrabberPosition;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -39,7 +40,7 @@ public class Grabber extends Subsystem {
 
   @Override
   protected void initDefaultCommand() {
-
+    setDefaultCommand(new ChangeGrabberPosition());
   }
 
   /**
@@ -76,6 +77,11 @@ public class Grabber extends Subsystem {
     setPoint = position;
     leftGrabberMotor.set(ControlMode.Position, position);
     rightGrabberMotor.set(ControlMode.Position, position);
+  }
+  
+  public void changePosition(double position) {
+    leftGrabberMotor.set(ControlMode.PercentOutput, position);
+    rightGrabberMotor.set(ControlMode.PercentOutput, position);
   }
 
   /**
