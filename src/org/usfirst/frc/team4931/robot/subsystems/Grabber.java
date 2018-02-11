@@ -23,7 +23,7 @@ public class Grabber extends Subsystem {
    * Creates a new grabber. This sets up the motors and pneumatics neccecary for grabbing.
    */
   public Grabber() {
-    pneumatic = new DoubleSolenoid(RobotMap.grabberPorts[0], RobotMap.grabberPorts[1]);
+    pneumatic = new DoubleSolenoid(RobotMap.compressor, RobotMap.grabberPorts[0], RobotMap.grabberPorts[1]);
     grabberMotor = new WPI_TalonSRX(RobotMap.grabberMotorPort);
     grabberMotor.setInverted(RobotMap.grabberMotorInverted);
     grabberMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute, 0, 0);

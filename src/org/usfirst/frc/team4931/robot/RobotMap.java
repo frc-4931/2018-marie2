@@ -37,7 +37,7 @@ public class RobotMap {
    */
   public static final int[] gearBox = {0, 1};
 
-  public static final int[] grabberPorts = {2, 3};
+  public static final int[] grabberPorts = {3, 2};
   public static final int grabberMotorPort = 7;
   public static final boolean grabberMotorInverted = true;
 
