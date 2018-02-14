@@ -7,9 +7,12 @@
 
 package org.usfirst.frc.team4931.robot;
 
+import edu.wpi.first.wpilibj.CameraServer;
+import edu.wpi.first.wpilibj.Sendable;
+import edu.wpi.first.wpilibj.smartdashboard.SendableBuilder;
 import org.usfirst.frc.team4931.robot.commands.Autonomous;
 import org.usfirst.frc.team4931.robot.commands.CloseGrabber;
-import org.usfirst.frc.team4931.robot.commands.GrabberChangePosition;
+import org.usfirst.frc.team4931.robot.commands.GrabberGoToPosition;
 import org.usfirst.frc.team4931.robot.commands.OpenGrabber;
 import org.usfirst.frc.team4931.robot.commands.SetLiftSetpoint;
 import org.usfirst.frc.team4931.robot.field.FieldAnalyzer;
@@ -20,7 +23,6 @@ import org.usfirst.frc.team4931.robot.subsystems.FixedLiftHeight;
 import org.usfirst.frc.team4931.robot.subsystems.Grabber;
 import org.usfirst.frc.team4931.robot.subsystems.GrabberPosition;
 import org.usfirst.frc.team4931.robot.subsystems.Lift;
-import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Relay;
@@ -62,7 +64,8 @@ public class Robot extends TimedRobot {
     fieldAnalyzer = new FieldAnalyzer();
 
     compressor = new Compressor(RobotMap.compressor);
-    compressor.setClosedLoopControl(false);
+    compressor.setClosedLoopControl(true); //TODO set this to true for PCM control when a new spark get's added change to false
+    compressor.start();
     runCompressor = true;
     compressorController = new Relay(0);
 
@@ -75,12 +78,7 @@ public class Robot extends TimedRobot {
     CameraServer.getInstance().startAutomaticCapture();
 
     SmartDashboard.putString("Strategy Field", "nnnnn");
-    SmartDashboard.putData("Submit", new InstantCommand() {
-      @Override
-      protected void initialize() {
-        fieldAnalyzer.predetermineStrategy();
-      }
-    });
+    SmartDashboard.putBoolean("Submit", false);
 
     // Create position selector to the SmartDashboard
     for (StartingPos pos : StartingPos.values()) {
@@ -89,6 +87,20 @@ public class Robot extends TimedRobot {
     SmartDashboard.putData("Position Selection", autoChooserPos);
 
     grabber.goToSetPoint(GrabberPosition.HIGH);
+
+
+    //Create testing commands
+    SmartDashboard.putData("Set - Grabber Open", new OpenGrabber());
+    SmartDashboard.putData("Set - Grabber Close", new CloseGrabber());
+    SmartDashboard.putData("Set - Grabber Position Low", new GrabberGoToPosition(GrabberPosition.LOW));
+    SmartDashboard.putData("Set - Grabber Position Exchange", new GrabberGoToPosition(GrabberPosition.EXCHANGE));
+    SmartDashboard.putData("Set - Grabber Position Shoot", new GrabberGoToPosition(GrabberPosition.SHOOT));
+    SmartDashboard.putData("Set - Grabber Position High", new GrabberGoToPosition(GrabberPosition.HIGH));
+    SmartDashboard.putData("Set - Lift Floor", new SetLiftSetpoint(FixedLiftHeight.FLOOR));
+    SmartDashboard.putData("Set - Lift Scale Mid", new SetLiftSetpoint(FixedLiftHeight.SCALE_MID));
+    SmartDashboard.putData("Set - Lift Scale Top", new SetLiftSetpoint(FixedLiftHeight.SCALE_TOP));
+    SmartDashboard.putData("Set - Lift Exchange", new SetLiftSetpoint(FixedLiftHeight.EXCHANGE));
+    SmartDashboard.putData("Set - Lift Switch", new SetLiftSetpoint(FixedLiftHeight.SWITCH));
   }
 
   /**
@@ -97,11 +109,18 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void disabledInit() {
+    runCompressor = false;
     compressorController.set(Value.kOff);
   }
 
   @Override
   public void disabledPeriodic() {
+    SmartDashboard.updateValues();
+    if (SmartDashboard.getBoolean("Submit", false)) {
+      fieldAnalyzer.predetermineStrategy();
+      SmartDashboard.putBoolean("Submit", false);
+    }
+
     Scheduler.getInstance().run();
     log();
   }
@@ -111,6 +130,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
+    runCompressor = true;
+
     char[] fieldPos =
         DriverStation.getInstance().getGameSpecificMessage().toLowerCase().toCharArray();
     fieldAnalyzer.setFieldPosition(fieldPos);
@@ -131,14 +152,13 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    // This makes sure that the autonomous stops running when
-    // teleop starts running. If you want the autonomous to
-    // continue until interrupted by another command, remove
-    // this line or comment it out.
     if (autonomousCommand != null) {
       autonomousCommand.cancel();
     }
+
     drivetrain.switchHighGear();
+    runCompressor = true;
+    compressor.start();
   }
 
 
@@ -159,12 +179,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     Scheduler.getInstance().run();
-    
     drivetrain.autoShift();
-
-    SmartDashboard.putBoolean("Pressure Switch", true);
-    SmartDashboard.putBoolean("Is In Low Gear", operatorInput.getDriverController().getRawButton(1));
-    SmartDashboard.putNumber("Encoder", drivetrain.getLeftEncoder());
     log();
   }
 
@@ -174,20 +189,13 @@ public class Robot extends TimedRobot {
   @Override
   public void testInit() {
     runCompressor = false;
-    SmartDashboard.putData("Open Grabber", new OpenGrabber());
-    SmartDashboard.putData("Close Grabber", new CloseGrabber());
-    SmartDashboard.putData("Change Grabber Position Low", new GrabberChangePosition(GrabberPosition.LOW));
-    SmartDashboard.putData("Change Grabber Position Exchange", new GrabberChangePosition(GrabberPosition.EXCHANGE));
-    SmartDashboard.putData("Change Grabber Position Shoot", new GrabberChangePosition(GrabberPosition.SHOOT));
-    SmartDashboard.putData("Change Grabber Position High", new GrabberChangePosition(GrabberPosition.HIGH));
-    SmartDashboard.putData("Lift Floor", new SetLiftSetpoint(FixedLiftHeight.FLOOR));
-    SmartDashboard.putData("Lift Scale Mid", new SetLiftSetpoint(FixedLiftHeight.SCALE_MID));
-    SmartDashboard.putData("Lift Scale Top", new SetLiftSetpoint(FixedLiftHeight.SCALE_TOP));
-    SmartDashboard.putData("Lift Exchange", new SetLiftSetpoint(FixedLiftHeight.EXCHANGE));
-    SmartDashboard.putData("Lift Switch", new SetLiftSetpoint(FixedLiftHeight.SWITCH));
-    SmartDashboard.putNumber("Left Speed", 0);
-    SmartDashboard.putNumber("Right Speed", 0);
-    SmartDashboard.putNumber("Lift set point", 0);
+
+    SmartDashboard.putNumber("Set - Left Speed", 0);
+    SmartDashboard.putNumber("Set - Right Speed", 0);
+    SmartDashboard.putNumber("Set - Lift Speed", 0);
+    SmartDashboard.putNumber("Set - Grabber Rotation Speed", 0);
+
+    SmartDashboard.putNumber("Set - Compressor State", 0);
   }
 
   /**
@@ -197,11 +205,31 @@ public class Robot extends TimedRobot {
   public void testPeriodic() {
     Scheduler.getInstance().run();
 
-    double leftSide = SmartDashboard.getNumber("Left Speed", 0);
-    double rightSide = SmartDashboard.getNumber("Right Speed", 0);
-    int setpoint = (int)SmartDashboard.getNumber("Lift set point", 0);
+    double liftSpeed = SmartDashboard.getNumber("Set - Lift Speed", 0);
+    if (liftSpeed != 0) {
+      lift.setSpeed(liftSpeed);
+    }
+
+    double grabberSpeed = SmartDashboard.getNumber("Set - Grabber Rotation Speed", 0);
+    if (grabberSpeed != 0) {
+      grabber.setSpeed(grabberSpeed);
+    }
+
+    double leftSide = SmartDashboard.getNumber("Set - Left Speed", 0);
+    double rightSide = SmartDashboard.getNumber("Set - Right Speed", 0);
     drivetrain.driveTank(leftSide, rightSide);
-    grabber.goToSetPoint(setpoint);
+
+    int compressorState = (int)SmartDashboard.getNumber("Set - Compressor State", 0);
+    if (compressorState == 1) { //Set compressor to on
+      runCompressor = false;
+      compressorController.set(Value.kForward);
+    } else if (compressorState == -1) { //Set compressor to auto
+      runCompressor = true;
+    } else { //Set compressor to off
+      runCompressor = false;
+      compressorController.set(Value.kOff);
+    }
+
     log();
   }
   
@@ -211,5 +239,6 @@ public class Robot extends TimedRobot {
     lift.log();
     
     SmartDashboard.putBoolean("Pressure Switch", compressor.getPressureSwitchValue());
+    SmartDashboard.putBoolean("Compressor Enabled", compressorController.get() == Value.kForward);
   }
 }

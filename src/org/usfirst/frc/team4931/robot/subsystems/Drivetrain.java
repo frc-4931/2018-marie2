@@ -221,12 +221,18 @@ public class Drivetrain extends Subsystem {
 
 
   public void log() {
-    SmartDashboard.putNumber("LFront", leftFrontMotor.get());
-    SmartDashboard.putNumber("LRear", leftBackMotor.get());
-    SmartDashboard.putNumber("RFront", rightFrontMotor.get());
-    SmartDashboard.putNumber("RRear", rightBackMotor.get());
+    SmartDashboard.putNumber("Left Side Speed", leftSideMotors.get());
+    SmartDashboard.putNumber("Right Side Speed", rightSideMotors.get());
+
+    SmartDashboard.putNumber("Left Encoder", getLeftEncoder());
+    SmartDashboard.putNumber("Right Encoder", getRightEncoder());
+    SmartDashboard.putNumber("Left Velocity", getLeftVelocity());
+    SmartDashboard.putNumber("Right Velocity", getRightVelocity());
+
     SmartDashboard.putNumber("Gyro Angle", gyroReadYawAngle());
     SmartDashboard.putNumber("Gyro Rate", gyroReadYawRate());
+
+    SmartDashboard.putBoolean("Low Gear", getGearState() == Value.kReverse);
   }
 
   /**

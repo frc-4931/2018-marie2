@@ -12,7 +12,7 @@ public class StartClimb extends Command {
   }
   
   @Override
-  public void start() {
+  protected void initialize() {
     Robot.climber.climb();
     Robot.lift.setLiftHeight(FixedLiftHeight.FLOOR);
   }
