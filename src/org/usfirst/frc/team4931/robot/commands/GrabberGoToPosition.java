@@ -8,10 +8,10 @@ import edu.wpi.first.wpilibj.command.Command;
  * Rotates the grabber to the set position
  * @author dj wickman
  */
-public class GrabberChangePosition extends Command {
+public class GrabberGoToPosition extends Command {
   private GrabberPosition position;
   
-  public GrabberChangePosition(GrabberPosition position) {
+  public GrabberGoToPosition(GrabberPosition position) {
     this.position = position;
     requires(Robot.grabber);
     setInterruptible(true);

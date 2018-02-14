@@ -8,7 +8,7 @@
 package org.usfirst.frc.team4931.robot;
 
 import org.usfirst.frc.team4931.robot.commands.CloseGrabber;
-import org.usfirst.frc.team4931.robot.commands.GrabberChangePosition;
+import org.usfirst.frc.team4931.robot.commands.GrabberGoToPosition;
 import org.usfirst.frc.team4931.robot.commands.OpenGrabber;
 import org.usfirst.frc.team4931.robot.commands.SetLiftSetpoint;
 import org.usfirst.frc.team4931.robot.subsystems.FixedLiftHeight;
@@ -70,10 +70,10 @@ public class OperatorInput {
 
     openGrabber.whenPressed(new OpenGrabber());
     closeGrabber.whenPressed(new CloseGrabber());
-    grabberExchange.whenPressed(new GrabberChangePosition(GrabberPosition.EXCHANGE));
-    grabberShoot.whenPressed(new GrabberChangePosition(GrabberPosition.SHOOT));
-    grabberLow.whenPressed(new GrabberChangePosition(GrabberPosition.LOW));
-    grabberHigh.whenPressed(new GrabberChangePosition(GrabberPosition.HIGH));
+    grabberExchange.whenPressed(new GrabberGoToPosition(GrabberPosition.EXCHANGE));
+    grabberShoot.whenPressed(new GrabberGoToPosition(GrabberPosition.SHOOT));
+    grabberLow.whenPressed(new GrabberGoToPosition(GrabberPosition.LOW));
+    grabberHigh.whenPressed(new GrabberGoToPosition(GrabberPosition.HIGH));
     scaleHigh.whenPressed(new SetLiftSetpoint(FixedLiftHeight.SCALE_TOP));
     scaleMid.whenPressed(new SetLiftSetpoint(FixedLiftHeight.SCALE_MID));
     floor.whenPressed(new SetLiftSetpoint(FixedLiftHeight.FLOOR));

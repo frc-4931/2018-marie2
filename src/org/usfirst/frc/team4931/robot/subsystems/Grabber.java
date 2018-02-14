@@ -2,12 +2,9 @@ package org.usfirst.frc.team4931.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
-import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
-import com.ctre.phoenix.motorcontrol.RemoteLimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import org.usfirst.frc.team4931.robot.RobotMap;
-import org.usfirst.frc.team4931.robot.commands.ChangeGrabberPosition;
+import org.usfirst.frc.team4931.robot.commands.GrabberMoveWithPOV;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -18,7 +15,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 public class Grabber extends Subsystem {
   private final double NORMAL_MOVE_SPEED = 0.5;
   private boolean open;
-  private DoubleSolenoid leftPneumatic, rightPneumatic;
+  private DoubleSolenoid pneumatic;
   private WPI_TalonSRX grabberMotor;
   private double setPoint;
 
@@ -26,8 +23,7 @@ public class Grabber extends Subsystem {
    * Creates a new grabber. This sets up the motors and pneumatics neccecary for grabbing.
    */
   public Grabber() {
-    leftPneumatic = new DoubleSolenoid(RobotMap.leftGrabberPorts[0], RobotMap.leftGrabberPorts[1]);
-    rightPneumatic = new DoubleSolenoid(RobotMap.rightGrabberPorts[0], RobotMap.rightGrabberPorts[1]);
+    pneumatic = new DoubleSolenoid(RobotMap.compressor, RobotMap.grabberPorts[0], RobotMap.grabberPorts[1]);
     grabberMotor = new WPI_TalonSRX(RobotMap.grabberMotorPort);
     grabberMotor.setInverted(RobotMap.grabberMotorInverted);
     grabberMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute, 0, 0);
@@ -36,11 +32,11 @@ public class Grabber extends Subsystem {
 
   @Override
   protected void initDefaultCommand() {
-    setDefaultCommand(new ChangeGrabberPosition());
+    setDefaultCommand(new GrabberMoveWithPOV());
   }
 
   /**
-   * @return whether a and b are almost equal
+   * @return whether a and b are close to or equal to each other
    */
   private boolean fuzzyEqual(double a, double b) {
     return Math.abs(a-b) < 5;
@@ -50,8 +46,7 @@ public class Grabber extends Subsystem {
    * Closes the grabber to get the cube
    */
   public void captureCube() {
-    leftPneumatic.set(Value.kReverse);
-    rightPneumatic.set(Value.kReverse);
+    pneumatic.set(Value.kReverse);
     open = false;
   }
 
@@ -59,8 +54,7 @@ public class Grabber extends Subsystem {
    * Opens the grabber to release the cube
    */
   public void releaseCube() {
-    leftPneumatic.set(Value.kForward);
-    rightPneumatic.set(Value.kForward);
+    pneumatic.set(Value.kForward);
     open = true;
   }
 
@@ -73,9 +67,13 @@ public class Grabber extends Subsystem {
     setPoint = position;
     grabberMotor.set(ControlMode.Position, position);
   }
-  
-  public void changePosition(double position) {
-    grabberMotor.set(ControlMode.PercentOutput, position);
+
+  /**
+   * Sets the speed of the grabber rotation
+   * @param speed the speed in of roation in +/- percent
+   */
+  public void setSpeed(double speed) {
+    grabberMotor.set(ControlMode.PercentOutput, speed);
   }
 
   /**

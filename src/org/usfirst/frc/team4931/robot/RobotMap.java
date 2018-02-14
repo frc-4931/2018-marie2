@@ -37,8 +37,7 @@ public class RobotMap {
    */
   public static final int[] gearBox = {0, 1};
 
-  public static final int[] leftGrabberPorts = {2, 3};
-  public static final int[] rightGrabberPorts = {4, 5};
+  public static final int[] grabberPorts = {3, 2};
   public static final int grabberMotorPort = 7;
   public static final boolean grabberMotorInverted = true;
 
@@ -51,9 +50,4 @@ public class RobotMap {
   
   public static final int driverControllerPort = 0;
   public static final int liftControllerPort = 1;
-
-  // If you are using multiple modules, make sure to define both the port
-  // number and the module. For example you with a rangefinder:
-  // public static int rangefinderPort = 1;
-  // public static int rangefinderModule = 1;
 }
