@@ -19,12 +19,18 @@ public class DriveByTrajectory extends Command {
 
   DriveByTrajectory(TankModifier tankModifier) {
     requires(Robot.drivetrain);
-    leftEncoderFollower = new EncoderFollower(tankModifier.getLeftTrajectory());
-    rightEncoderFollower = new EncoderFollower(tankModifier.getRightTrajectory());
-    leftEncoderFollower.configureEncoder(0, RobotMap.encoderPPR, .10); //FIXME Wheel diameter
-    rightEncoderFollower.configureEncoder(0, RobotMap.encoderPPR, .10); //FIXME Wheel diameter
+    this.leftEncoderFollower = new EncoderFollower(tankModifier.getLeftTrajectory());
+    this.rightEncoderFollower = new EncoderFollower(tankModifier.getRightTrajectory());
+
+    leftEncoderFollower.configureEncoder(0, RobotMap.encoderPPR, .15); //FIXME Wheel diameter
+    rightEncoderFollower.configureEncoder(0, RobotMap.encoderPPR, .15); //FIXME Wheel diameter
+
     Robot.drivetrain.resetLeftEncoder();
     Robot.drivetrain.resetRightEncoder();
+
+    leftEncoderFollower.reset();
+    rightEncoderFollower.reset();
+
     this.startingHeading = leftEncoderFollower.getHeading();
    }
 
@@ -48,6 +54,7 @@ public class DriveByTrajectory extends Command {
       leftCorrection += (rightSpeed > 0) ? (rightSpeed + correction) - 1 : (rightSpeed + correction) + 1;
     }
 
+    System.out.println("Left Speed: "+leftSpeed+"     "+"Right Speed: "+rightSpeed);
     Robot.drivetrain.driveTank(leftSpeed+leftCorrection, rightSpeed-rightCorrection);
   }
 

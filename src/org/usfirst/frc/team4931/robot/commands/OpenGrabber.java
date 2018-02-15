@@ -8,7 +8,6 @@ import org.usfirst.frc.team4931.robot.Robot;
 public class OpenGrabber extends Command {
 
   public OpenGrabber() {
-    super("OpenGrabber");
     requires(Robot.grabber);
     setInterruptible(false);
   }

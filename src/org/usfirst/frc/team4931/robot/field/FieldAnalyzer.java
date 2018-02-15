@@ -17,14 +17,15 @@ import jaci.pathfinder.modifiers.TankModifier;
  */
 public class FieldAnalyzer {
 
+  private static final double WHEEL_BASE = 0.5; //TODO set wheel width in meters
   private char fieldPos[]; // position of switches and scale
   private EnumMap<Strategy, TankModifier> strategyOptions = new EnumMap<>(Strategy.class);
   private StartingPos robotStartingPos; // position of the robot before auto
   private char strategyPick[]; // selected strategy by the drive team
   private double dt = 0.05; // TODO Set time between each different straight path on the curve
-  private double maxSpeed = 4.0; //TODO Set max speed
-  private double maxAcceleration = 3.0; //TODO Set max acceleration
-  private double maxJerk = 60.0; //TODO Set max jerk
+  private double maxSpeed = 3.0; //TODO Set max speed (700 encoder pulses in high gear)
+  private double maxAcceleration = 2.0; //TODO Set max acceleration  (375 encoder pulses in high gear)
+  private double maxJerk = 50.0; //TODO Set max jerk
   private Strategy pickedStrategy;
   private TankModifier pickedTrajectory;
 
@@ -50,7 +51,7 @@ public class FieldAnalyzer {
     strategyPick = SmartDashboard.getString("Strategy Field", "nnnnn").toLowerCase().toCharArray();
     robotStartingPos = StartingPos
         .valueOf(SmartDashboard.getString("Position Selection", StartingPos.LEFT.name()));
-    System.out.println(strategyPick.toString() + "\n" + robotStartingPos);
+    System.out.println(strategyPick[0]+strategyPick[1]+strategyPick[2]+strategyPick[3]+strategyPick[4] + "\n" + robotStartingPos + "\n");
 
     Trajectory.Config config = new Trajectory.Config(FitMethod.HERMITE_CUBIC,
         Trajectory.Config.SAMPLES_FAST, dt, maxSpeed, maxAcceleration, maxJerk);
@@ -59,6 +60,7 @@ public class FieldAnalyzer {
         Waypoint[] point = Waypoints.WAYPOINTS.get(robotStartingPos).get(s);
         TankModifier tankModifier =
             new TankModifier(Pathfinder.generate(point, config));
+        tankModifier.modify(WHEEL_BASE);
         strategyOptions.put(s, tankModifier);
 
         System.out.println(s.name());

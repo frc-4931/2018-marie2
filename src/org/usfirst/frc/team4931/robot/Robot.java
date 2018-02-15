@@ -8,8 +8,7 @@
 package org.usfirst.frc.team4931.robot;
 
 import edu.wpi.first.wpilibj.CameraServer;
-import edu.wpi.first.wpilibj.Sendable;
-import edu.wpi.first.wpilibj.smartdashboard.SendableBuilder;
+import edu.wpi.first.wpilibj.command.Command;
 import org.usfirst.frc.team4931.robot.commands.Autonomous;
 import org.usfirst.frc.team4931.robot.commands.CloseGrabber;
 import org.usfirst.frc.team4931.robot.commands.GrabberGoToPosition;
@@ -28,7 +27,6 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.Relay.Value;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.command.InstantCommand;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -64,7 +62,7 @@ public class Robot extends TimedRobot {
     fieldAnalyzer = new FieldAnalyzer();
 
     compressor = new Compressor(RobotMap.compressor);
-    compressor.setClosedLoopControl(true); //TODO set this to true for PCM control when a new spark get's added change to false
+    compressor.setClosedLoopControl(true); //TODO set this to true for PCM control. When a new spark get's added change to false.
     compressor.start();
     runCompressor = true;
     compressorController = new Relay(0);
@@ -87,6 +85,18 @@ public class Robot extends TimedRobot {
     SmartDashboard.putData("Position Selection", autoChooserPos);
 
     grabber.goToSetPoint(GrabberPosition.HIGH);
+
+    new Command() {
+      @Override
+      protected void execute() {
+        System.out.println(System.currentTimeMillis() + ": Command Running");
+      }
+
+      @Override
+      protected boolean isFinished() {
+        return false;
+      }
+    }.start();
 
 
     //Create testing commands
@@ -115,7 +125,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledPeriodic() {
-    SmartDashboard.updateValues();
     if (SmartDashboard.getBoolean("Submit", false)) {
       fieldAnalyzer.predetermineStrategy();
       SmartDashboard.putBoolean("Submit", false);
@@ -179,7 +188,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     Scheduler.getInstance().run();
-    drivetrain.autoShift();
+    //drivetrain.autoShift();
     log();
   }
 
