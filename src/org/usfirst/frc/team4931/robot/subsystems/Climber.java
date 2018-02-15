@@ -5,12 +5,13 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import org.usfirst.frc.team4931.robot.RobotMap;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 public class Climber extends Subsystem {
   private WPI_TalonSRX climberMotor;
 
   public Climber() {
-    climberMotor = new WPI_TalonSRX(RobotMap.climberMotorPort);
+    climberMotor = new WPI_TalonSRX(RobotMap.climberMotorPort); //TODO might not be a victor
   }
 
   @Override
