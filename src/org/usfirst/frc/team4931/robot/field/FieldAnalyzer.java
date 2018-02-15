@@ -1,6 +1,7 @@
 package org.usfirst.frc.team4931.robot.field;
 
 import java.util.EnumMap;
+import org.usfirst.frc.team4931.robot.RobotMap;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import jaci.pathfinder.Pathfinder;
 import jaci.pathfinder.Trajectory;
@@ -47,9 +48,9 @@ public class FieldAnalyzer {
    * consider that strategy as a possible strategy to run.
    */
   public void predetermineStrategy() {
-    strategyPick = SmartDashboard.getString("Strategy Field", "nnnnn").toLowerCase().toCharArray();
+    strategyPick = SmartDashboard.getString(RobotMap.STRATEGY_FIELD, "nnnnn").toLowerCase().toCharArray();
     robotStartingPos = StartingPos
-        .valueOf(SmartDashboard.getString("Position Selection", StartingPos.LEFT.name()));
+        .valueOf(SmartDashboard.getString(RobotMap.POSITION_SELECTION, StartingPos.LEFT.name()));
     System.out.println(strategyPick.toString() + "\n" + robotStartingPos);
 
     Trajectory.Config config = new Trajectory.Config(FitMethod.HERMITE_CUBIC,
