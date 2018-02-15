@@ -1,7 +1,6 @@
 package org.usfirst.frc.team4931.robot.field;
 
 import java.util.EnumMap;
-import java.util.List;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import jaci.pathfinder.Pathfinder;
 import jaci.pathfinder.Trajectory;
@@ -51,6 +50,8 @@ public class FieldAnalyzer {
     strategyPick = SmartDashboard.getString("Strategy Field", "nnnnn").toLowerCase().toCharArray();
     robotStartingPos = StartingPos
         .valueOf(SmartDashboard.getString("Position Selection", StartingPos.LEFT.name()));
+    System.out.println(strategyPick.toString() + "\n" + robotStartingPos);
+
     Trajectory.Config config = new Trajectory.Config(FitMethod.HERMITE_CUBIC,
         Trajectory.Config.SAMPLES_FAST, dt, maxSpeed, maxAcceleration, maxJerk);
     for (Strategy s : Strategy.values()) {
@@ -59,6 +60,8 @@ public class FieldAnalyzer {
         TankModifier tankModifier =
             new TankModifier(Pathfinder.generate(point, config));
         strategyOptions.put(s, tankModifier);
+
+        System.out.println(s.name());
       }
     }
   }

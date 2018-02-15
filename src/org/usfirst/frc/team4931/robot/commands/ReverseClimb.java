@@ -10,7 +10,7 @@ public class ReverseClimb extends Command {
   }
   
   @Override
-  public void start() {
+  public void initialize() {
     Robot.climber.reverse();
   }
   

@@ -2,20 +2,12 @@ package org.usfirst.frc.team4931.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
 import org.usfirst.frc.team4931.robot.Robot;
-/**
- * Opens the grabber
- */
-public class OpenGrabber extends Command {
 
-  public OpenGrabber() {
-    super("OpenGrabber");
-    requires(Robot.grabber);
-    setInterruptible(false);
-  }
+public class ShiftToHighGear extends Command {
 
   @Override
   protected void initialize() {
-    Robot.grabber.releaseCube();
+    Robot.drivetrain.switchHighGear();
   }
 
   @Override

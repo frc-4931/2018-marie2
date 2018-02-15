@@ -10,7 +10,7 @@ public class StopClimb extends Command{
   }
   
   @Override
-  public void start() {
+  protected void initialize() {
     Robot.climber.stop();
   }
   
