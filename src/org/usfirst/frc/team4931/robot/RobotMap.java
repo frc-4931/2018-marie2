@@ -18,7 +18,20 @@ import edu.wpi.first.wpilibj.SPI;
 public class RobotMap {
   // For example to map the left and right motors, you could define the
   // following variables to use with your drivetrain subsystem.
-
+  public static final String POSITION_SELECTION = "Position Selection";
+  public static final String SET_LIFT_SWITCH = "Set - Lift Switch";
+  public static final String SET_LIFT_EXCHANGE = "Set - Lift Exchange";
+  public static final String SET_LIFT_SCALE_TOP = "Set - Lift Scale Top";
+  public static final String SET_LIFT_SCALE_MID = "Set - Lift Scale Mid";
+  public static final String SET_LIFT_FLOOR = "Set - Lift Floor";
+  public static final String SET_GRABBER_POSITION_HIGH = "Set - Grabber Position High";
+  public static final String SET_GRABBER_POSITION_SHOOT = "Set - Grabber Position Shoot";
+  public static final String SET_GRABBER_POSITION_EXCHANGE = "Set - Grabber Position Exchange";
+  public static final String SET_GRABBER_POSITION_LOW = "Set - Grabber Position Low";
+  public static final String SET_GRABBER_CLOSE = "Set - Grabber Close";
+  public static final String SUBMIT = "Submit";
+  public static final String STRATEGY_FIELD = "Strategy Field";
+  public static final String SET_GRABBER_OPEN = "Set - Grabber Open";
   public static final int leftFrontMotorPort = 1;
   public static final int leftBackMotorPort = 2;
   public static final int rightFrontMotorPort = 3;
