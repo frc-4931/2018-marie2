@@ -7,6 +7,7 @@
 
 package org.usfirst.frc.team4931.robot;
 
+import static org.usfirst.frc.team4931.robot.RobotMap.*;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.command.Command;
 import org.usfirst.frc.team4931.robot.commands.Autonomous;
@@ -75,14 +76,14 @@ public class Robot extends TimedRobot {
 
     CameraServer.getInstance().startAutomaticCapture();
 
-    SmartDashboard.putString("Strategy Field", "nnnnn");
-    SmartDashboard.putBoolean("Submit", false);
+    SmartDashboard.putString(STRATEGY_FIELD, "nnnnn");
+    SmartDashboard.putBoolean(SUBMIT, false);
 
     // Create position selector to the SmartDashboard
     for (StartingPos pos : StartingPos.values()) {
         autoChooserPos.addObject("Position " + (pos.ordinal() + 1), pos.name());
     }
-    SmartDashboard.putData("Position Selection", autoChooserPos);
+    SmartDashboard.putData(POSITION_SELECTION, autoChooserPos);
 
     grabber.goToSetPoint(GrabberPosition.HIGH);
 
@@ -100,17 +101,17 @@ public class Robot extends TimedRobot {
 
 
     //Create testing commands
-    SmartDashboard.putData("Set - Grabber Open", new OpenGrabber());
-    SmartDashboard.putData("Set - Grabber Close", new CloseGrabber());
-    SmartDashboard.putData("Set - Grabber Position Low", new GrabberGoToPosition(GrabberPosition.LOW));
-    SmartDashboard.putData("Set - Grabber Position Exchange", new GrabberGoToPosition(GrabberPosition.EXCHANGE));
-    SmartDashboard.putData("Set - Grabber Position Shoot", new GrabberGoToPosition(GrabberPosition.SHOOT));
-    SmartDashboard.putData("Set - Grabber Position High", new GrabberGoToPosition(GrabberPosition.HIGH));
-    SmartDashboard.putData("Set - Lift Floor", new SetLiftSetpoint(FixedLiftHeight.FLOOR));
-    SmartDashboard.putData("Set - Lift Scale Mid", new SetLiftSetpoint(FixedLiftHeight.SCALE_MID));
-    SmartDashboard.putData("Set - Lift Scale Top", new SetLiftSetpoint(FixedLiftHeight.SCALE_TOP));
-    SmartDashboard.putData("Set - Lift Exchange", new SetLiftSetpoint(FixedLiftHeight.EXCHANGE));
-    SmartDashboard.putData("Set - Lift Switch", new SetLiftSetpoint(FixedLiftHeight.SWITCH));
+    SmartDashboard.putData(SET_GRABBER_OPEN, new OpenGrabber());
+    SmartDashboard.putData(SET_GRABBER_CLOSE, new CloseGrabber());
+    SmartDashboard.putData(SET_GRABBER_POSITION_LOW, new GrabberGoToPosition(GrabberPosition.LOW));
+    SmartDashboard.putData(SET_GRABBER_POSITION_EXCHANGE, new GrabberGoToPosition(GrabberPosition.EXCHANGE));
+    SmartDashboard.putData(SET_GRABBER_POSITION_SHOOT, new GrabberGoToPosition(GrabberPosition.SHOOT));
+    SmartDashboard.putData(SET_GRABBER_POSITION_HIGH, new GrabberGoToPosition(GrabberPosition.HIGH));
+    SmartDashboard.putData(SET_LIFT_FLOOR, new SetLiftSetpoint(FixedLiftHeight.FLOOR));
+    SmartDashboard.putData(SET_LIFT_SCALE_MID, new SetLiftSetpoint(FixedLiftHeight.SCALE_MID));
+    SmartDashboard.putData(SET_LIFT_SCALE_TOP, new SetLiftSetpoint(FixedLiftHeight.SCALE_TOP));
+    SmartDashboard.putData(SET_LIFT_EXCHANGE, new SetLiftSetpoint(FixedLiftHeight.EXCHANGE));
+    SmartDashboard.putData(SET_LIFT_SWITCH, new SetLiftSetpoint(FixedLiftHeight.SWITCH));
   }
 
   /**
@@ -125,9 +126,9 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledPeriodic() {
-    if (SmartDashboard.getBoolean("Submit", false)) {
+    if (SmartDashboard.getBoolean(SUBMIT, false)) {
       fieldAnalyzer.predetermineStrategy();
-      SmartDashboard.putBoolean("Submit", false);
+      SmartDashboard.putBoolean(SUBMIT, false);
     }
 
     Scheduler.getInstance().run();
