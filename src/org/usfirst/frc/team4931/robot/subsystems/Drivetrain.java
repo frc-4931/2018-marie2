@@ -225,6 +225,10 @@ public class Drivetrain extends Subsystem {
   long lastTime;
   double lastLeft;
   double lastRight;
+  double maxLeftAcc;
+  double maxRightAcc;
+  double maxLeftJerk;
+  double maxRightJerk;
   public void log() {
 
     long curTime = System.currentTimeMillis();
@@ -239,8 +243,23 @@ public class Drivetrain extends Subsystem {
     lastLeft = leftEnc;
     lastRight = rightEnc;
 
+    double leftJerk = leftAcc * 100 / deltaTime;
+    double rightJerk = rightAcc * 100 / deltaTime;
+
+    maxLeftAcc = (leftAcc > maxLeftAcc) ? leftAcc : maxLeftAcc;
+    maxRightAcc = (rightAcc > maxRightAcc) ? rightAcc : maxRightAcc;
+    maxLeftJerk = (leftJerk > maxLeftJerk) ? leftJerk : maxRightJerk;
+    maxRightJerk = (rightJerk > maxRightJerk) ? rightJerk : maxRightJerk;
+
     SmartDashboard.putNumber("Left Acc", leftAcc);
     SmartDashboard.putNumber("Right Acc", rightAcc);
+    SmartDashboard.putNumber("Left Jerk", leftJerk);
+    SmartDashboard.putNumber("Right Jerk", rightJerk);
+    SmartDashboard.putNumber("Left Max Acc", maxLeftAcc);
+    SmartDashboard.putNumber("Right Max Acc", maxRightAcc);
+    SmartDashboard.putNumber("Left Max Jerk", maxLeftJerk);
+    SmartDashboard.putNumber("Right Max Jerk", maxRightJerk);
+
 
     SmartDashboard.putNumber("Left Side Speed", leftSideMotors.get());
     SmartDashboard.putNumber("Right Side Speed", rightSideMotors.get());
@@ -268,21 +287,18 @@ public class Drivetrain extends Subsystem {
     if (getGearState() == Value.kForward) { //High Gear
       leftSpeed = getLeftVelocity() / MAX_VELOCITY_HIGH_GEAR;
       rightSpeed = getRightVelocity() / MAX_VELOCITY_HIGH_GEAR;
-      leftMotorStrain = (Math.abs(leftSpeed) / Math.abs(leftTargetSpeed)) < 0.5;
-      rightMotorStrain = (Math.abs(rightSpeed) / Math.abs(rightTargetSpeed)) < 0.5;
+      leftMotorStrain = (Math.abs(leftSpeed) / Math.abs(leftTargetSpeed)) < 0.3;
+      rightMotorStrain = (Math.abs(rightSpeed) / Math.abs(rightTargetSpeed)) < 0.3;
 
-      if ((Math.abs(leftTargetSpeed) > 0.2 || Math.abs(rightTargetSpeed) > 0.2) && (leftMotorStrain || rightMotorStrain)) {
+      if ((Math.abs(leftTargetSpeed) > 0.5 || Math.abs(rightTargetSpeed) > 0.5) && (leftMotorStrain || rightMotorStrain)) {
         switchLowGear();
       }
     } else if (getGearState() == Value.kReverse) { //Low Gear
       leftSpeed = getLeftVelocity() / MAX_VELOCITY_LOW_GEAR;
       rightSpeed = getRightVelocity() / MAX_VELOCITY_LOW_GEAR;
-      leftMotorStrain = (Math.abs(leftSpeed) / Math.abs(leftTargetSpeed)) < 0.5;
-      rightMotorStrain = (Math.abs(rightSpeed) / Math.abs(rightTargetSpeed)) < 0.5;
-
       boolean highSpeed = leftSpeed >= 0.9 && rightSpeed >= 0.9;
 
-      if (highSpeed && (!leftMotorStrain && !rightMotorStrain)) {
+      if (highSpeed) {
         switchHighGear();
       }
     }

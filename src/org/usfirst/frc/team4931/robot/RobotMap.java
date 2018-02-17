@@ -57,7 +57,8 @@ public class RobotMap {
   public static final int compressor = 6;
 
   public static final int liftMotorPort = 5;
-  public static final boolean liftMotorInverted = false;
+  public static final boolean liftMotorInverted = true;
+  public static final boolean liftMotorSensorInverted = true;
 
   public static final int climberMotorPort = 9;
   

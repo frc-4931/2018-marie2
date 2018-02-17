@@ -95,7 +95,7 @@ public class Grabber extends Subsystem {
    * @return if the grabber is at it's target position.
    */
   public boolean atTargetPosition() {
-    return fuzzyEqual(grabberMotor.getSelectedSensorPosition(0), setPoint);
+    return fuzzyEqual(getCurrentPosition(), setPoint);
   }
   
   public void log() {

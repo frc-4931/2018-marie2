@@ -7,9 +7,31 @@
 
 package org.usfirst.frc.team4931.robot;
 
-import static org.usfirst.frc.team4931.robot.RobotMap.*;
+import static org.usfirst.frc.team4931.robot.RobotMap.POSITION_SELECTION;
+import static org.usfirst.frc.team4931.robot.RobotMap.SET_GRABBER_CLOSE;
+import static org.usfirst.frc.team4931.robot.RobotMap.SET_GRABBER_OPEN;
+import static org.usfirst.frc.team4931.robot.RobotMap.SET_GRABBER_POSITION_EXCHANGE;
+import static org.usfirst.frc.team4931.robot.RobotMap.SET_GRABBER_POSITION_HIGH;
+import static org.usfirst.frc.team4931.robot.RobotMap.SET_GRABBER_POSITION_LOW;
+import static org.usfirst.frc.team4931.robot.RobotMap.SET_GRABBER_POSITION_SHOOT;
+import static org.usfirst.frc.team4931.robot.RobotMap.SET_LIFT_EXCHANGE;
+import static org.usfirst.frc.team4931.robot.RobotMap.SET_LIFT_FLOOR;
+import static org.usfirst.frc.team4931.robot.RobotMap.SET_LIFT_SCALE_MID;
+import static org.usfirst.frc.team4931.robot.RobotMap.SET_LIFT_SCALE_TOP;
+import static org.usfirst.frc.team4931.robot.RobotMap.SET_LIFT_SWITCH;
+import static org.usfirst.frc.team4931.robot.RobotMap.STRATEGY_FIELD;
+import static org.usfirst.frc.team4931.robot.RobotMap.SUBMIT;
+
 import edu.wpi.first.wpilibj.CameraServer;
+import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Relay;
+import edu.wpi.first.wpilibj.Relay.Value;
+import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.command.Scheduler;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team4931.robot.commands.Autonomous;
 import org.usfirst.frc.team4931.robot.commands.CloseGrabber;
 import org.usfirst.frc.team4931.robot.commands.GrabberGoToPosition;
@@ -23,15 +45,6 @@ import org.usfirst.frc.team4931.robot.subsystems.FixedLiftHeight;
 import org.usfirst.frc.team4931.robot.subsystems.Grabber;
 import org.usfirst.frc.team4931.robot.subsystems.GrabberPosition;
 import org.usfirst.frc.team4931.robot.subsystems.Lift;
-import edu.wpi.first.wpilibj.Compressor;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Relay;
-import edu.wpi.first.wpilibj.Relay.Value;
-import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.command.Scheduler;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -48,8 +61,6 @@ public class Robot extends TimedRobot {
   public static Climber climber;
   private FieldAnalyzer fieldAnalyzer;
   public static Compressor compressor;
-  public static Relay compressorController;
-  public static boolean runCompressor ;
   SendableChooser<String> autoChooserPos = new SendableChooser<>();
   private Autonomous autonomousCommand;
 
@@ -65,8 +76,6 @@ public class Robot extends TimedRobot {
     compressor = new Compressor(RobotMap.compressor);
     compressor.setClosedLoopControl(true); //TODO set this to true for PCM control. When a new spark get's added change to false.
     compressor.start();
-    runCompressor = true;
-    compressorController = new Relay(0);
 
     grabber = new Grabber();
     lift = new Lift();
@@ -120,8 +129,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void disabledInit() {
-    runCompressor = false;
-    compressorController.set(Value.kOff);
+    compressor.stop();
   }
 
   @Override
@@ -140,7 +148,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    runCompressor = true;
+    compressor.start();
 
     char[] fieldPos =
         DriverStation.getInstance().getGameSpecificMessage().toLowerCase().toCharArray();
@@ -167,20 +175,12 @@ public class Robot extends TimedRobot {
     }
 
     drivetrain.switchHighGear();
-    runCompressor = true;
-    compressor.start();
   }
 
 
   @Override
   public void robotPeriodic() {
-    if (runCompressor) {
-      if (!compressor.getPressureSwitchValue()) {
-        compressorController.set(Value.kForward);
-      } else {
-        compressorController.set(Value.kOff);
-      }
-    }
+
   }
 
   /**
@@ -198,14 +198,10 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void testInit() {
-    runCompressor = false;
-
     SmartDashboard.putNumber("Set - Left Speed", 0);
     SmartDashboard.putNumber("Set - Right Speed", 0);
     SmartDashboard.putNumber("Set - Lift Speed", 0);
     SmartDashboard.putNumber("Set - Grabber Rotation Speed", 0);
-
-    SmartDashboard.putNumber("Set - Compressor State", 0);
   }
 
   /**
@@ -216,29 +212,14 @@ public class Robot extends TimedRobot {
     Scheduler.getInstance().run();
 
     double liftSpeed = SmartDashboard.getNumber("Set - Lift Speed", 0);
-    if (liftSpeed != 0) {
-      lift.setSpeed(liftSpeed);
-    }
+    lift.setSpeed(liftSpeed);
 
     double grabberSpeed = SmartDashboard.getNumber("Set - Grabber Rotation Speed", 0);
-    if (grabberSpeed != 0) {
-      grabber.setSpeed(grabberSpeed);
-    }
+    grabber.setSpeed(grabberSpeed);
 
     double leftSide = SmartDashboard.getNumber("Set - Left Speed", 0);
     double rightSide = SmartDashboard.getNumber("Set - Right Speed", 0);
     drivetrain.driveTank(leftSide, rightSide);
-
-    int compressorState = (int)SmartDashboard.getNumber("Set - Compressor State", 0);
-    if (compressorState == 1) { //Set compressor to on
-      runCompressor = false;
-      compressorController.set(Value.kForward);
-    } else if (compressorState == -1) { //Set compressor to auto
-      runCompressor = true;
-    } else { //Set compressor to off
-      runCompressor = false;
-      compressorController.set(Value.kOff);
-    }
 
     log();
   }
@@ -249,6 +230,5 @@ public class Robot extends TimedRobot {
     lift.log();
     
     SmartDashboard.putBoolean("Pressure Switch", compressor.getPressureSwitchValue());
-    SmartDashboard.putBoolean("Compressor Enabled", compressorController.get() == Value.kForward);
   }
 }
