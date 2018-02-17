@@ -22,10 +22,6 @@ public class Waypoints {
       new EnumMap<>(StartingPos.class);
 
 
-  /**
-   * The waypoints for autonomous.
-   */
-
   private static class Waypoint extends jaci.pathfinder.Waypoint {
     private static final double FEET_TO_METERS = 0.3048;
     private static final double DEGREES_TO_RADS = Math.PI / 180;
@@ -35,9 +31,10 @@ public class Waypoints {
     }
   }
 
+  /**
+   * The waypoints for autonomous.
+   */
   static {
-    //FIXME convert all values to Meters and Rads
-
     Map<Strategy, Waypoint[]> points = new EnumMap<>(Strategy.class);
     points.put(SWITCH_SAME, new Waypoint[] {new Waypoint(0, 24, 0), new Waypoint(11, 25, -35),
         new Waypoint(14, 20, -90)});
@@ -75,7 +72,7 @@ public class Waypoints {
     points.put(SCALE_OPPOSITE,
         new Waypoint[] {new Waypoint(0, 3, 0), new Waypoint(16, 4, 0), new Waypoint(20, 8, 90),
             new Waypoint(20, 21, 90), new Waypoint(24, 24, 0), new Waypoint(27, 21, -90)});
-    points.put(DRIVE_FORWARD, new Waypoint[] {new Waypoint(0, 0, 0), new Waypoint(10, 0, 0)});
+    points.put(DRIVE_FORWARD, new Waypoint[] {new Waypoint(0, 3, 0), new Waypoint(20, 3, 0)});
     WAYPOINTS.put(StartingPos.RIGHT, points);
   }
 }
