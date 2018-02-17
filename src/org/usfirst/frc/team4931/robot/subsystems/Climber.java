@@ -11,7 +11,7 @@ public class Climber extends Subsystem {
   private WPI_TalonSRX climberMotor;
 
   public Climber() {
-    climberMotor = new WPI_TalonSRX(RobotMap.climberMotorPort); //TODO might not be a victor
+    climberMotor = new WPI_TalonSRX(RobotMap.climberMotorPort);
   }
 
   @Override

@@ -22,8 +22,8 @@ public class DriveByTrajectory extends Command {
     this.leftEncoderFollower = new EncoderFollower(tankModifier.getLeftTrajectory());
     this.rightEncoderFollower = new EncoderFollower(tankModifier.getRightTrajectory());
 
-    leftEncoderFollower.configureEncoder(0, RobotMap.encoderPPR, .15); //FIXME Wheel diameter
-    rightEncoderFollower.configureEncoder(0, RobotMap.encoderPPR, .15); //FIXME Wheel diameter
+    leftEncoderFollower.configureEncoder(0, RobotMap.encoderPPR, 0.1524);
+    rightEncoderFollower.configureEncoder(0, RobotMap.encoderPPR, 0.1524);
 
     Robot.drivetrain.resetLeftEncoder();
     Robot.drivetrain.resetRightEncoder();

@@ -18,7 +18,7 @@ import jaci.pathfinder.modifiers.TankModifier;
  */
 public class FieldAnalyzer {
 
-  private static final double WHEEL_BASE = 0.5; //TODO set wheel width in meters
+  private static final double WHEEL_BASE = 0.635;
   private char fieldPos[]; // position of switches and scale
   private EnumMap<Strategy, TankModifier> strategyOptions = new EnumMap<>(Strategy.class);
   private StartingPos robotStartingPos; // position of the robot before auto
