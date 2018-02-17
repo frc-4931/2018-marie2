@@ -7,8 +7,6 @@
 
 package org.usfirst.frc.team4931.robot;
 
-import edu.wpi.first.wpilibj.SPI;
-
 /**
  * The RobotMap is a mapping from the ports sensors and actuators are wired into
  * to a variable name. This provides flexibility changing wiring, makes checking
@@ -16,8 +14,7 @@ import edu.wpi.first.wpilibj.SPI;
  * floating around.
  */
 public class RobotMap {
-  // For example to map the left and right motors, you could define the
-  // following variables to use with your drivetrain subsystem.
+
   public static final String POSITION_SELECTION = "Position Selection";
   public static final String SET_LIFT_SWITCH = "Set - Lift Switch";
   public static final String SET_LIFT_EXCHANGE = "Set - Lift Exchange";
@@ -32,6 +29,7 @@ public class RobotMap {
   public static final String SUBMIT = "Submit";
   public static final String STRATEGY_FIELD = "Strategy Field";
   public static final String SET_GRABBER_OPEN = "Set - Grabber Open";
+
   public static final int leftFrontMotorPort = 1;
   public static final int leftBackMotorPort = 2;
   public static final int rightFrontMotorPort = 3;
@@ -40,24 +38,29 @@ public class RobotMap {
   public static final boolean leftBackMotorInverted = false;
   public static final boolean rightFrontMotorInverted = false;
   public static final boolean rightBackMotorInverted = false;
+  public static final boolean leftSideEncoderInverted = true;
   public static final boolean rightSideEncoderInverted = false;
-  public static final boolean leftSideEncoderInverted = false;
 
   public static final int encoderPPR = 120 * 4; //Multiplied for 4x encoding
 
   /**
    * [0] is forward position port, [1] is backward position port
    */
-  public static final int[] gearBox = {0, 1};
-
+  public static final int[] gearBox = {1, 0};
+  /**
+   * [0] is forward position port, [1] is backward position port
+   */
   public static final int[] grabberPorts = {3, 2};
   public static final int grabberMotorPort = 7;
   public static final boolean grabberMotorInverted = true;
+  public static final int grabberTopLimitPort = 0;
+  public static final int grabberBottomLimitPort = 1;
 
   public static final int compressor = 6;
 
   public static final int liftMotorPort = 5;
-  public static final boolean liftMotorInverted = false;
+  public static final boolean liftMotorInverted = true;
+  public static final boolean liftMotorSensorInverted = true;
 
   public static final int climberMotorPort = 9;
   

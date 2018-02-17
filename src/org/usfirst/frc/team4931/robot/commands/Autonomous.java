@@ -1,6 +1,8 @@
 package org.usfirst.frc.team4931.robot.commands;
 
 import static org.usfirst.frc.team4931.robot.field.Strategy.*;
+
+import org.usfirst.frc.team4931.robot.Robot;
 import org.usfirst.frc.team4931.robot.field.Strategy;
 import org.usfirst.frc.team4931.robot.subsystems.FixedLiftHeight;
 import org.usfirst.frc.team4931.robot.subsystems.GrabberPosition;
@@ -17,10 +19,15 @@ public class Autonomous extends CommandGroup {
    * Runs the autonomous
    */
   public Autonomous(Strategy strategy, TankModifier tankModifier) {
-    addParallel(new GrabberGoToPosition(GrabberPosition.EXCHANGE)); // sets claw position to middle position
-    addParallel(new SetLiftSetpoint(calcLiftHeight(strategy))); // raises lift based on the calculated strategy
-    addParallel(new DriveByTrajectory(tankModifier)); // drives the calculated trajectory
-    
+    //TODO uncomment when we have encoders setup on the lift and grabber
+    //addParallel(new GrabberGoToPosition(GrabberPosition.EXCHANGE)); // sets claw position to middle position
+    //addParallel(new SetLiftSetpoint(calcLiftHeight(strategy))); // raises lift based on the calculated strategy
+    //addParallel(new DriveByTrajectory(tankModifier)); // drives the calculated trajectory
+
+    Robot.drivetrain.resetLeftEncoder();
+    Robot.drivetrain.resetRightEncoder();
+    addSequential(new DriveByTrajectory(tankModifier)); // drives the calculated trajectory
+
     if (strategy != DRIVE_FORWARD) {
       addSequential(new OpenGrabber()); // if not driving forward, open the claw at the end of autonomous
     }
