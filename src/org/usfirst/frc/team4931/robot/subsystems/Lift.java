@@ -23,6 +23,7 @@ public class Lift extends Subsystem {
     liftMotor.setInverted(RobotMap.liftMotorInverted);
     liftMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
     liftMotor.setSelectedSensorPosition(0, 0, 0);
+    liftMotor.setSensorPhase(RobotMap.liftMotorSensorInverted);
     liftHeight = FixedLiftHeight.FLOOR;
   }
 

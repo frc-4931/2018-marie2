@@ -25,8 +25,8 @@ public class Drivetrain extends Subsystem {
   private static DifferentialDrive drivetrain;
   private static DoubleSolenoid gearBox;
   private static PigeonIMU pigeon;
-  private static final double MAX_VELOCITY_LOW_GEAR = 10; //TODO set max velocity in Pulses/100ms
-  private static final double MAX_VELOCITY_HIGH_GEAR = 10; //TODO set max velocity in Pulses/100ms
+  private static final double MAX_VELOCITY_LOW_GEAR = 250;
+  private static final double MAX_VELOCITY_HIGH_GEAR = 700;
 
   public Drivetrain() {
     initialization();
@@ -58,6 +58,9 @@ public class Drivetrain extends Subsystem {
     leftBackMotor.setSensorPhase(!RobotMap.leftSideEncoderInverted);
     rightBackMotor.setSensorPhase(!RobotMap.rightSideEncoderInverted);
 
+    resetLeftEncoder();
+    resetRightEncoder();
+
     // Configure pneumatics for 2 speed gearboxes
     gearBox = new DoubleSolenoid(RobotMap.compressor, RobotMap.gearBox[0], RobotMap.gearBox[1]);
 
@@ -85,9 +88,9 @@ public class Drivetrain extends Subsystem {
    * @param rotation - difference between left and right
    */
   public void driveArcade(double speed, double rotation, double throttle) {
-    double trueThrottle = (throttle + 1)/2;
+    double trueThrottle = 1 - ((throttle/2) + 0.5); //
     // Values are switched because wpi is stupid and somehow switches the values
-    drivetrain.arcadeDrive((Math.copySign(rotation * rotation, rotation) * trueThrottle), (Math.copySign(speed * speed, speed) * trueThrottle), false);
+    drivetrain.arcadeDrive(-(Math.copySign(speed * speed, speed) * trueThrottle), (Math.copySign(rotation * rotation, rotation) * trueThrottle), false);
   }
 
   /**
@@ -132,14 +135,14 @@ public class Drivetrain extends Subsystem {
    * Resets value of left encoder.
    */
   public void resetLeftEncoder() {
-    leftFrontMotor.setSelectedSensorPosition(0, 0, 50);
+    leftBackMotor.setSelectedSensorPosition(0, 0, 0);
   }
 
   /**
    * Resets value of right encoder.
    */
   public void resetRightEncoder() {
-    rightFrontMotor.setSelectedSensorPosition(0, 0, 50);
+    rightBackMotor.setSelectedSensorPosition(0, 0, 0);
   }
 
   /**
@@ -219,8 +222,46 @@ public class Drivetrain extends Subsystem {
     gearBox.set(Value.kOff);
   }
 
-
+  //TODO remove code to calculate max acceleration and jerk
+  long lastTime;
+  double lastLeft;
+  double lastRight;
+  double maxLeftAcc;
+  double maxRightAcc;
+  double maxLeftJerk;
+  double maxRightJerk;
   public void log() {
+
+    long curTime = System.currentTimeMillis();
+    double leftEnc = getLeftVelocity();
+    double rightEnc = getRightVelocity();
+    double deltaLeft = leftEnc - lastLeft;
+    double deltaRight = rightEnc - lastRight;
+    long deltaTime = curTime - lastTime;
+    double leftAcc = deltaLeft * 100 / (deltaTime);
+    double rightAcc = deltaRight * 100 / (deltaTime);
+    lastTime = curTime;
+    lastLeft = leftEnc;
+    lastRight = rightEnc;
+
+    double leftJerk = leftAcc * 100 / deltaTime;
+    double rightJerk = rightAcc * 100 / deltaTime;
+
+    maxLeftAcc = (leftAcc > maxLeftAcc) ? leftAcc : maxLeftAcc;
+    maxRightAcc = (rightAcc > maxRightAcc) ? rightAcc : maxRightAcc;
+    maxLeftJerk = (leftJerk > maxLeftJerk) ? leftJerk : maxRightJerk;
+    maxRightJerk = (rightJerk > maxRightJerk) ? rightJerk : maxRightJerk;
+
+    SmartDashboard.putNumber("Left Acc", leftAcc);
+    SmartDashboard.putNumber("Right Acc", rightAcc);
+    SmartDashboard.putNumber("Left Jerk", leftJerk);
+    SmartDashboard.putNumber("Right Jerk", rightJerk);
+    SmartDashboard.putNumber("Left Max Acc", maxLeftAcc);
+    SmartDashboard.putNumber("Right Max Acc", maxRightAcc);
+    SmartDashboard.putNumber("Left Max Jerk", maxLeftJerk);
+    SmartDashboard.putNumber("Right Max Jerk", maxRightJerk);
+
+
     SmartDashboard.putNumber("Left Side Speed", leftSideMotors.get());
     SmartDashboard.putNumber("Right Side Speed", rightSideMotors.get());
 
@@ -247,21 +288,18 @@ public class Drivetrain extends Subsystem {
     if (getGearState() == Value.kForward) { //High Gear
       leftSpeed = getLeftVelocity() / MAX_VELOCITY_HIGH_GEAR;
       rightSpeed = getRightVelocity() / MAX_VELOCITY_HIGH_GEAR;
-      leftMotorStrain = (Math.abs(leftSpeed) / Math.abs(leftTargetSpeed)) < 0.5;
-      rightMotorStrain = (Math.abs(rightSpeed) / Math.abs(rightTargetSpeed)) < 0.5;
+      leftMotorStrain = (Math.abs(leftSpeed) / Math.abs(leftTargetSpeed)) < 0.3;
+      rightMotorStrain = (Math.abs(rightSpeed) / Math.abs(rightTargetSpeed)) < 0.3;
 
-      if (leftMotorStrain || rightMotorStrain) {
+      if ((Math.abs(leftTargetSpeed) > 0.5 || Math.abs(rightTargetSpeed) > 0.5) && (leftMotorStrain || rightMotorStrain)) {
         switchLowGear();
       }
     } else if (getGearState() == Value.kReverse) { //Low Gear
       leftSpeed = getLeftVelocity() / MAX_VELOCITY_LOW_GEAR;
       rightSpeed = getRightVelocity() / MAX_VELOCITY_LOW_GEAR;
-      leftMotorStrain = (Math.abs(leftSpeed) / Math.abs(leftTargetSpeed)) < 0.5;
-      rightMotorStrain = (Math.abs(rightSpeed) / Math.abs(rightTargetSpeed)) < 0.5;
-
       boolean highSpeed = leftSpeed >= 0.9 && rightSpeed >= 0.9;
 
-      if (highSpeed && (!leftMotorStrain && !rightMotorStrain)) {
+      if (highSpeed) {
         switchHighGear();
       }
     }
