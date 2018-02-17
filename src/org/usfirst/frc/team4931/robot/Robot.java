@@ -25,8 +25,6 @@ import static org.usfirst.frc.team4931.robot.RobotMap.SUBMIT;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Relay;
-import edu.wpi.first.wpilibj.Relay.Value;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -157,6 +155,8 @@ public class Robot extends TimedRobot {
     autonomousCommand = new Autonomous(fieldAnalyzer.getPickedStrategy(),
         fieldAnalyzer.getPickedTrajectory());
     autonomousCommand.start();
+
+    SmartDashboard.putString("Autonomous Strategy", fieldAnalyzer.getPickedStrategy().name());
   }
 
   /**
