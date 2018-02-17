@@ -94,18 +94,6 @@ public class Robot extends TimedRobot {
 
     grabber.goToSetPoint(GrabberPosition.HIGH);
 
-    new Command() {
-      @Override
-      protected void execute() {
-        System.out.println(System.currentTimeMillis() + ": Command Running");
-      }
-
-      @Override
-      protected boolean isFinished() {
-        return false;
-      }
-    }.start();
-
 
     //Create testing commands
     SmartDashboard.putData(SET_GRABBER_OPEN, new OpenGrabber());
