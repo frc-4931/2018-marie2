@@ -223,13 +223,9 @@ public class Drivetrain extends Subsystem {
   }
 
   //TODO remove code to calculate max acceleration and jerk
+  //To get M/S: divide by 480, multiply by 6(pi) * 10 * 0.0254.
   long lastTime;
-  double lastLeft;
-  double lastRight;
-  double maxLeftAcc;
-  double maxRightAcc;
-  double maxLeftJerk;
-  double maxRightJerk;
+  double lastLeft, lastRight, maxLeftAcc, maxRightAcc, maxLeftJerk, maxRightJerk, maxLeftSpeed, maxRightSpeed;
   public void log() {
 
     long curTime = System.currentTimeMillis();
@@ -251,6 +247,8 @@ public class Drivetrain extends Subsystem {
     maxRightAcc = (rightAcc > maxRightAcc) ? rightAcc : maxRightAcc;
     maxLeftJerk = (leftJerk > maxLeftJerk) ? leftJerk : maxRightJerk;
     maxRightJerk = (rightJerk > maxRightJerk) ? rightJerk : maxRightJerk;
+    maxLeftSpeed = (leftEnc > maxLeftSpeed) ? leftEnc : maxLeftSpeed;
+    maxRightSpeed = (rightEnc > maxRightSpeed) ? rightEnc : maxRightSpeed;
 
     SmartDashboard.putNumber("Left Acc", leftAcc);
     SmartDashboard.putNumber("Right Acc", rightAcc);
@@ -260,6 +258,8 @@ public class Drivetrain extends Subsystem {
     SmartDashboard.putNumber("Right Max Acc", maxRightAcc);
     SmartDashboard.putNumber("Left Max Jerk", maxLeftJerk);
     SmartDashboard.putNumber("Right Max Jerk", maxRightJerk);
+    SmartDashboard.putNumber("Max Left Speed", maxLeftSpeed);
+    SmartDashboard.putNumber("Max Right Speed", maxRightSpeed);
 
 
     SmartDashboard.putNumber("Left Side Speed", leftSideMotors.get());
