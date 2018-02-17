@@ -15,15 +15,17 @@ public class DriveByTrajectory extends Command {
   private EncoderFollower leftEncoderFollower;
   private EncoderFollower rightEncoderFollower;
   private double startingHeading;
-  private final double CORRECTION_AMOUNT = 100; //Lower number means more correction
 
   DriveByTrajectory(TankModifier tankModifier) {
     requires(Robot.drivetrain);
-    this.leftEncoderFollower = new EncoderFollower(tankModifier.getLeftTrajectory());
-    this.rightEncoderFollower = new EncoderFollower(tankModifier.getRightTrajectory());
+    leftEncoderFollower = new EncoderFollower(tankModifier.getLeftTrajectory());
+    rightEncoderFollower = new EncoderFollower(tankModifier.getRightTrajectory());
 
-    leftEncoderFollower.configureEncoder(0, RobotMap.encoderPPR, 0.1524);
-    rightEncoderFollower.configureEncoder(0, RobotMap.encoderPPR, 0.1524);
+    leftEncoderFollower.configureEncoder(0, RobotMap.encoderPPR, RobotMap.WHEEL_DIAMETER);
+    rightEncoderFollower.configureEncoder(0, RobotMap.encoderPPR, RobotMap.WHEEL_DIAMETER);
+
+    leftEncoderFollower.configurePIDVA(RobotMap.TRAJ_PROPORTIONAL, RobotMap.TRAJ_INTEGRAL, RobotMap.TRAJ_DERIVATIVE, RobotMap.TRAJ_VELOCITY, RobotMap.TRAJ_ACCELERATION);
+    rightEncoderFollower.configurePIDVA(RobotMap.TRAJ_PROPORTIONAL, RobotMap.TRAJ_INTEGRAL, RobotMap.TRAJ_DERIVATIVE, RobotMap.TRAJ_VELOCITY, RobotMap.TRAJ_ACCELERATION);
 
     Robot.drivetrain.resetLeftEncoder();
     Robot.drivetrain.resetRightEncoder();
@@ -42,20 +44,14 @@ public class DriveByTrajectory extends Command {
     double leftSpeed = leftEncoderFollower.calculate(Robot.drivetrain.getLeftEncoder());
     double rightSpeed = rightEncoderFollower.calculate(Robot.drivetrain.getRightEncoder());
     double curTrajectoryHeading = leftEncoderFollower.getHeading();
-    double correction = ((curTrajectoryHeading - startingHeading) - Robot.drivetrain.gyroReadYawAngle()) / CORRECTION_AMOUNT;
+    double correction = ((curTrajectoryHeading - startingHeading) - Math.toRadians(Robot.drivetrain.gyroReadYawAngle())) / RobotMap.TRAJ_CORRECTION_AMOUNT;
 
     double leftCorrection = correction;
     double rightCorrection = correction;
 
-    if (Math.abs(leftSpeed + correction) > 1.0) {
-      rightCorrection += (leftSpeed > 0) ? (leftSpeed + correction) - 1 : (leftSpeed + correction) + 1;
-    }
-    if (Math.abs(rightSpeed - correction) > 1.0) {
-      leftCorrection += (rightSpeed > 0) ? (rightSpeed + correction) - 1 : (rightSpeed + correction) + 1;
-    }
-
     System.out.println("Left Speed: "+leftSpeed+"     "+"Right Speed: "+rightSpeed);
-    Robot.drivetrain.driveTank(leftSpeed+leftCorrection, rightSpeed-rightCorrection);
+    System.out.println("Left Correction: "+leftCorrection+"     "+"Right Correction: "+rightCorrection);
+    Robot.drivetrain.driveTank((leftSpeed+leftCorrection)/12, (rightSpeed-rightCorrection)/12);
   }
 
   /**

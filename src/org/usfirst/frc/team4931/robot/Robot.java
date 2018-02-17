@@ -58,7 +58,7 @@ public class Robot extends TimedRobot {
   public static Climber climber;
   private FieldAnalyzer fieldAnalyzer;
   public static Compressor compressor;
-  SendableChooser<String> autoChooserPos = new SendableChooser<>();
+  public static SendableChooser<String> autoChooserPos = new SendableChooser<>();
   private Autonomous autonomousCommand;
 
   /**
@@ -87,7 +87,7 @@ public class Robot extends TimedRobot {
 
     // Create position selector to the SmartDashboard
     for (StartingPos pos : StartingPos.values()) {
-        autoChooserPos.addObject("Position " + (pos.ordinal() + 1), pos.name());
+        autoChooserPos.addObject(pos.name(), pos.name());
     }
     SmartDashboard.putData(POSITION_SELECTION, autoChooserPos);
 
@@ -162,6 +162,7 @@ public class Robot extends TimedRobot {
     }
 
     drivetrain.switchHighGear();
+    compressor.start();
   }
 
 
