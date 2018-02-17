@@ -2,6 +2,7 @@ package org.usfirst.frc.team4931.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.DigitalInput;
 import org.usfirst.frc.team4931.robot.Robot;
@@ -30,6 +31,7 @@ public class Grabber extends Subsystem {
     grabberMotor = new WPI_TalonSRX(RobotMap.grabberMotorPort);
     grabberMotor.setInverted(RobotMap.grabberMotorInverted);
     grabberMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
+    grabberMotor.setNeutralMode(NeutralMode.Brake);
     grabberMotor.setSelectedSensorPosition(0, 0, 0);
     grabberMotor.setSensorPhase(RobotMap.grabberMotorInverted);
 

@@ -52,6 +52,7 @@ public class RobotMap {
    */
   public static final int[] grabberPorts = {3, 2};
   public static final int grabberMotorPort = 7;
+  public static final boolean climberMotorInverted = false;
   public static final boolean grabberMotorInverted = true;
   public static final int grabberTopLimitPort = 0;
   public static final int grabberBottomLimitPort = 1;
@@ -66,4 +67,19 @@ public class RobotMap {
   
   public static final int driverControllerPort = 0;
   public static final int liftControllerPort = 1;
+
+  public static final double PPS_TO_MPS = 6 * Math.PI * 10 * 0.0254 / 480;
+  public static final double DELTA_TIME = 0.02; // TODO Set time between each different straight path on the curve
+  public static final double MAX_VELOCITY = 488 * PPS_TO_MPS; //TODO Set max speed (700 encoder pulses in high gear)
+  public static final double MAX_ACCELERATION = 120 * PPS_TO_MPS; //TODO Set max acceleration  (375 encoder pulses in high gear)
+  public static final double MAX_JERK = 600 * PPS_TO_MPS; //TODO Set max jerk
+  public static final double WHEEL_BASE = 0.635;
+  public static final double WHEEL_DIAMETER = 0.1524;
+  public static final double TRAJ_PROPORTIONAL = 1;
+  public static final double TRAJ_INTEGRAL = 0;
+  public static final double TRAJ_DERIVATIVE = 0;
+  public static final double TRAJ_VELOCITY = 1/MAX_VELOCITY;
+  public static final double TRAJ_ACCELERATION = 0;
+  public static final double TRAJ_CORRECTION_AMOUNT = 100; //Lower number means more correction;
+
 }

@@ -2,6 +2,7 @@ package org.usfirst.frc.team4931.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -23,6 +24,7 @@ public class Lift extends Subsystem {
     liftMotor.setInverted(RobotMap.liftMotorInverted);
     liftMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
     liftMotor.setSelectedSensorPosition(0, 0, 0);
+    liftMotor.setNeutralMode(NeutralMode.Brake);
     liftMotor.setSensorPhase(RobotMap.liftMotorSensorInverted);
     liftHeight = FixedLiftHeight.FLOOR;
   }

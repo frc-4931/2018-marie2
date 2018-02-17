@@ -26,6 +26,8 @@ public class Autonomous extends CommandGroup {
 
     Robot.drivetrain.resetLeftEncoder();
     Robot.drivetrain.resetRightEncoder();
+    Robot.drivetrain.switchHighGear();
+    Robot.drivetrain.gyroReset();
     addSequential(new DriveByTrajectory(tankModifier)); // drives the calculated trajectory
 
     if (strategy != DRIVE_FORWARD) {
