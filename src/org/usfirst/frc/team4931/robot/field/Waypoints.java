@@ -17,6 +17,9 @@ import jaci.pathfinder.Waypoint;
  *
  */
 public class Waypoints {
+  private static final double F_TO_M = 0.3048;
+  private static final double D_TO_R = Math.PI / 180;
+  
   /**
    * Creates a map for our waypoints.
    */
@@ -28,46 +31,44 @@ public class Waypoints {
    * The waypoints for autonomous.
    */
   static {
-    //FIXME convert all values to Meters and Rads
-
     Map<Strategy, Waypoint[]> points = new EnumMap<>(Strategy.class);
-    points.put(SWITCH_SAME, new Waypoint[] {new Waypoint(0, 24, 0), new Waypoint(11, 25, -35),
+    points.put(SWITCH_SAME, new Waypoint[] {new Waypoint(0 * F_TO_M, 24 * F_TO_M, 0 * D_TO_R), new Waypoint(11, 25, -35),
         new Waypoint(14, 20, -90)});
-    points.put(SCALE_SAME, new Waypoint[] {new Waypoint(0, 24, 0), new Waypoint(20, 25, 0),
+    points.put(SCALE_SAME, new Waypoint[] {new Waypoint(0 * F_TO_M, 24 * F_TO_M, 0 * D_TO_R), new Waypoint(20 * F_TO_M, 25 * F_TO_M, 0 * D_TO_R),
         new Waypoint(27, 21, -90)});
-    points.put(SWITCH_OPPOSITE, new Waypoint[] {new Waypoint(0, 24, 0), new Waypoint(15, 24, 0),
-        new Waypoint(20, 19, -90), new Waypoint(20, 12, -90), new Waypoint(16, 9, 180)});
+    points.put(SWITCH_OPPOSITE, new Waypoint[] {new Waypoint(0 * F_TO_M, 24 * F_TO_M, 0 * D_TO_R), new Waypoint(15 * F_TO_M, 24 * F_TO_M, 0 * D_TO_R),
+        new Waypoint(20, 19, -90), new Waypoint(20, 12, -90), new Waypoint(16 * F_TO_M, 9 * F_TO_M, 180 * D_TO_R)});
     points.put(SCALE_OPPOSITE,
-        new Waypoint[] {new Waypoint(0, 24, 0), new Waypoint(17, 23, 0), new Waypoint(20, 20, -90),
-            new Waypoint(20, 5, -90), new Waypoint(24, 2, 0), new Waypoint(27, 6, 90)});
-    //points.put(DRIVE_FORWARD, new Waypoint[] {new Waypoint(0, 24, 0), new Waypoint(20, 24, 0)});
-    points.put(DRIVE_FORWARD, new Waypoint[] {new Waypoint(1, 12, 45), new Waypoint(4, 7, -15), new Waypoint(10, 8, 90), new Waypoint(17, 2, 45)});
+        new Waypoint[] {new Waypoint(0 * F_TO_M, 24 * F_TO_M, 0 * D_TO_R), new Waypoint(17 * F_TO_M, 23 * F_TO_M, 0 * D_TO_R), new Waypoint(20, 20, -90),
+            new Waypoint(20, 5, -90), new Waypoint(24 * F_TO_M, 2 * F_TO_M, 0 * D_TO_R), new Waypoint(27 * F_TO_M, 6 * F_TO_M, 90 * D_TO_R)});
+    //points.put(DRIVE_FORWARD, new Waypoint[] {new Waypoint(0 * F_TO_M, 24 * F_TO_M, 0 * D_TO_R), new Waypoint(20 * F_TO_M, 24 * F_TO_M, 0 * D_TO_R)});
+    points.put(DRIVE_FORWARD, new Waypoint[] {new Waypoint(1 * F_TO_M, 12 * F_TO_M, 45 * D_TO_R), new Waypoint(4, 7, -15), new Waypoint(10 * F_TO_M, 8 * F_TO_M, 90 * D_TO_R), new Waypoint(17 * F_TO_M, 2 * F_TO_M, 45 * D_TO_R)});
     WAYPOINTS.put(StartingPos.LEFT, points);
 
     points = new EnumMap<>(Strategy.class);
     points.put(SWITCH_SAME,
-        new Waypoint[] {new Waypoint(0, 14, 0), new Waypoint(7, 18, 35), new Waypoint(12, 18, 0)});
-    points.put(SCALE_SAME, new Waypoint[] {new Waypoint(0, 14, 0), new Waypoint(7, 20, 90),
-        new Waypoint(11, 23, 0), new Waypoint(21, 24, 0), new Waypoint(27, 21, -90)});
+        new Waypoint[] {new Waypoint(0 * F_TO_M, 14 * F_TO_M, 0 * D_TO_R), new Waypoint(7 * F_TO_M, 18 * F_TO_M, 35 * D_TO_R), new Waypoint(12 * F_TO_M, 18 * F_TO_M, 0 * D_TO_R)});
+    points.put(SCALE_SAME, new Waypoint[] {new Waypoint(0 * F_TO_M, 14 * F_TO_M, 0 * D_TO_R), new Waypoint(7 * F_TO_M, 20 * F_TO_M, 90 * D_TO_R),
+        new Waypoint(11 * F_TO_M, 23 * F_TO_M, 0 * D_TO_R), new Waypoint(21 * F_TO_M, 24 * F_TO_M, 0 * D_TO_R), new Waypoint(27, 21, -90)});
     points.put(SWITCH_OPPOSITE,
-        new Waypoint[] {new Waypoint(0, 14, 0), new Waypoint(7, 9, -35), new Waypoint(12, 8, 0)});
-    points.put(SCALE_OPPOSITE, new Waypoint[] {new Waypoint(0, 14, 0), new Waypoint(6, 9, -90),
-        new Waypoint(10, 4, 0), new Waypoint(21, 2, 0), new Waypoint(27, 6, 90)});
-    points.put(DRIVE_FORWARD, new Waypoint[] {new Waypoint(0, 14, 0), new Waypoint(7, 15, 35),
-        new Waypoint(10, 18, 90), new Waypoint(10, 20, 90)});
+        new Waypoint[] {new Waypoint(0 * F_TO_M, 14 * F_TO_M, 0 * D_TO_R), new Waypoint(7, 9, -35), new Waypoint(12 * F_TO_M, 8 * F_TO_M, 0 * D_TO_R)});
+    points.put(SCALE_OPPOSITE, new Waypoint[] {new Waypoint(0 * F_TO_M, 14 * F_TO_M, 0 * D_TO_R), new Waypoint(6, 9, -90),
+        new Waypoint(10 * F_TO_M, 4 * F_TO_M, 0 * D_TO_R), new Waypoint(21 * F_TO_M, 2 * F_TO_M, 0 * D_TO_R), new Waypoint(27 * F_TO_M, 6 * F_TO_M, 90 * D_TO_R)});
+    points.put(DRIVE_FORWARD, new Waypoint[] {new Waypoint(0 * F_TO_M, 14 * F_TO_M, 0 * D_TO_R), new Waypoint(7 * F_TO_M, 15 * F_TO_M, 35 * D_TO_R),
+        new Waypoint(10 * F_TO_M, 18 * F_TO_M, 90 * D_TO_R), new Waypoint(10 * F_TO_M, 20 * F_TO_M, 90 * D_TO_R)});
     WAYPOINTS.put(StartingPos.MIDDLE, points);
 
     points = new EnumMap<>(Strategy.class);
     points.put(SWITCH_SAME,
-        new Waypoint[] {new Waypoint(0, 3, 0), new Waypoint(4, 3, 0), new Waypoint(14, 7, 90)});
+        new Waypoint[] {new Waypoint(0 * F_TO_M, 3 * F_TO_M, 0 * D_TO_R), new Waypoint(4 * F_TO_M, 3 * F_TO_M, 0 * D_TO_R), new Waypoint(14 * F_TO_M, 7 * F_TO_M, 90 * D_TO_R)});
     points.put(SCALE_SAME,
-        new Waypoint[] {new Waypoint(0, 3, 0), new Waypoint(22, 3, 0), new Waypoint(27, 6, 90)});
-    points.put(SWITCH_OPPOSITE, new Waypoint[] {new Waypoint(0, 3, 0), new Waypoint(17, 4, 35),
-        new Waypoint(19, 7, 90), new Waypoint(19, 60, 90), new Waypoint(16, 18, 180)});
+        new Waypoint[] {new Waypoint(0 * F_TO_M, 3 * F_TO_M, 0 * D_TO_R), new Waypoint(22 * F_TO_M, 3 * F_TO_M, 0 * D_TO_R), new Waypoint(27 * F_TO_M, 6 * F_TO_M, 90 * D_TO_R)});
+    points.put(SWITCH_OPPOSITE, new Waypoint[] {new Waypoint(0 * F_TO_M, 3 * F_TO_M, 0 * D_TO_R), new Waypoint(17 * F_TO_M, 4 * F_TO_M, 35 * D_TO_R),
+        new Waypoint(19 * F_TO_M, 7 * F_TO_M, 90 * D_TO_R), new Waypoint(19 * F_TO_M, 60 * F_TO_M, 90 * D_TO_R), new Waypoint(16 * F_TO_M, 18 * F_TO_M, 180 * D_TO_R)});
     points.put(SCALE_OPPOSITE,
-        new Waypoint[] {new Waypoint(0, 3, 0), new Waypoint(16, 4, 0), new Waypoint(20, 8, 90),
-            new Waypoint(20, 21, 90), new Waypoint(24, 24, 0), new Waypoint(27, 21, -90)});
-    points.put(DRIVE_FORWARD, new Waypoint[] {new Waypoint(0, 0, 0), new Waypoint(10, 0, 0)});
+        new Waypoint[] {new Waypoint(0 * F_TO_M, 3 * F_TO_M, 0 * D_TO_R), new Waypoint(16 * F_TO_M, 4 * F_TO_M, 0 * D_TO_R), new Waypoint(20 * F_TO_M, 8 * F_TO_M, 90 * D_TO_R),
+            new Waypoint(20 * F_TO_M, 21 * F_TO_M, 90 * D_TO_R), new Waypoint(24 * F_TO_M, 24 * F_TO_M, 0 * D_TO_R), new Waypoint(27, 21, -90)});
+    points.put(DRIVE_FORWARD, new Waypoint[] {new Waypoint(0 * F_TO_M, 3 * F_TO_M, 0 * D_TO_R), new Waypoint(20 * F_TO_M, 3 * F_TO_M, 0 * D_TO_R)});
     WAYPOINTS.put(StartingPos.RIGHT, points);
   }
 }
