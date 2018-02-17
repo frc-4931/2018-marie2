@@ -222,6 +222,7 @@ public class Drivetrain extends Subsystem {
     gearBox.set(Value.kOff);
   }
 
+  //TODO remove code to calculate max acceleration and jerk
   long lastTime;
   double lastLeft;
   double lastRight;
