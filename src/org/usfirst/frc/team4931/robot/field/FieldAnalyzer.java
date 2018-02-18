@@ -1,14 +1,10 @@
 package org.usfirst.frc.team4931.robot.field;
 
+import edu.wpi.first.wpilibj.command.CommandGroup;
 import java.util.EnumMap;
 import org.usfirst.frc.team4931.robot.Robot;
 import org.usfirst.frc.team4931.robot.RobotMap;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import jaci.pathfinder.Pathfinder;
-import jaci.pathfinder.Trajectory;
-import jaci.pathfinder.Trajectory.FitMethod;
-import jaci.pathfinder.Waypoint;
-import jaci.pathfinder.modifiers.TankModifier;
 
 /**
  * Uses the position of the field, the robot starting position, and the
@@ -20,13 +16,13 @@ import jaci.pathfinder.modifiers.TankModifier;
 public class FieldAnalyzer {
 
   private char fieldPos[]; // position of switches and scale
-  private EnumMap<Strategy, TankModifier> strategyOptions = new EnumMap<>(Strategy.class);
+  private EnumMap<Strategy, AutoCommand> strategyOptions = new EnumMap<>(Strategy.class);
   private StartingPos robotStartingPos; // position of the robot before auto
   private char strategyPick[]; // selected strategy by the drive team
+  private AutoCommand pickedAuto;
 
   //To get M/S: divide by 480, multiply by 6(pi) * 10 * 0.0254.
   private Strategy pickedStrategy;
-  private TankModifier pickedTrajectory;
 
   /**
    * Gets the position of the field for strategy selection.
@@ -55,15 +51,13 @@ public class FieldAnalyzer {
     //robotStartingPos = StartingPos.valueOf(SmartDashboard.getString(RobotMap.POSITION_SELECTION, StartingPos.LEFT.name()));
     System.out.println(strategyString + "\n" + robotStartingPos.name());
 
-    Trajectory.Config config = new Trajectory.Config(FitMethod.HERMITE_CUBIC,
-        Trajectory.Config.SAMPLES_FAST, RobotMap.DELTA_TIME, RobotMap.MAX_VELOCITY, RobotMap.MAX_ACCELERATION, RobotMap.MAX_JERK);
     for (Strategy s : Strategy.values()) {
       if (strategyPick[s.ordinal()] == 'y') {
-        Waypoint[] point = Waypoints.WAYPOINTS.get(robotStartingPos).get(s);
-        TankModifier tankModifier =
-            new TankModifier(Pathfinder.generate(point, config));
-        tankModifier.modify(RobotMap.WHEEL_BASE);
-        strategyOptions.put(s, tankModifier);
+        Waypoint[] points = Waypoints.WAYPOINTS.get(robotStartingPos).get(s);
+
+        AutoCommand auto = new AutoCommand(points);
+
+        strategyOptions.put(s, auto);
 
         System.out.println(s.name());
       }
@@ -94,7 +88,7 @@ public class FieldAnalyzer {
           pickedStrategy = Strategy.DRIVE_FORWARD;
         }*/
     }
-    pickedTrajectory = strategyOptions.get(pickedStrategy);
+    pickedAuto = strategyOptions.get(pickedStrategy);
   }
   
   /**
@@ -124,7 +118,7 @@ public class FieldAnalyzer {
   /**
    * Returns the calculated trajectory based on the picked strategy
    */
-  public TankModifier getPickedTrajectory() {
-    return pickedTrajectory;
+  public void runAuto() {
+    pickedAuto.start();
   }
 }

@@ -139,9 +139,7 @@ public class Robot extends TimedRobot {
         DriverStation.getInstance().getGameSpecificMessage().toLowerCase().toCharArray();
     fieldAnalyzer.setFieldPosition(fieldPos);
     fieldAnalyzer.calculateStrategy();
-    autonomousCommand = new Autonomous(fieldAnalyzer.getPickedStrategy(),
-        fieldAnalyzer.getPickedTrajectory());
-    autonomousCommand.start();
+    fieldAnalyzer.runAuto();
 
     SmartDashboard.putString("Autonomous Strategy", fieldAnalyzer.getPickedStrategy().name());
   }

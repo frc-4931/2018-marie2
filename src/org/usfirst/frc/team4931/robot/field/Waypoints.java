@@ -22,15 +22,6 @@ public class Waypoints {
       new EnumMap<>(StartingPos.class);
 
 
-  private static class Waypoint extends jaci.pathfinder.Waypoint {
-    private static final double FEET_TO_METERS = 0.3048;
-    private static final double DEGREES_TO_RADS = Math.PI / 180;
-
-    public Waypoint(double x, double y, double angle) {
-      super(x * FEET_TO_METERS, y * FEET_TO_METERS, angle * DEGREES_TO_RADS);
-    }
-  }
-
   /**
    * The waypoints for autonomous.
    */
