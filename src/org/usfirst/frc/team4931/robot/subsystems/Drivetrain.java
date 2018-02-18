@@ -25,8 +25,8 @@ public class Drivetrain extends Subsystem {
   private static DifferentialDrive drivetrain;
   private static DoubleSolenoid gearBox;
   private static PigeonIMU pigeon;
-  private static final double MAX_VELOCITY_LOW_GEAR = 250;
-  private static final double MAX_VELOCITY_HIGH_GEAR = 700;
+  private static final double MAX_VELOCITY_LOW_GEAR = 162;
+  private static final double MAX_VELOCITY_HIGH_GEAR = 488;
 
   public Drivetrain() {
     initialization();
@@ -69,6 +69,7 @@ public class Drivetrain extends Subsystem {
 
     // Create gyro senser
     pigeon = new PigeonIMU(rightFrontMotor);
+    gyroReset();
   }
 
   /**
@@ -192,7 +193,7 @@ public class Drivetrain extends Subsystem {
   public double gyroReadYawAngle() {
     double[] values = new double[3];
     pigeon.getYawPitchRoll(values);
-    return values[0];
+    return -values[0];
   }
 
   /**
@@ -203,14 +204,14 @@ public class Drivetrain extends Subsystem {
   public double gyroReadYawRate() {
     double[] values = new double[3];
     pigeon.getRawGyro(values);
-    return values[0];
+    return -values[0];
   }
 
   /**
    * Resets the gyro.
    */
   public void gyroReset() {
-    pigeon.setYaw(0, 50);
+    pigeon.setYaw(0, 0);
   }
 
   /**

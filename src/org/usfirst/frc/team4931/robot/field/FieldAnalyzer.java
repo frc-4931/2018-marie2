@@ -1,6 +1,7 @@
 package org.usfirst.frc.team4931.robot.field;
 
 import java.util.EnumMap;
+import org.usfirst.frc.team4931.robot.Robot;
 import org.usfirst.frc.team4931.robot.RobotMap;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import jaci.pathfinder.Pathfinder;
@@ -18,15 +19,12 @@ import jaci.pathfinder.modifiers.TankModifier;
  */
 public class FieldAnalyzer {
 
-  private static final double WHEEL_BASE = 0.635;
   private char fieldPos[]; // position of switches and scale
   private EnumMap<Strategy, TankModifier> strategyOptions = new EnumMap<>(Strategy.class);
   private StartingPos robotStartingPos; // position of the robot before auto
   private char strategyPick[]; // selected strategy by the drive team
-  private double dt = 0.05; // TODO Set time between each different straight path on the curve
-  private double maxSpeed = 7.1; //TODO Set max speed (700 encoder pulses in high gear)
-  private double maxAcceleration = 3.75; //TODO Set max acceleration  (375 encoder pulses in high gear)
-  private double maxJerk = 18.75; //TODO Set max jerk
+
+  //To get M/S: divide by 480, multiply by 6(pi) * 10 * 0.0254.
   private Strategy pickedStrategy;
   private TankModifier pickedTrajectory;
 
@@ -49,19 +47,22 @@ public class FieldAnalyzer {
    * consider that strategy as a possible strategy to run.
    */
   public void predetermineStrategy() {
-    strategyPick = SmartDashboard.getString(RobotMap.STRATEGY_FIELD, "nnnnn").toLowerCase().toCharArray();
-    robotStartingPos = StartingPos
-        .valueOf(SmartDashboard.getString(RobotMap.POSITION_SELECTION, StartingPos.LEFT.name()));
-    System.out.println(strategyPick[0]+strategyPick[1]+strategyPick[2]+strategyPick[3]+strategyPick[4] + "\n" + robotStartingPos + "\n");
+    SmartDashboard.updateValues();
+    robotStartingPos = StartingPos.valueOf(Robot.autoChooserPos.getSelected());
+
+    String strategyString = SmartDashboard.getString(RobotMap.STRATEGY_FIELD, "nnnnn").toLowerCase();
+    strategyPick = strategyString.toCharArray();
+    //robotStartingPos = StartingPos.valueOf(SmartDashboard.getString(RobotMap.POSITION_SELECTION, StartingPos.LEFT.name()));
+    System.out.println(strategyString + "\n" + robotStartingPos.name());
 
     Trajectory.Config config = new Trajectory.Config(FitMethod.HERMITE_CUBIC,
-        Trajectory.Config.SAMPLES_FAST, dt, maxSpeed, maxAcceleration, maxJerk);
+        Trajectory.Config.SAMPLES_FAST, RobotMap.DELTA_TIME, RobotMap.MAX_VELOCITY, RobotMap.MAX_ACCELERATION, RobotMap.MAX_JERK);
     for (Strategy s : Strategy.values()) {
       if (strategyPick[s.ordinal()] == 'y') {
         Waypoint[] point = Waypoints.WAYPOINTS.get(robotStartingPos).get(s);
         TankModifier tankModifier =
             new TankModifier(Pathfinder.generate(point, config));
-        tankModifier.modify(WHEEL_BASE);
+        tankModifier.modify(RobotMap.WHEEL_BASE);
         strategyOptions.put(s, tankModifier);
 
         System.out.println(s.name());
