@@ -51,7 +51,11 @@ public class DriveByTrajectory extends Command {
 
     System.out.println("Left Speed: "+leftSpeed+"     "+"Right Speed: "+rightSpeed);
     System.out.println("Left Correction: "+leftCorrection+"     "+"Right Correction: "+rightCorrection);
-    Robot.drivetrain.driveTank((leftSpeed+leftCorrection)/12, (rightSpeed-rightCorrection)/12);
+    leftSpeed = (leftSpeed > 1) ? 1 : leftSpeed;
+    leftSpeed = (leftSpeed < -1) ? -1 : leftSpeed;
+    rightSpeed = (rightSpeed > 1) ? 1 : rightSpeed;
+    rightSpeed = (rightSpeed < -1) ? -1 : rightSpeed;
+    Robot.drivetrain.driveTank(leftSpeed/3, rightSpeed/3);
   }
 
   /**

@@ -70,8 +70,8 @@ public class RobotMap {
 
   public static final double PPS_TO_MPS = 6 * Math.PI * 10 * 0.0254 / 480;
   public static final double DELTA_TIME = 0.02; // TODO Set time between each different straight path on the curve
-  public static final double MAX_VELOCITY = 488 * PPS_TO_MPS; //TODO Set max speed (700 encoder pulses in high gear)
-  public static final double MAX_ACCELERATION = 120 * PPS_TO_MPS; //TODO Set max acceleration  (375 encoder pulses in high gear)
+  public static final double MAX_VELOCITY = 488 * PPS_TO_MPS / 3; //TODO Set max speed
+  public static final double MAX_ACCELERATION = 120 * PPS_TO_MPS / 3; //TODO Set max acceleration
   public static final double MAX_JERK = 600 * PPS_TO_MPS; //TODO Set max jerk
   public static final double WHEEL_BASE = 0.635;
   public static final double WHEEL_DIAMETER = 0.1524;
