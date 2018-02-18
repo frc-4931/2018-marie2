@@ -11,7 +11,7 @@ public class GoToDistance extends Command {
     requires(Robot.drivetrain);
 
     this.speed = speed;
-    this.distance = distance / (Math.PI*6) * 480;
+    this.distance = distance * 12 / (Math.PI*6) * 480;
 
     System.out.println("Distance: " + distance);
   }

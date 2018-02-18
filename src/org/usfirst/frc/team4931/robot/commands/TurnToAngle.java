@@ -15,7 +15,7 @@ public class TurnToAngle extends Command {
 
     this.speed = speed;
     this.angle = angle;
-    System.out.println("Angle: " + angle);
+    System.out.println("Angle: " + Math.copySign(angle, speed));
   }
 
   @Override

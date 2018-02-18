@@ -6,17 +6,19 @@ import org.usfirst.frc.team4931.robot.commands.TurnToAngle;
 
 public class AutoCommand extends CommandGroup {
   double curAbsoluteAngle = 0;
-  double curAbsoluteX = 1;
+  double curAbsoluteX = 0;
   double curAbsoluteY = 0;
+  boolean isFirst = true;
 
   AutoCommand(Waypoint[] points) {
     addSequential(new GoToDistance(1, 1));
 
     Waypoint lastPoint = points[points.length-1];
     for (Waypoint point : points) {
-      double x = point.x - curAbsoluteX;
+      double x = (isFirst) ? point.x - 1 : point.x;
       double y = point.y - curAbsoluteY;
       double distance = Math.sqrt(x*x + y*y);
+      isFirst = false;
 
       if (x == 0 && y > 0) {;
         turn(90);
@@ -36,8 +38,8 @@ public class AutoCommand extends CommandGroup {
         turn(180 + Math.toDegrees(Math.atan(-y/-x)));
       }
 
-      curAbsoluteX += x;
-      curAbsoluteY += y;
+      //curAbsoluteX += x;
+      //curAbsoluteY += y;
       addSequential(new GoToDistance(1, distance));
     }
     turn(lastPoint.angle);
