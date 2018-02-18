@@ -16,7 +16,7 @@ public class DriveByTrajectory extends Command {
   private EncoderFollower rightEncoderFollower;
   private double startingHeading;
 
-  DriveByTrajectory(TankModifier tankModifier) {
+  public DriveByTrajectory(TankModifier tankModifier) {
     requires(Robot.drivetrain);
     leftEncoderFollower = new EncoderFollower(tankModifier.getLeftTrajectory());
     rightEncoderFollower = new EncoderFollower(tankModifier.getRightTrajectory());
@@ -59,7 +59,7 @@ public class DriveByTrajectory extends Command {
   }
 
   /**
-   * @return true when both encoders are finished
+   * @return true when both encoders are finishedb
    */
   @Override
   protected boolean isFinished() {
