@@ -45,12 +45,12 @@ public class DriveByTrajectory extends Command {
     double rightSpeed = rightEncoderFollower.calculate(Robot.drivetrain.getRightEncoder());
     double curTrajectoryHeading = leftEncoderFollower.getHeading();
     double correction = ((curTrajectoryHeading - startingHeading) - Math.toRadians(Robot.drivetrain.gyroReadYawAngle())) / RobotMap.TRAJ_CORRECTION_AMOUNT;
-
-    double leftCorrection = correction;
-    double rightCorrection = correction;
-
     System.out.println("Left Speed: "+leftSpeed+"     "+"Right Speed: "+rightSpeed);
-    System.out.println("Left Correction: "+leftCorrection+"     "+"Right Correction: "+rightCorrection);
+    System.out.println("Correction: " + correction);
+
+    leftSpeed -= correction;
+    rightSpeed += correction;
+
     leftSpeed = (leftSpeed > 1) ? 1 : leftSpeed;
     leftSpeed = (leftSpeed < -1) ? -1 : leftSpeed;
     rightSpeed = (rightSpeed > 1) ? 1 : rightSpeed;
