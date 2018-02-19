@@ -1,23 +1,24 @@
 package org.usfirst.frc.team4931.robot.commands;
 
-import org.usfirst.frc.team4931.robot.Robot;
 import edu.wpi.first.wpilibj.command.Command;
+import org.usfirst.frc.team4931.robot.Robot;
 /**
  * Makes the robot turn to a specific angle
  *
  */
 public class TurnToAngle extends Command {
-  private static final double MIN_SPEED = 0.1;
-  private static final double THRESHOLD_ANGLE = 45;
+
+  private static final double MIN_SPEED = 0.15;
+  private static final double THRESHOLD_ANGLE = 270;
   private double speed;
   private double angle;
 
   public TurnToAngle(double speed, double angle) {
     requires(Robot.drivetrain);
 
-    this.speed = speed / 3;
+    this.speed = speed;
     this.angle = angle;
-    System.out.println("Angle: " + Math.copySign(angle, speed));
+    System.out.println("Starting Speed: " + speed);
   }
 
   @Override
@@ -28,9 +29,16 @@ public class TurnToAngle extends Command {
   @Override
   protected void execute() {
     double currentAngle = Robot.drivetrain.gyroReadYawAngle();
-    double calcSpeed = ramp(speed, MIN_SPEED, currentAngle, angle, THRESHOLD_ANGLE);
+    double calcSpeed = ramp(Math.abs(speed), MIN_SPEED, Math.abs(currentAngle), angle,
+        THRESHOLD_ANGLE);
 
-    Robot.drivetrain.driveTank(calcSpeed, -calcSpeed);
+    if (speed > 0) {
+      Robot.drivetrain.driveTank(calcSpeed, -calcSpeed);
+    } else {
+      Robot.drivetrain.driveTank(-calcSpeed, calcSpeed);
+    }
+
+    System.out.println("Angle: " + currentAngle + "\n" + "Speed: " + calcSpeed);
   }
 
   @Override

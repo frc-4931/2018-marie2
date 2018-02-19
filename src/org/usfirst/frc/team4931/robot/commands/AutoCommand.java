@@ -4,6 +4,7 @@ import static org.usfirst.frc.team4931.robot.subsystems.FixedLiftHeight.SCALE_TO
 import static org.usfirst.frc.team4931.robot.subsystems.FixedLiftHeight.SWITCH;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
+import org.usfirst.frc.team4931.robot.Robot;
 import org.usfirst.frc.team4931.robot.field.Strategy;
 import org.usfirst.frc.team4931.robot.field.Waypoint;
 import org.usfirst.frc.team4931.robot.subsystems.FixedLiftHeight;
@@ -14,14 +15,15 @@ public class AutoCommand extends CommandGroup {
   double curAbsoluteAngle = 0;
   double curAbsoluteX = 0;
   double curAbsoluteY = 0;
-  boolean isFirst = true;
+  boolean isFirst = false;
 
   public AutoCommand(Waypoint[] points, Strategy strategy) {
     //TODO uncomment when we have encoders setup on the lift and grabber
     //addParallel(new GrabberGoToPosition(GrabberPosition.EXCHANGE)); // sets claw position to middle position
     //addParallel(new SetLiftSetpoint(calcLiftHeight(strategy))); // raises lift based on the calculated strategy
 
-    addSequential(new GoToDistance(1, 1));
+    //addSequential(new GoToDistance(1, 1));
+    Robot.drivetrain.switchLowGear();
 
     Waypoint lastPoint = points[points.length-1];
     for (Waypoint point : points) {
@@ -51,9 +53,9 @@ public class AutoCommand extends CommandGroup {
 
       //curAbsoluteX += x;
       //curAbsoluteY += y;
-      addSequential(new WaitForMS(1000));
+      //addSequential(new WaitForMS(3000));
       addSequential(new GoToDistance(1, distance));
-      addSequential(new WaitForMS(1000));
+      //addSequential(new WaitForMS(3000));
     }
     turn(Math.toDegrees(lastPoint.angle));
   }
