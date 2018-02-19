@@ -14,7 +14,6 @@ import org.usfirst.frc.team4931.robot.RobotMap;
 public class DriveByTrajectory extends Command {
   private EncoderFollower leftEncoderFollower;
   private EncoderFollower rightEncoderFollower;
-  private double startingHeading;
 
   DriveByTrajectory(TankModifier tankModifier) {
     requires(Robot.drivetrain);
@@ -32,8 +31,6 @@ public class DriveByTrajectory extends Command {
 
     leftEncoderFollower.reset();
     rightEncoderFollower.reset();
-
-    this.startingHeading = leftEncoderFollower.getHeading();
    }
 
   /**
@@ -43,9 +40,10 @@ public class DriveByTrajectory extends Command {
   protected void execute() {
     double leftSpeed = leftEncoderFollower.calculate(Robot.drivetrain.getLeftEncoder());
     double rightSpeed = rightEncoderFollower.calculate(Robot.drivetrain.getRightEncoder());
-    double curTrajectoryHeading = leftEncoderFollower.getHeading();
-    double correction = ((curTrajectoryHeading - startingHeading) - Math.toRadians(Robot.drivetrain.gyroReadYawAngle())) / RobotMap.TRAJ_CORRECTION_AMOUNT;
-    System.out.println("Left Speed: "+leftSpeed+"     "+"Right Speed: "+rightSpeed);
+    double curTrajectoryHeading = Math.toDegrees(leftEncoderFollower.getHeading());
+    double correction = (Robot.drivetrain.gyroReadYawAngle() + curTrajectoryHeading)
+        / RobotMap.TRAJ_CORRECTION_AMOUNT;
+    System.out.println("Left Speed: " + leftSpeed + "\n" + "Right Speed: " + rightSpeed);
     System.out.println("Correction: " + correction);
 
     leftSpeed -= correction;

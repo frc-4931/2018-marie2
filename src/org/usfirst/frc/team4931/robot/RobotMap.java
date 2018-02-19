@@ -80,6 +80,6 @@ public class RobotMap {
   public static final double TRAJ_DERIVATIVE = 0;
   public static final double TRAJ_VELOCITY = 1/MAX_VELOCITY;
   public static final double TRAJ_ACCELERATION = 0;
-  public static final double TRAJ_CORRECTION_AMOUNT = 100; //Lower number means more correction;
+  public static final double TRAJ_CORRECTION_AMOUNT = 50; //Lower number means more correction;
 
 }
