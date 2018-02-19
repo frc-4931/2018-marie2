@@ -9,72 +9,79 @@ import static org.usfirst.frc.team4931.robot.field.Strategy.SWITCH_SAME;
 import java.util.EnumMap;
 import java.util.Map;
 
+//import jaci.pathfinder.Waypoint;
+
 /**
  * This function tells us each waypoint based on positions and strategies.
  *
  */
 public class Waypoints {
-  
-  /**
-   * Creates a map for our waypoints.
-   */
-  public static Map<StartingPos, Map<Strategy, Waypoint[]>> WAYPOINTS =
-      new EnumMap<>(StartingPos.class);
 
+	/**
+	 * Creates a map for our waypoints.
+	 */
+	public static Map<StartingPos, Map<Strategy, Waypoint[]>> WAYPOINTS = new EnumMap<>(StartingPos.class);
 
-  private static class Waypoint extends jaci.pathfinder.Waypoint {
-    private static final double FEET_TO_METERS = 0.3048;
-    private static final double DEGREES_TO_RADS = Math.PI / 180;
+	static class Waypoint extends jaci.pathfinder.Waypoint {
+		private static final double FEET_TO_METERS = 0.3048;
+		private static final double DEGREES_TO_RADS = Math.PI / 180;
 
-    public Waypoint(double x, double y, double angle) {
-      super(x * FEET_TO_METERS, y * FEET_TO_METERS, angle * DEGREES_TO_RADS);
-    }
-  }
+		public Waypoint(double x, double y, double angle) {
+			super(x * FEET_TO_METERS, y * FEET_TO_METERS, angle * DEGREES_TO_RADS);
+		}
+	}
 
-  /**
-   * The waypoints for autonomous.
-   */
-  static {
-    Map<Strategy, Waypoint[]> points = new EnumMap<>(Strategy.class);
-    points.put(SWITCH_SAME, new Waypoint[] {new Waypoint(0, 24, 0), new Waypoint(11, 25, -35),
-        new Waypoint(14, 20, -90)});
-    points.put(SCALE_SAME, new Waypoint[] {new Waypoint(0, 24, 0), new Waypoint(20, 25, 0),
-        new Waypoint(27, 21, -90)});
-    points.put(SWITCH_OPPOSITE, new Waypoint[] {new Waypoint(0, 24, 0), new Waypoint(15, 24, 0),
-        new Waypoint(20, 19, -90), new Waypoint(20, 12, -90), new Waypoint(16, 9, 180)});
-    points.put(SCALE_OPPOSITE,
-        new Waypoint[] {new Waypoint(0, 24, 0), new Waypoint(17, 23, 0), new Waypoint(20, 20, -90),
-            new Waypoint(20, 5, -90), new Waypoint(24, 2, 0), new Waypoint(27, 6, 90)});
-    //points.put(DRIVE_FORWARD, new Waypoint[] {new Waypoint(0, 24, 0), new Waypoint(20, 24, 0)});
-    points.put(DRIVE_FORWARD, new Waypoint[] {new Waypoint(1, 12, 45), new Waypoint(4, 7, -15), new Waypoint(10, 8, 90), new Waypoint(17, 2, 45)});
-    WAYPOINTS.put(StartingPos.LEFT, points);
+	/**
+	 * The waypoints for autonomous.
+	 */
+	static {
+		Map<Strategy, Waypoint[]> points = new EnumMap<>(Strategy.class);
+		// starting at: 0.0, 24.0, 0.0
+		points.put(SWITCH_SAME, new Waypoint[] { new Waypoint(11.0, 1.0, -35.0), new Waypoint(3.0, -5.0, -90.0) });
+		// starting at: 0.0, 24.0, 0.0
+		points.put(SCALE_SAME, new Waypoint[] { new Waypoint(20.0, 1.0, 0.0), new Waypoint(7.0, -4.0, -90.0) });
+		// starting at: 0.0, 24.0, 0.0
+		points.put(SWITCH_OPPOSITE, new Waypoint[] { new Waypoint(15.0, 0.0, 0.0), new Waypoint(5.0, -5.0, -90.0),
+				new Waypoint(0.0, -7.0, -90.0), new Waypoint(-4.0, -3.0, 180.0) });
+		// starting at: 0.0, 24.0, 0.0
+		points.put(SCALE_OPPOSITE, new Waypoint[] { new Waypoint(17.0, -1.0, 0.0), new Waypoint(3.0, -3.0, -90.0),
+				new Waypoint(0.0, -15.0, -90.0), new Waypoint(4.0, -3.0, 0.0), new Waypoint(3.0, 4.0, 90.0) });
+		// points.put(DRIVE_FORWARD, new Waypoint[] {new Waypoint(0, 24, 0), new
+		// Waypoint(20, 24, 0)});
+		// starting at: 1.0, 12.0, 45.0
+		points.put(DRIVE_FORWARD, new Waypoint[] { new Waypoint(3.0, -5.0, -15.0), new Waypoint(6.0, 1.0, 90.0),
+				new Waypoint(7.0, -6.0, 45.0) });
+		WAYPOINTS.put(StartingPos.LEFT, points);
 
-    points = new EnumMap<>(Strategy.class);
-    points.put(SWITCH_SAME,
-        new Waypoint[] {new Waypoint(0, 14, 0), new Waypoint(7, 18, 35), new Waypoint(12, 18, 0)});
-    points.put(SCALE_SAME, new Waypoint[] {new Waypoint(0, 14, 0), new Waypoint(7, 20, 90),
-        new Waypoint(11, 23, 0), new Waypoint(21, 24, 0), new Waypoint(27, 21, -90)});
-    points.put(SWITCH_OPPOSITE,
-        new Waypoint[] {new Waypoint(0, 14, 0), new Waypoint(7, 9, -35), new Waypoint(12, 8, 0)});
-    points.put(SCALE_OPPOSITE, new Waypoint[] {new Waypoint(0, 14, 0), new Waypoint(6, 9, -90),
-        new Waypoint(10, 4, 0), new Waypoint(21, 2, 0), new Waypoint(27, 6, 90)});
-    points.put(DRIVE_FORWARD, new Waypoint[] {new Waypoint(0, 14, 0), new Waypoint(7, 15, 35),
-        new Waypoint(10, 18, 90), new Waypoint(10, 20, 90)});
-    WAYPOINTS.put(StartingPos.MIDDLE, points);
+		points = new EnumMap<>(Strategy.class);
+		// starting at: 0.0, 14.0, 0.0
+		points.put(SWITCH_SAME, new Waypoint[] { new Waypoint(7.0, 4.0, 35.0), new Waypoint(5.0, 0.0, 0.0) });
+		// starting at: 0.0, 14.0, 0.0
+		points.put(SCALE_SAME, new Waypoint[] { new Waypoint(7.0, 6.0, 90.0), new Waypoint(4.0, 3.0, 0.0),
+				new Waypoint(10.0, 1.0, 0.0), new Waypoint(6.0, -3.0, -90.0) });
+		// starting at: 0.0, 14.0, 0.0
+		points.put(SWITCH_OPPOSITE, new Waypoint[] { new Waypoint(7.0, -5.0, -35.0), new Waypoint(5.0, -1.0, 0.0) });
+		// starting at: 0.0, 14.0, 0.0
+		points.put(SCALE_OPPOSITE, new Waypoint[] { new Waypoint(6.0, -5.0, -90.0), new Waypoint(4.0, -5.0, 0.0),
+				new Waypoint(11.0, -2.0, 0.0), new Waypoint(6.0, 4.0, 90.0) });
+		// starting at: 0.0, 14.0, 0.0
+		points.put(DRIVE_FORWARD, new Waypoint[] { new Waypoint(7.0, 1.0, 35.0), new Waypoint(3.0, 3.0, 90.0),
+				new Waypoint(0.0, 2.0, 90.0) });
+		WAYPOINTS.put(StartingPos.MIDDLE, points);
 
-    points = new EnumMap<>(Strategy.class);
-    points.put(SWITCH_SAME,
-        new Waypoint[] {new Waypoint(0, 3, 0), new Waypoint(4, 3, 0), new Waypoint(14, 7, 90)});
-    points.put(SCALE_SAME,
-        new Waypoint[] {new Waypoint(0, 3, 0), new Waypoint(22, 3, 0), new Waypoint(27, 6, 90)});
-    points.put(SWITCH_OPPOSITE, new Waypoint[] {new Waypoint(0, 3, 0), new Waypoint(17, 4, 35),
-        new Waypoint(19, 7, 90), new Waypoint(19, 60, 90), new Waypoint(16, 18, 180)});
-    points.put(SCALE_OPPOSITE,
-        new Waypoint[] {new Waypoint(0, 3, 0), new Waypoint(16, 4, 0), new Waypoint(20, 8, 90),
-            new Waypoint(20, 21, 90), new Waypoint(24, 24, 0), new Waypoint(27, 21, -90)});
-    points.put(DRIVE_FORWARD, new Waypoint[] {new Waypoint(0, 3, 0), new Waypoint(20, 3, 0)});
-    WAYPOINTS.put(StartingPos.RIGHT, points);
-  }
+		points = new EnumMap<>(Strategy.class);
+		// starting at: 0.0, 3.0, 0.0
+		points.put(SWITCH_SAME, new Waypoint[] { new Waypoint(4.0, 0.0, 0.0), new Waypoint(10.0, 4.0, 90.0) });
+		// starting at: 0.0, 3.0, 0.0
+		points.put(SCALE_SAME, new Waypoint[] { new Waypoint(22.0, 0.0, 0.0), new Waypoint(5.0, 3.0, 90.0) });
+		// starting at: 0.0, 3.0, 0.0
+		points.put(SWITCH_OPPOSITE, new Waypoint[] { new Waypoint(17.0, 1.0, 35.0), new Waypoint(2.0, 3.0, 90.0),
+				new Waypoint(0.0, 53.0, 90.0), new Waypoint(-3.0, -42.0, 180.0) });
+		// starting at: 0.0, 3.0, 0.0
+		points.put(SCALE_OPPOSITE, new Waypoint[] { new Waypoint(16.0, 1.0, 0.0), new Waypoint(4.0, 4.0, 90.0),
+				new Waypoint(0.0, 13.0, 90.0), new Waypoint(4.0, 3.0, 0.0), new Waypoint(3.0, -3.0, -90.0) });
+		// starting at: 0.0, 3.0, 0.0
+		points.put(DRIVE_FORWARD, new Waypoint[] { new Waypoint(20.0, 0.0, 0.0) });
+		WAYPOINTS.put(StartingPos.RIGHT, points);
+	}
 }
-
-
