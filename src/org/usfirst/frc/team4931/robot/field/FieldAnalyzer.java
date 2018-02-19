@@ -1,10 +1,10 @@
 package org.usfirst.frc.team4931.robot.field;
 
-import edu.wpi.first.wpilibj.command.CommandGroup;
 import java.util.EnumMap;
 import org.usfirst.frc.team4931.robot.Robot;
 import org.usfirst.frc.team4931.robot.RobotMap;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import org.usfirst.frc.team4931.robot.commands.AutoCommand;
 
 /**
  * Uses the position of the field, the robot starting position, and the
@@ -43,19 +43,16 @@ public class FieldAnalyzer {
    * consider that strategy as a possible strategy to run.
    */
   public void predetermineStrategy() {
-    SmartDashboard.updateValues();
     robotStartingPos = StartingPos.valueOf(Robot.autoChooserPos.getSelected());
-
     String strategyString = SmartDashboard.getString(RobotMap.STRATEGY_FIELD, "nnnnn").toLowerCase();
     strategyPick = strategyString.toCharArray();
-    //robotStartingPos = StartingPos.valueOf(SmartDashboard.getString(RobotMap.POSITION_SELECTION, StartingPos.LEFT.name()));
     System.out.println(strategyString + "\n" + robotStartingPos.name());
 
     for (Strategy s : Strategy.values()) {
       if (strategyPick[s.ordinal()] == 'y') {
         Waypoint[] points = Waypoints.WAYPOINTS.get(robotStartingPos).get(s);
 
-        AutoCommand auto = new AutoCommand(points);
+        AutoCommand auto = new AutoCommand(points, pickedStrategy);
 
         strategyOptions.put(s, auto);
 
@@ -63,10 +60,11 @@ public class FieldAnalyzer {
       }
     }
   }
-/**
- * This calculates the strategy for autonomous based on field position,
- * robot position, and which autonomous routines have been rendered.
- */
+
+  /**
+   * This calculates the strategy for autonomous based on field position,
+   * robot position, and which autonomous routines have been rendered.
+   */
   public void calculateStrategy() {
     switch (robotStartingPos) {
       case LEFT:
@@ -78,15 +76,6 @@ public class FieldAnalyzer {
       default: //Left siwtch/scale = _SAME. Right switch/scale = OPPOSITE
         pickStrategy('l', 'r');
         break;
-
-        //Commented out because I'm unsure whether we atually wanted this logic that doesn't change based the field setup
-        /*if (strategyOptions.containsKey(Strategy.SWITCH_SAME)) {
-          pickedStrategy = Strategy.SWITCH_SAME;
-        } else if (strategyOptions.containsKey(Strategy.SWITCH_OPPOSITE)) {
-          pickedStrategy = Strategy.SWITCH_OPPOSITE;
-        } else {
-          pickedStrategy = Strategy.DRIVE_FORWARD;
-        }*/
     }
     pickedAuto = strategyOptions.get(pickedStrategy);
   }

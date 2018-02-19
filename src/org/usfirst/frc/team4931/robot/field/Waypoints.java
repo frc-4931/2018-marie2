@@ -44,6 +44,9 @@ public class Waypoints {
 		points.put(DRIVE_FORWARD, new Waypoint[] { new Waypoint(3.0, -5.0, -15.0), new Waypoint(6.0, 1.0, 90.0),
 				new Waypoint(7.0, -6.0, 45.0) });
 		WAYPOINTS.put(StartingPos.LEFT, points);
+
+
+    points = new EnumMap<>(Strategy.class);
 		// starting at: 0.0, 14.0, 0.0
 		points.put(SWITCH_SAME, new Waypoint[] { new Waypoint(7.0, 4.0, 35.0), new Waypoint(5.0, 0.0, 0.0) });
 		// starting at: 0.0, 14.0, 0.0
@@ -58,6 +61,9 @@ public class Waypoints {
 		points.put(DRIVE_FORWARD, new Waypoint[] { new Waypoint(7.0, 1.0, 35.0), new Waypoint(3.0, 3.0, 90.0),
 				new Waypoint(0.0, 2.0, 90.0) });
 		WAYPOINTS.put(StartingPos.MIDDLE, points);
+
+
+    points = new EnumMap<>(Strategy.class);
 		// starting at: 0.0, 3.0, 0.0
 		points.put(SWITCH_SAME, new Waypoint[] { new Waypoint(4.0, 0.0, 0.0), new Waypoint(10.0, 4.0, 90.0) });
 		// starting at: 0.0, 3.0, 0.0
@@ -69,7 +75,7 @@ public class Waypoints {
 		points.put(SCALE_OPPOSITE, new Waypoint[] { new Waypoint(16.0, 1.0, 0.0), new Waypoint(4.0, 4.0, 90.0),
 				new Waypoint(0.0, 13.0, 90.0), new Waypoint(4.0, 3.0, 0.0), new Waypoint(3.0, -3.0, -90.0) });
 		// starting at: 0.0, 3.0, 0.0
-		points.put(DRIVE_FORWARD, new Waypoint[] { new Waypoint(20.0, 0.0, 0.0) });
+		points.put(DRIVE_FORWARD, new Waypoint[] { new Waypoint(10.0, 0.0, 0.0), new Waypoint(0, 0, 90) }); //TODO set back to 20
 		WAYPOINTS.put(StartingPos.RIGHT, points);
 	}
 }
