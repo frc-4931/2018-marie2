@@ -75,8 +75,9 @@ public class Waypoints {
 		points.put(SCALE_OPPOSITE, new Waypoint[] { new Waypoint(16.0, 1.0, 0.0), new Waypoint(4.0, 4.0, 90.0),
 				new Waypoint(0.0, 13.0, 90.0), new Waypoint(4.0, 3.0, 0.0), new Waypoint(3.0, -3.0, -90.0) });
 		// starting at: 0.0, 3.0, 0.0
-		points.put(DRIVE_FORWARD, new Waypoint[] { new Waypoint(10.0, 0.0, 0.0), new Waypoint(0, 0, 90) }); //TODO set back to 20
-		WAYPOINTS.put(StartingPos.RIGHT, points);
+    //points.put(DRIVE_FORWARD, new Waypoint[] { new Waypoint(20.0, 0.0, 0.0)}); //TODO uncomment real waypoint list
+    points.put(DRIVE_FORWARD, new Waypoint[]{new Waypoint(10.0, 0.0, 0.0), new Waypoint(0, 0, 90)});
+    WAYPOINTS.put(StartingPos.RIGHT, points);
 	}
 }
 

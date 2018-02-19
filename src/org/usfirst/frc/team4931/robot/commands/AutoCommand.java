@@ -9,6 +9,8 @@ import org.usfirst.frc.team4931.robot.field.Waypoint;
 import org.usfirst.frc.team4931.robot.subsystems.FixedLiftHeight;
 
 public class AutoCommand extends CommandGroup {
+
+  private static final double METERS_TO_FEET = 3.28084;
   double curAbsoluteAngle = 0;
   double curAbsoluteX = 0;
   double curAbsoluteY = 0;
@@ -23,8 +25,9 @@ public class AutoCommand extends CommandGroup {
 
     Waypoint lastPoint = points[points.length-1];
     for (Waypoint point : points) {
-      double x = ((isFirst) ? point.x - 1 : point.x) - curAbsoluteX;
-      double y = curAbsoluteY - point.y;
+      double x =
+          ((isFirst) ? point.x * METERS_TO_FEET - 1 : point.x * METERS_TO_FEET) - curAbsoluteX;
+      double y = curAbsoluteY - point.y * METERS_TO_FEET;
       double distance = Math.sqrt(x*x + y*y);
       isFirst = false;
 
@@ -52,7 +55,7 @@ public class AutoCommand extends CommandGroup {
       addSequential(new GoToDistance(1, distance));
       addSequential(new WaitForMS(1000));
     }
-    turn(lastPoint.angle);
+    turn(Math.toDegrees(lastPoint.angle));
   }
 
   /**
