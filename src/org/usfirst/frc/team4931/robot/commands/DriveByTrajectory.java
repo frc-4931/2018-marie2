@@ -1,6 +1,7 @@
 package org.usfirst.frc.team4931.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
+import jaci.pathfinder.Pathfinder;
 import jaci.pathfinder.followers.EncoderFollower;
 import jaci.pathfinder.modifiers.TankModifier;
 import org.usfirst.frc.team4931.robot.Robot;
@@ -41,19 +42,18 @@ public class DriveByTrajectory extends Command {
     double leftSpeed = leftEncoderFollower.calculate(Robot.drivetrain.getLeftEncoder());
     double rightSpeed = rightEncoderFollower.calculate(Robot.drivetrain.getRightEncoder());
     double curTrajectoryHeading = Math.toDegrees(leftEncoderFollower.getHeading());
-    double correction = (Robot.drivetrain.gyroReadYawAngle() + curTrajectoryHeading)
-        / RobotMap.TRAJ_CORRECTION_AMOUNT;
+    double correction = Pathfinder
+        .boundHalfDegrees(curTrajectoryHeading + Robot.drivetrain.gyroReadYawAngle());
+    double turn = 0.8 * (-1.0 / 80.0) * correction;
+
     System.out.println("Left Speed: " + leftSpeed + "\n" + "Right Speed: " + rightSpeed);
     System.out.println("Correction: " + correction);
+    System.out
+        .println("Left Cur: " + (leftSpeed + turn) + "\n" + "Right Cur: " + (rightSpeed - turn));
+    leftSpeed += turn;
+    rightSpeed -= turn;
 
-    leftSpeed -= correction;
-    rightSpeed += correction;
-
-    leftSpeed = (leftSpeed > 1) ? 1 : leftSpeed;
-    leftSpeed = (leftSpeed < -1) ? -1 : leftSpeed;
-    rightSpeed = (rightSpeed > 1) ? 1 : rightSpeed;
-    rightSpeed = (rightSpeed < -1) ? -1 : rightSpeed;
-    Robot.drivetrain.driveTank(leftSpeed/3, rightSpeed/3);
+    Robot.drivetrain.driveTank(leftSpeed, rightSpeed);
   }
 
   /**

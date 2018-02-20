@@ -1,14 +1,14 @@
 package org.usfirst.frc.team4931.robot.commands;
 
-import static org.usfirst.frc.team4931.robot.field.Strategy.*;
+import static org.usfirst.frc.team4931.robot.field.Strategy.DRIVE_FORWARD;
+import static org.usfirst.frc.team4931.robot.subsystems.FixedLiftHeight.SCALE_TOP;
+import static org.usfirst.frc.team4931.robot.subsystems.FixedLiftHeight.SWITCH;
 
+import edu.wpi.first.wpilibj.command.CommandGroup;
+import jaci.pathfinder.modifiers.TankModifier;
 import org.usfirst.frc.team4931.robot.Robot;
 import org.usfirst.frc.team4931.robot.field.Strategy;
 import org.usfirst.frc.team4931.robot.subsystems.FixedLiftHeight;
-import org.usfirst.frc.team4931.robot.subsystems.GrabberPosition;
-import static org.usfirst.frc.team4931.robot.subsystems.FixedLiftHeight.*;
-import edu.wpi.first.wpilibj.command.CommandGroup;
-import jaci.pathfinder.modifiers.TankModifier;
 
 /**
  * Sets the command Autonomous
@@ -26,7 +26,7 @@ public class Autonomous extends CommandGroup {
 
     Robot.drivetrain.resetLeftEncoder();
     Robot.drivetrain.resetRightEncoder();
-    Robot.drivetrain.switchHighGear();
+    Robot.drivetrain.switchLowGear();
     Robot.drivetrain.gyroReset();
     addSequential(new DriveByTrajectory(tankModifier)); // drives the calculated trajectory
 
