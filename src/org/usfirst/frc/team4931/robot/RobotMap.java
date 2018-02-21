@@ -50,7 +50,7 @@ public class RobotMap {
   /**
    * [0] is forward position port, [1] is backward position port
    */
-  public static final int[] grabberPorts = {3, 2};
+  public static final int[] grabberPorts = {2, 3};
   public static final int grabberMotorPort = 7;
   public static final boolean climberMotorInverted = false;
   public static final boolean grabberMotorInverted = true;
@@ -64,6 +64,10 @@ public class RobotMap {
   public static final boolean liftMotorSensorInverted = true;
 
   public static final int climberMotorPort = 9;
+  /**
+   * [0] is the lock port, [1] is the free port
+   */
+  public static final int[] climberBrake = {5, 4};
   
   public static final int driverControllerPort = 0;
   public static final int liftControllerPort = 1;

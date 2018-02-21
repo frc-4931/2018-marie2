@@ -7,16 +7,20 @@
 
 package org.usfirst.frc.team4931.robot;
 
-import org.usfirst.frc.team4931.robot.commands.CloseGrabber;
-import org.usfirst.frc.team4931.robot.commands.GrabberGoToPosition;
-import org.usfirst.frc.team4931.robot.commands.OpenGrabber;
-import org.usfirst.frc.team4931.robot.commands.SetLiftSetpoint;
-import org.usfirst.frc.team4931.robot.subsystems.FixedLiftHeight;
-import org.usfirst.frc.team4931.robot.subsystems.GrabberPosition;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.command.InstantCommand;
+import org.usfirst.frc.team4931.robot.commands.CloseGrabber;
+import org.usfirst.frc.team4931.robot.commands.GrabberGoToPosition;
+import org.usfirst.frc.team4931.robot.commands.LockClimber;
+import org.usfirst.frc.team4931.robot.commands.OpenGrabber;
+import org.usfirst.frc.team4931.robot.commands.ReleaseClimber;
+import org.usfirst.frc.team4931.robot.commands.SetLiftSetpoint;
+import org.usfirst.frc.team4931.robot.commands.StartClimb;
+import org.usfirst.frc.team4931.robot.commands.StopClimb;
+import org.usfirst.frc.team4931.robot.subsystems.FixedLiftHeight;
+import org.usfirst.frc.team4931.robot.subsystems.GrabberPosition;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -35,8 +39,11 @@ public class OperatorInput {
 
   private Joystick tankDriveController() {
     Joystick controller = new Joystick (RobotMap.driverControllerPort);
-    Button shiftHighGear = new JoystickButton(controller, 2);
     Button shiftLowGear = new JoystickButton(controller, 1);
+    Button shiftHighGear = new JoystickButton(controller, 2);
+    Button climber = new JoystickButton(controller, 3);
+    Button lockClimber = new JoystickButton(controller, 5);
+    Button releaseClimber = new JoystickButton(controller, 6);
 
     shiftHighGear.whenPressed(new InstantCommand() {
       @Override
@@ -50,6 +57,10 @@ public class OperatorInput {
         Robot.drivetrain.switchLowGear();
       }
     });
+    climber.whenPressed(new StartClimb());
+    climber.whenReleased(new StopClimb());
+    lockClimber.whenPressed(new LockClimber());
+    releaseClimber.whenPressed(new ReleaseClimber());
     return controller;
   }
 
@@ -61,7 +72,7 @@ public class OperatorInput {
     Button grabberExchange = new JoystickButton(controller, 4); // bottom right button 
     Button grabberLow = new JoystickButton(controller, 3); // bottom left button
     Button grabberHigh = new JoystickButton(controller, 6); // top right button
-    Button grabberShoot = new JoystickButton(controller, 5); // top right button
+    Button grabberShoot = new JoystickButton(controller, 5); // bottom right button
     Button scaleHigh = new JoystickButton(controller, 11);
     Button scaleMid = new JoystickButton(controller, 10);
     Button floor = new JoystickButton(controller, 7);
