@@ -73,7 +73,7 @@ public class RobotMap {
   public static final int liftControllerPort = 1;
 
   public static final double PPS_TO_MPS = 6 * Math.PI * 10 * 0.0254 / 480;
-  public static final double DELTA_TIME = 0.02; // TODO Set time between each different straight path on the curve
+  public static final double DELTA_TIME = 0.02;
   public static final double MAX_VELOCITY = 218 * PPS_TO_MPS; //TODO Set max speed
   public static final double MAX_ACCELERATION = 80 * PPS_TO_MPS; //TODO Set max acceleration
   public static final double MAX_JERK = 500 * PPS_TO_MPS; //TODO Set max jerk
@@ -84,6 +84,6 @@ public class RobotMap {
   public static final double TRAJ_DERIVATIVE = 0;
   public static final double TRAJ_VELOCITY = 1/MAX_VELOCITY;
   public static final double TRAJ_ACCELERATION = 0;
-  public static final double TRAJ_CORRECTION_AMOUNT = 50; //Lower number means more correction;
+  public static final double TRAJ_GYRO_CORRECTION = 0.8;
 
 }

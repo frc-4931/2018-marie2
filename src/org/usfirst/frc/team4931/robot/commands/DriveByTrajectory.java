@@ -44,12 +44,13 @@ public class DriveByTrajectory extends Command {
     double curTrajectoryHeading = Math.toDegrees(leftEncoderFollower.getHeading());
     double correction = Pathfinder
         .boundHalfDegrees(curTrajectoryHeading + Robot.drivetrain.gyroReadYawAngle());
-    double turn = 0.8 * (-1.0 / 80.0) * correction;
+    double turn = RobotMap.TRAJ_GYRO_CORRECTION * (-1.0 / 80.0) * correction;
 
     System.out.println("Left Speed: " + leftSpeed + "\n" + "Right Speed: " + rightSpeed);
     System.out.println("Correction: " + correction);
     System.out
         .println("Left Cur: " + (leftSpeed + turn) + "\n" + "Right Cur: " + (rightSpeed - turn));
+
     leftSpeed += turn;
     rightSpeed -= turn;
 

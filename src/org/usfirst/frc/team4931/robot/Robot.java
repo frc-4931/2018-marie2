@@ -71,7 +71,7 @@ public class Robot extends TimedRobot {
     fieldAnalyzer = new FieldAnalyzer();
 
     compressor = new Compressor(RobotMap.compressor);
-    compressor.setClosedLoopControl(true); //TODO set this to true for PCM control. When a new spark get's added change to false.
+    compressor.setClosedLoopControl(true);
     compressor.start();
 
     grabber = new Grabber();
