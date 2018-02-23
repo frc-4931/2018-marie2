@@ -1,15 +1,15 @@
 package org.usfirst.frc.team4931.robot.field;
 
-import jaci.pathfinder.Trajectory.Config;
-import java.util.EnumMap;
-import org.usfirst.frc.team4931.robot.Robot;
-import org.usfirst.frc.team4931.robot.RobotMap;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import jaci.pathfinder.Pathfinder;
 import jaci.pathfinder.Trajectory;
+import jaci.pathfinder.Trajectory.Config;
 import jaci.pathfinder.Trajectory.FitMethod;
 import jaci.pathfinder.Waypoint;
 import jaci.pathfinder.modifiers.TankModifier;
+import java.util.EnumMap;
+import org.usfirst.frc.team4931.robot.Robot;
+import org.usfirst.frc.team4931.robot.RobotMap;
 
 /**
  * Uses the position of the field, the robot starting position, and the
@@ -57,7 +57,8 @@ public class FieldAnalyzer {
     System.out.println(strategyString + "\n" + robotStartingPos.name());
 
     Trajectory.Config config = new Trajectory.Config(FitMethod.HERMITE_CUBIC,
-        Config.SAMPLES_HIGH, RobotMap.DELTA_TIME, RobotMap.MAX_VELOCITY, RobotMap.MAX_ACCELERATION, RobotMap.MAX_JERK);
+        Config.SAMPLES_FAST, RobotMap.DELTA_TIME, RobotMap.MAX_VELOCITY, RobotMap.MAX_ACCELERATION,
+        RobotMap.MAX_JERK);
     for (Strategy s : Strategy.values()) {
       if (strategyPick[s.ordinal()] == 'y') {
         Waypoint[] point = Waypoints.WAYPOINTS.get(robotStartingPos).get(s);

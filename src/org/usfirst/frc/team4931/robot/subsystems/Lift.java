@@ -4,6 +4,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team4931.robot.RobotMap;
@@ -15,7 +16,9 @@ public class Lift extends Subsystem {
   private WPI_TalonSRX liftMotor;
   private double setPoint;
   private FixedLiftHeight liftHeight;
-  
+  private DigitalInput topLimitSwitch;
+  private DigitalInput bottomLimitSwitch;
+
 /**
  * Creates a new lift. This sets up the motors and potentiometers necessary for lifting.
  */
@@ -27,6 +30,9 @@ public class Lift extends Subsystem {
     liftMotor.setNeutralMode(NeutralMode.Brake);
     liftMotor.setSensorPhase(RobotMap.liftMotorSensorInverted);
     liftHeight = FixedLiftHeight.FLOOR;
+
+    topLimitSwitch = new DigitalInput(RobotMap.grabberTopLimitPort);
+    bottomLimitSwitch = new DigitalInput(RobotMap.grabberBottomLimitPort);
   }
 
   /**
@@ -47,8 +53,7 @@ public class Lift extends Subsystem {
    */
   public void setLiftHeight(FixedLiftHeight liftHeight) {
     this.liftHeight = liftHeight;
-    setPoint = liftHeight.position();
-    liftMotor.set(ControlMode.MotionMagic, setPoint);
+    setLiftHeight(liftHeight.position());
   }
 
   /**
@@ -57,7 +62,13 @@ public class Lift extends Subsystem {
    */
   public void setLiftHeight(double position) {
     setPoint = position;
-    liftMotor.set(ControlMode.MotionMagic, setPoint);
+    if (!topLimitSwitch.get() && !bottomLimitSwitch.get()) {
+      liftMotor.set(ControlMode.MotionMagic, setPoint);
+    } else if (topLimitSwitch.get() && setPoint < liftMotor.getSelectedSensorPosition(0)) {
+      liftMotor.set(ControlMode.MotionMagic, setPoint);
+    } else if (bottomLimitSwitch.get() && setPoint > liftMotor.getSelectedSensorPosition(0)) {
+      liftMotor.set(ControlMode.MotionMagic, setPoint);
+    }
   }
 
   /**
@@ -68,8 +79,23 @@ public class Lift extends Subsystem {
     liftMotor.set(ControlMode.PercentOutput, speed);
   }
 
+  /**
+   * Checks the limit switches on the grabber and if one is trigger it will stop the motor from running that direction
+   */
+  public void checkLimitSwitchs() {
+    if (topLimitSwitch.get() && liftMotor.get() > 0) {
+      setSpeed(0);
+    } else if (bottomLimitSwitch.get()) {
+      liftMotor.setSelectedSensorPosition(0, 0, 0);
+      if (liftMotor.get() < 0) {
+        setSpeed(0);
+      }
+    }
+  }
+
   public void log() {
     SmartDashboard.putString("Lift Height", liftHeight.name());
+    SmartDashboard.putNumber("Lift Position", liftMotor.getSelectedSensorPosition(0));
     SmartDashboard.putNumber("Lift Motor Speed", liftMotor.get());
   }
   

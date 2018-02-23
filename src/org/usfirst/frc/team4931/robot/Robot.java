@@ -71,7 +71,7 @@ public class Robot extends TimedRobot {
     fieldAnalyzer = new FieldAnalyzer();
 
     compressor = new Compressor(RobotMap.compressor);
-    compressor.setClosedLoopControl(true); //TODO set this to true for PCM control. When a new spark get's added change to false.
+    compressor.setClosedLoopControl(true);
     compressor.start();
 
     grabber = new Grabber();
@@ -168,7 +168,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotPeriodic() {
-    grabber.checkLimitSwitchs();
+    lift.checkLimitSwitchs();
   }
 
   /**
@@ -189,6 +189,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Set - Left Speed", 0);
     SmartDashboard.putNumber("Set - Right Speed", 0);
     SmartDashboard.putNumber("Set - Lift Speed", 0);
+    SmartDashboard.putNumber("Set - Climber Speed", 0);
     SmartDashboard.putNumber("Set - Grabber Rotation Speed", 0);
   }
 
@@ -204,6 +205,15 @@ public class Robot extends TimedRobot {
 
     double grabberSpeed = SmartDashboard.getNumber("Set - Grabber Rotation Speed", 0);
     grabber.setSpeed(grabberSpeed);
+
+    double climberSpeed = SmartDashboard.getNumber("Set - Climber Speed", 0);
+    if (climberSpeed > 0) {
+      climber.climb();
+    } else if (climberSpeed < 0) {
+      climber.reverse();
+    } else {
+      climber.stop();
+    }
 
     double leftSide = SmartDashboard.getNumber("Set - Left Speed", 0);
     double rightSide = SmartDashboard.getNumber("Set - Right Speed", 0);
