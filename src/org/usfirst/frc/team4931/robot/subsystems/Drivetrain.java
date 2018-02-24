@@ -20,7 +20,7 @@ import org.usfirst.frc.team4931.robot.commands.DriveWithJoystick;
  */
 public class Drivetrain extends Subsystem {
 
-  private WPI_TalonSRX leftFrontMotor, leftBackMotor, rightFrontMotor, rightBackMotor;
+  public WPI_TalonSRX leftFrontMotor, leftBackMotor, rightFrontMotor, rightBackMotor;
   private static SpeedControllerGroup leftSideMotors, rightSideMotors;
   private static DifferentialDrive drivetrain;
   private static DoubleSolenoid gearBox;
@@ -68,7 +68,7 @@ public class Drivetrain extends Subsystem {
     drivetrain = new DifferentialDrive(leftSideMotors, rightSideMotors);
 
     // Create gyro senser
-    pigeon = new PigeonIMU(leftFrontMotor);
+    pigeon = new PigeonIMU(rightFrontMotor);
     gyroReset();
   }
 
@@ -129,21 +129,21 @@ public class Drivetrain extends Subsystem {
    * @return the velocity of the right in Pulses/100ms
    */
   public double getRightVelocity() {
-    return rightBackMotor.getSelectedSensorVelocity(0);
+    return leftBackMotor.getSelectedSensorVelocity(0);
   }
 
   /**
    * Resets value of left encoder.
    */
   public void resetLeftEncoder() {
-    leftBackMotor.setSelectedSensorPosition(0, 0, 0);
+    rightBackMotor.setSelectedSensorPosition(0, 0, 0);
   }
 
   /**
    * Resets value of right encoder.
    */
   public void resetRightEncoder() {
-    rightBackMotor.setSelectedSensorPosition(0, 0, 0);
+    leftBackMotor.setSelectedSensorPosition(0, 0, 0);
   }
 
   /**

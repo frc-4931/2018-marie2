@@ -35,10 +35,10 @@ public class Waypoints {
     points.put(SCALE_OPPOSITE,
         new Waypoint[]{new Waypoint(0, 24, 0), new Waypoint(17, 23, 0), new Waypoint(20, 20, -90),
             new Waypoint(20, 5, -90), new Waypoint(24, 2, 0), new Waypoint(27, 6, 90)});
-    //points.put(DRIVE_FORWARD, new Waypoint[] {new Waypoint(0, 24, 0), new Waypoint(20, 24, 0)});
-    points.put(DRIVE_FORWARD,
-        new Waypoint[]{new Waypoint(1, 12, 45), new Waypoint(4, 7, -15), new Waypoint(10, 8, 90),
-            new Waypoint(17, 2, 45)});
+    points.put(DRIVE_FORWARD, new Waypoint[]{new Waypoint(0, 24, 0), new Waypoint(20, 24, 0)});
+//    points.put(DRIVE_FORWARD,
+//        new Waypoint[]{new Waypoint(1, 12, 45), new Waypoint(4, 7, -15), new Waypoint(10, 8, 90),
+//            new Waypoint(17, 2, 45)});
     WAYPOINTS.put(StartingPos.LEFT, points);
 
     points = new EnumMap<>(Strategy.class);
@@ -56,7 +56,7 @@ public class Waypoints {
 
     points = new EnumMap<>(Strategy.class);
     points.put(SWITCH_SAME,
-        new Waypoint[]{new Waypoint(0, 3, 0), new Waypoint(4, 3, 0), new Waypoint(14, 7, 90)});
+        new Waypoint[]{new Waypoint(0, 3, 0), new Waypoint(4, 3, 0), new Waypoint(12, 5, 90)});
     points.put(SCALE_SAME,
         new Waypoint[]{new Waypoint(0, 3, 0), new Waypoint(22, 3, 0), new Waypoint(27, 6, 90)});
     points.put(SWITCH_OPPOSITE, new Waypoint[]{new Waypoint(0, 3, 0), new Waypoint(17, 4, 35),
