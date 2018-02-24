@@ -80,7 +80,7 @@ public class Waypoints {
     // starting at: 0.0, 3.0, 0.0
     points.put(SCALE_SAME,
         new Waypoint[]{new Waypoint(22.0, 0.0, 0.0), new Waypoint(5.0, 3.0, 90.0)});
-    
+
     // starting at: 0.0, 3.0, 0.0
     points.put(SWITCH_OPPOSITE,
         new Waypoint[]{new Waypoint(17.0, 1.0, 35.0), new Waypoint(2.0, 3.0, 90.0),
