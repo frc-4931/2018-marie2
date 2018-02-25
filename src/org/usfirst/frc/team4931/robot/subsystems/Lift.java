@@ -68,11 +68,11 @@ public Lift() {
   public void setLiftHeight(double position) {
     setPoint = position;
     if (!topLimitSwitch.get() && !bottomLimitSwitch.get()) {
-      liftMotor.set(ControlMode.MotionMagic, setPoint);
+      liftMotor.set(ControlMode.Position, setPoint);
     } else if (topLimitSwitch.get() && setPoint < getPosition()) {
-      liftMotor.set(ControlMode.MotionMagic, setPoint);
+      liftMotor.set(ControlMode.Position, setPoint);
     } else if (bottomLimitSwitch.get() && setPoint > getPosition()) {
-      liftMotor.set(ControlMode.MotionMagic, setPoint);
+      liftMotor.set(ControlMode.Position, setPoint);
     }
   }
 
