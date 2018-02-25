@@ -1,8 +1,8 @@
 package org.usfirst.frc.team4931.robot.commands;
 
+import edu.wpi.first.wpilibj.command.Command;
 import org.usfirst.frc.team4931.robot.Robot;
 import org.usfirst.frc.team4931.robot.subsystems.FixedLiftHeight;
-import edu.wpi.first.wpilibj.command.Command;
 
 public class StartClimb extends Command {
   
@@ -13,6 +13,7 @@ public class StartClimb extends Command {
   
   @Override
   protected void initialize() {
+    Robot.climber.release();
     Robot.climber.climb();
     Robot.lift.setLiftHeight(FixedLiftHeight.FLOOR);
   }

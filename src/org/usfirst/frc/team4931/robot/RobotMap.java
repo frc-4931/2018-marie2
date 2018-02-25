@@ -38,8 +38,8 @@ public class RobotMap {
   public static final boolean leftBackMotorInverted = false;
   public static final boolean rightFrontMotorInverted = false;
   public static final boolean rightBackMotorInverted = false;
-  public static final boolean leftSideEncoderInverted = true;
-  public static final boolean rightSideEncoderInverted = false;
+  public static final boolean leftSideEncoderInverted = false;
+  public static final boolean rightSideEncoderInverted = true;
 
   public static final int encoderPPR = 120 * 4; //Multiplied for 4x encoding
 
@@ -50,7 +50,7 @@ public class RobotMap {
   /**
    * [0] is forward position port, [1] is backward position port
    */
-  public static final int[] grabberPorts = {3, 2};
+  public static final int[] grabberPorts = {2, 3};
   public static final int grabberMotorPort = 7;
   public static final boolean climberMotorInverted = false;
   public static final boolean grabberMotorInverted = true;
@@ -64,15 +64,19 @@ public class RobotMap {
   public static final boolean liftMotorSensorInverted = true;
 
   public static final int climberMotorPort = 9;
+  /**
+   * [0] is the lock port, [1] is the free port
+   */
+  public static final int[] climberBrake = {5, 4};
   
   public static final int driverControllerPort = 0;
   public static final int liftControllerPort = 1;
 
   public static final double PPS_TO_MPS = 6 * Math.PI * 10 * 0.0254 / 480;
-  public static final double DELTA_TIME = 0.02; // TODO Set time between each different straight path on the curve
-  public static final double MAX_VELOCITY = 488 * PPS_TO_MPS / 3; //TODO Set max speed
-  public static final double MAX_ACCELERATION = 120 * PPS_TO_MPS / 3; //TODO Set max acceleration
-  public static final double MAX_JERK = 600 * PPS_TO_MPS; //TODO Set max jerk
+  public static final double DELTA_TIME = 0.02;
+  public static final double MAX_VELOCITY = 218 * PPS_TO_MPS; //TODO Set max speed
+  public static final double MAX_ACCELERATION = 80 * PPS_TO_MPS; //TODO Set max acceleration
+  public static final double MAX_JERK = 500 * PPS_TO_MPS; //TODO Set max jerk
   public static final double WHEEL_BASE = 0.635;
   public static final double WHEEL_DIAMETER = 0.1524;
   public static final double TRAJ_PROPORTIONAL = 1;
@@ -80,6 +84,6 @@ public class RobotMap {
   public static final double TRAJ_DERIVATIVE = 0;
   public static final double TRAJ_VELOCITY = 1/MAX_VELOCITY;
   public static final double TRAJ_ACCELERATION = 0;
-  public static final double TRAJ_CORRECTION_AMOUNT = 100; //Lower number means more correction;
+  public static final double TRAJ_GYRO_CORRECTION = 0.8;
 
 }

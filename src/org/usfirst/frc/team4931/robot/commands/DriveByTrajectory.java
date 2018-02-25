@@ -1,6 +1,7 @@
 package org.usfirst.frc.team4931.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
+import jaci.pathfinder.Pathfinder;
 import jaci.pathfinder.followers.EncoderFollower;
 import jaci.pathfinder.modifiers.TankModifier;
 import org.usfirst.frc.team4931.robot.Robot;
@@ -14,7 +15,6 @@ import org.usfirst.frc.team4931.robot.RobotMap;
 public class DriveByTrajectory extends Command {
   private EncoderFollower leftEncoderFollower;
   private EncoderFollower rightEncoderFollower;
-  private double startingHeading;
 
   public DriveByTrajectory(TankModifier tankModifier) {
     requires(Robot.drivetrain);
@@ -32,8 +32,6 @@ public class DriveByTrajectory extends Command {
 
     leftEncoderFollower.reset();
     rightEncoderFollower.reset();
-
-    this.startingHeading = leftEncoderFollower.getHeading();
    }
 
   /**
@@ -43,19 +41,20 @@ public class DriveByTrajectory extends Command {
   protected void execute() {
     double leftSpeed = leftEncoderFollower.calculate(Robot.drivetrain.getLeftEncoder());
     double rightSpeed = rightEncoderFollower.calculate(Robot.drivetrain.getRightEncoder());
-    double curTrajectoryHeading = leftEncoderFollower.getHeading();
-    double correction = ((curTrajectoryHeading - startingHeading) - Math.toRadians(Robot.drivetrain.gyroReadYawAngle())) / RobotMap.TRAJ_CORRECTION_AMOUNT;
+    double curTrajectoryHeading = Math.toDegrees(leftEncoderFollower.getHeading());
+    double correction = Pathfinder
+        .boundHalfDegrees(curTrajectoryHeading + Robot.drivetrain.gyroReadYawAngle());
+    double turn = RobotMap.TRAJ_GYRO_CORRECTION * (-1.0 / 80.0) * correction;
 
-    double leftCorrection = correction;
-    double rightCorrection = correction;
+    System.out.println("Left Speed: " + leftSpeed + "\n" + "Right Speed: " + rightSpeed);
+    System.out.println("Correction: " + correction);
+    System.out
+        .println("Left Cur: " + (leftSpeed + turn) + "\n" + "Right Cur: " + (rightSpeed - turn));
 
-    System.out.println("Left Speed: "+leftSpeed+"     "+"Right Speed: "+rightSpeed);
-    System.out.println("Left Correction: "+leftCorrection+"     "+"Right Correction: "+rightCorrection);
-    leftSpeed = (leftSpeed > 1) ? 1 : leftSpeed;
-    leftSpeed = (leftSpeed < -1) ? -1 : leftSpeed;
-    rightSpeed = (rightSpeed > 1) ? 1 : rightSpeed;
-    rightSpeed = (rightSpeed < -1) ? -1 : rightSpeed;
-    Robot.drivetrain.driveTank(leftSpeed/3, rightSpeed/3);
+    leftSpeed += turn;
+    rightSpeed -= turn;
+
+    Robot.drivetrain.driveTank(leftSpeed, rightSpeed);
   }
 
   /**

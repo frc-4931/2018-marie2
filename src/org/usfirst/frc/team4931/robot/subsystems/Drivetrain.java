@@ -1,6 +1,5 @@
 package org.usfirst.frc.team4931.robot.subsystems;
 
-import org.usfirst.frc.team4931.robot.RobotMap;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -12,6 +11,7 @@ import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import org.usfirst.frc.team4931.robot.RobotMap;
 import org.usfirst.frc.team4931.robot.commands.DriveWithJoystick;
 
 
@@ -20,7 +20,7 @@ import org.usfirst.frc.team4931.robot.commands.DriveWithJoystick;
  */
 public class Drivetrain extends Subsystem {
 
-  private WPI_TalonSRX leftFrontMotor, leftBackMotor, rightFrontMotor, rightBackMotor;
+  public WPI_TalonSRX leftFrontMotor, leftBackMotor, rightFrontMotor, rightBackMotor;
   private static SpeedControllerGroup leftSideMotors, rightSideMotors;
   private static DifferentialDrive drivetrain;
   private static DoubleSolenoid gearBox;
@@ -108,14 +108,14 @@ public class Drivetrain extends Subsystem {
    * Returns value of left encoder in revolutions.
    */
   public int getLeftEncoder() {
-    return leftBackMotor.getSelectedSensorPosition(0);
+    return rightBackMotor.getSelectedSensorPosition(0);
   }
 
   /**
    * Returns value of right encoder in revolutions.
    */
   public int getRightEncoder() {
-    return rightBackMotor.getSelectedSensorPosition(0);
+    return leftBackMotor.getSelectedSensorPosition(0);
   }
 
   /**
@@ -129,21 +129,21 @@ public class Drivetrain extends Subsystem {
    * @return the velocity of the right in Pulses/100ms
    */
   public double getRightVelocity() {
-    return rightBackMotor.getSelectedSensorVelocity(0);
+    return leftBackMotor.getSelectedSensorVelocity(0);
   }
 
   /**
    * Resets value of left encoder.
    */
   public void resetLeftEncoder() {
-    leftBackMotor.setSelectedSensorPosition(0, 0, 0);
+    rightBackMotor.setSelectedSensorPosition(0, 0, 0);
   }
 
   /**
    * Resets value of right encoder.
    */
   public void resetRightEncoder() {
-    rightBackMotor.setSelectedSensorPosition(0, 0, 0);
+    leftBackMotor.setSelectedSensorPosition(0, 0, 0);
   }
 
   /**

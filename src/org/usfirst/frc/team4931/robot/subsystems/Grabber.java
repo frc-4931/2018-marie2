@@ -4,14 +4,12 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-import edu.wpi.first.wpilibj.DigitalInput;
-import org.usfirst.frc.team4931.robot.Robot;
-import org.usfirst.frc.team4931.robot.RobotMap;
-import org.usfirst.frc.team4931.robot.commands.GrabberMoveWithPOV;
-import edu.wpi.first.wpilibj.command.Subsystem;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import org.usfirst.frc.team4931.robot.RobotMap;
+import org.usfirst.frc.team4931.robot.commands.GrabberMoveWithPOV;
 /**
  * This defines the major component of the grabber subsystem.
  */
@@ -21,7 +19,6 @@ public class Grabber extends Subsystem {
   private DoubleSolenoid pneumatic;
   private WPI_TalonSRX grabberMotor;
   private double setPoint;
-  private DigitalInput topLimitSwitch, bottomLimitSwitch;
 
   /**
    * Creates a new grabber. This sets up the motors and pneumatics neccecary for grabbing.
@@ -34,9 +31,6 @@ public class Grabber extends Subsystem {
     grabberMotor.setNeutralMode(NeutralMode.Brake);
     grabberMotor.setSelectedSensorPosition(0, 0, 0);
     grabberMotor.setSensorPhase(RobotMap.grabberMotorInverted);
-
-    topLimitSwitch = new DigitalInput(RobotMap.grabberTopLimitPort);
-    bottomLimitSwitch = new DigitalInput(RobotMap.grabberBottomLimitPort);
   }
 
   @Override
@@ -74,14 +68,6 @@ public class Grabber extends Subsystem {
    */
   public void goToSetPoint(double position) {
     setPoint = position;
-
-    if (!topLimitSwitch.get() && !bottomLimitSwitch.get()) {
-      grabberMotor.set(ControlMode.Position, position);
-    } else if (topLimitSwitch.get() && position < grabberMotor.getSelectedSensorPosition(0)) {
-      grabberMotor.set(ControlMode.Position, position);
-    } else if (bottomLimitSwitch.get() && position > grabberMotor.getSelectedSensorPosition(0)) {
-      grabberMotor.set(ControlMode.Position, position);
-    }
   }
 
   /**
@@ -112,20 +98,6 @@ public class Grabber extends Subsystem {
    */
   public boolean atTargetPosition() {
     return fuzzyEqual(getCurrentPosition(), setPoint);
-  }
-
-  /**
-   * Checks the limit switches on the grabber and if one is trigger it will stop the motor from running that direction
-   */
-  public void checkLimitSwitchs() {
-    if (topLimitSwitch.get() && grabberMotor.get() > 0) {
-      setSpeed(0);
-    } else if (bottomLimitSwitch.get()) {
-      grabberMotor.setSelectedSensorPosition(0, 0, 0);
-      if (grabberMotor.get() < 0) {
-        setSpeed(0);
-      }
-    }
   }
   
   public void log() {

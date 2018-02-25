@@ -1,7 +1,7 @@
 package org.usfirst.frc.team4931.robot.commands;
 
-import org.usfirst.frc.team4931.robot.Robot;
 import edu.wpi.first.wpilibj.command.Command;
+import org.usfirst.frc.team4931.robot.Robot;
 
 public class StopClimb extends Command{
 
@@ -12,6 +12,7 @@ public class StopClimb extends Command{
   @Override
   protected void initialize() {
     Robot.climber.stop();
+    Robot.climber.lock();
   }
   
   @Override
