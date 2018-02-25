@@ -31,6 +31,7 @@ public class Grabber extends Subsystem {
     grabberMotor.setNeutralMode(NeutralMode.Brake);
     grabberMotor.setSelectedSensorPosition(0, 0, 0);
     grabberMotor.setSensorPhase(RobotMap.grabberMotorInverted);
+    grabberMotor.configClosedloopRamp(0.5, 0);
   }
 
   @Override

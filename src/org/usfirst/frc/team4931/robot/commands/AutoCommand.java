@@ -1,5 +1,6 @@
 package org.usfirst.frc.team4931.robot.commands;
 
+import static org.usfirst.frc.team4931.robot.subsystems.FixedLiftHeight.FLOOR;
 import static org.usfirst.frc.team4931.robot.subsystems.FixedLiftHeight.SCALE_TOP;
 import static org.usfirst.frc.team4931.robot.subsystems.FixedLiftHeight.SWITCH;
 
@@ -8,23 +9,23 @@ import org.usfirst.frc.team4931.robot.Robot;
 import org.usfirst.frc.team4931.robot.field.Strategy;
 import org.usfirst.frc.team4931.robot.field.Waypoint;
 import org.usfirst.frc.team4931.robot.subsystems.FixedLiftHeight;
+import org.usfirst.frc.team4931.robot.subsystems.GrabberPosition;
 
 public class AutoCommand extends CommandGroup {
 
   private static final double METERS_TO_FEET = 3.28084;
+  private static final double MOVE_SPEED = 1;
+  private static final double TURN_SPEED = 1;
   double curAbsoluteAngle = 0;
-  double curAbsoluteX = 0;
+  double curAbsoluteX = 1;
   double curAbsoluteY = 0;
   boolean isFirst = false;
 
   public AutoCommand(Waypoint[] points, Strategy strategy) {
-    //TODO uncomment when we have encoders setup on the lift and grabber
-    //addParallel(new GrabberGoToPosition(GrabberPosition.EXCHANGE)); // sets claw position to middle position
-    //addParallel(new SetLiftSetpoint(calcLiftHeight(strategy))); // raises lift based on the calculated strategy
 
-    //addSequential(new GoToDistance(1, 1));
     Robot.drivetrain.switchLowGear();
 
+    addSequential(new GoToDistance(1, 1));
     Waypoint lastPoint = points[points.length-1];
     for (Waypoint point : points) {
       double x =
@@ -51,13 +52,17 @@ public class AutoCommand extends CommandGroup {
         turn(180 + Math.toDegrees(Math.atan(-y/-x)));
       }
 
-      //curAbsoluteX += x;
-      //curAbsoluteY += y;
+      curAbsoluteX += x;
+      curAbsoluteY += y;
       //addSequential(new WaitForMS(3000));
-      addSequential(new GoToDistance(1, distance));
+      addSequential(new GoToDistance(MOVE_SPEED, distance));
       //addSequential(new WaitForMS(3000));
     }
-    turn(Math.toDegrees(lastPoint.angle));
+    turn(Math.toDegrees(-lastPoint.angle));
+
+    addSequential(new SetLiftSetpoint(calcLiftHeight(strategy)));
+    addSequential(new GrabberGoToPosition(GrabberPosition.SHOOT));
+    addSequential(calcOpenGrabber(strategy) ? new OpenGrabber() : new CloseGrabber());
   }
 
   /**
@@ -73,7 +78,29 @@ public class AutoCommand extends CommandGroup {
       case SCALE_SAME:
         return SCALE_TOP; // if going to the scale, then raise the lift to the highest scale height
       default:
-        return SWITCH; // by default, if nothing can be determined, then raise the lift to switch height
+        return FLOOR; // by default, if nothing can be determined, then raise the lift to switch height
+    }
+  }
+
+  private GrabberPosition calcGrabberPosition(Strategy strategy) {
+    switch (strategy) {
+      case SWITCH_SAME:
+      case SWITCH_OPPOSITE:
+        return GrabberPosition.EXCHANGE;
+      case SCALE_SAME:
+      case SCALE_OPPOSITE:
+        return GrabberPosition.SHOOT;
+      default:
+        return GrabberPosition.HIGH;
+    }
+  }
+
+  private boolean calcOpenGrabber(Strategy strategy) {
+    switch (strategy) {
+      case DRIVE_FORWARD:
+        return false;
+      default:
+        return true;
     }
   }
 
@@ -93,7 +120,7 @@ public class AutoCommand extends CommandGroup {
   private void turn(double angle) {
     angle = turnFromAbsolute(angle);
     addAngle(angle);
-    addSequential(new TurnToAngle(Math.copySign(1, angle), Math.abs(angle)));
+    addSequential(new TurnToAngle(Math.copySign(TURN_SPEED, angle), Math.abs(angle)));
   }
 
 }

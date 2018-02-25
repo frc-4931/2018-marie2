@@ -5,8 +5,10 @@ import org.usfirst.frc.team4931.robot.Robot;
 
 public class GoToDistance extends Command {
   private static final double FEET_TO_ENCODER_COUNTS = 12 / (Math.PI*6) * 480;
-  private static final double MIN_SPEED = 0.1;
-  private static final double THRESHOLD_DISTANCE = 5 * FEET_TO_ENCODER_COUNTS;
+  private static final double RAMP_UP_THRESHOLD_DISTANCE = 5 * FEET_TO_ENCODER_COUNTS;
+  private static final double RAMP_DOWN_THRESHOLD_DISTANCE = 5 * FEET_TO_ENCODER_COUNTS;
+  private static final double START_SPEED = 0.2;
+  private static final double END_SPEED = 0.1;
   private double speed;
   private double distance;
 
@@ -30,7 +32,7 @@ public class GoToDistance extends Command {
     double correction = Robot.drivetrain.gyroReadYawAngle() / 50;
     double currentDistance = Robot.drivetrain.getLeftEncoder();
 
-    double calcSpeed = ramp(currentDistance, distance, THRESHOLD_DISTANCE, speed, MIN_SPEED);
+    double calcSpeed = ramp(currentDistance);
     calcSpeed = Math.max(0, calcSpeed);
 
     Robot.drivetrain.driveTank(calcSpeed - correction, calcSpeed + correction);
@@ -45,15 +47,19 @@ public class GoToDistance extends Command {
 
   /**
    * Calculates a speed from minSpeed to maxSpeed, with a ramp up and down based on thresholdDistance. All values assumed non-negative.
-   *
-   * @param currentDistance The current distance you are at
-   * @param targetDistance The target distance you want to move
-   * @param thresholdDistance How close to start and end you want to end your ramp up and start your ramp down, respectively.
-   * @param maxSpeed The maximum speed you want to output
-   * @param minSpeed The minimum speed you want to output
-   * @return a speed between minSpeed and maxSpeed
    */
-  private double ramp(double currentDistance, double targetDistance, double thresholdDistance, double maxSpeed, double minSpeed) {
-    return Math.min(Math.min(currentDistance, targetDistance - currentDistance) / thresholdDistance, 1) * (maxSpeed - minSpeed) + minSpeed;
+  private double ramp(double currentDistance) {
+    return calculateSpeed(currentDistance, distance, RAMP_UP_THRESHOLD_DISTANCE,
+        RAMP_DOWN_THRESHOLD_DISTANCE, speed, START_SPEED, END_SPEED);
+
+    //return Math.min(Math.min(currentDistance, targetDistance - currentDistance) / thresholdDistance, 1) * (maxSpeed - minSpeed) + minSpeed;
+  }
+
+  private double calculateSpeed(double current, double target, double rampUpThreshold,
+      double rampDownThreshold, double maxSpeed, double startSpeed, double endSpeed) {
+    return Math.min(Math.min(Math.pow(current / rampUpThreshold, 0.75), 1) * (maxSpeed - startSpeed)
+            + startSpeed,
+        Math.min(Math.pow((target - current) / rampDownThreshold, 1.5), 1) * (maxSpeed - endSpeed)
+            + endSpeed);
   }
 }

@@ -7,7 +7,6 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import org.usfirst.frc.team4931.robot.Robot;
 import org.usfirst.frc.team4931.robot.RobotMap;
 import org.usfirst.frc.team4931.robot.commands.LiftWithJoystick;
 /**
@@ -23,27 +22,22 @@ public class Lift extends Subsystem {
 /**
  * Creates a new lift. This sets up the motors and potentiometers necessary for lifting.
  */
-  public Lift() {
-    liftMotor = new WPI_TalonSRX(RobotMap.liftMotorPort);
-    liftMotor.setInverted(RobotMap.liftMotorInverted);
+public Lift() {
+  liftMotor = new WPI_TalonSRX(RobotMap.liftMotorPort);
+  liftMotor.setInverted(RobotMap.liftMotorInverted);
+  liftMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
+  liftMotor.setSelectedSensorPosition(0, 0, 0);
+  liftMotor.setSensorPhase(RobotMap.liftMotorSensorInverted);
+  liftMotor.configClosedloopRamp(0.5, 0);
+  liftMotor.setNeutralMode(NeutralMode.Brake);
+  liftHeight = FixedLiftHeight.FLOOR;
 
-//    liftMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
-//    liftMotor.setSelectedSensorPosition(0, 0, 0);
-
-    Robot.drivetrain.leftFrontMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
-    Robot.drivetrain.leftFrontMotor.setSelectedSensorPosition(0, 0, 0);
-    Robot.drivetrain.leftFrontMotor.setSensorPhase(RobotMap.liftMotorSensorInverted);
-
-    liftMotor.setNeutralMode(NeutralMode.Brake);
-    liftMotor.setSensorPhase(RobotMap.liftMotorSensorInverted);
-    liftHeight = FixedLiftHeight.FLOOR;
-
-    topLimitSwitch = new DigitalInput(RobotMap.grabberTopLimitPort);
-    bottomLimitSwitch = new DigitalInput(RobotMap.grabberBottomLimitPort);
-  }
+  topLimitSwitch = new DigitalInput(RobotMap.grabberTopLimitPort);
+  bottomLimitSwitch = new DigitalInput(RobotMap.grabberBottomLimitPort);
+}
 
   public double getPosition() {
-    return Robot.drivetrain.leftFrontMotor.getSelectedSensorPosition(0);
+    return liftMotor.getSelectedSensorPosition(0);
   }
 
   /**
