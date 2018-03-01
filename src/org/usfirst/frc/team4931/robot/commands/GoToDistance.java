@@ -59,7 +59,8 @@ public class GoToDistance extends Command {
       double rampDownThreshold, double maxSpeed, double startSpeed, double endSpeed) {
     return Math.min(Math.min(Math.pow(current / rampUpThreshold, 0.75), 1) * (maxSpeed - startSpeed)
             + startSpeed,
-        Math.min(Math.pow((target - current) / rampDownThreshold, 1.5), 1) * (maxSpeed - endSpeed)
+        Math.min(Math.pow(Math.max((target - current) / rampDownThreshold, 0), 1.5), 1) * (maxSpeed
+            - endSpeed)
             + endSpeed);
   }
 }

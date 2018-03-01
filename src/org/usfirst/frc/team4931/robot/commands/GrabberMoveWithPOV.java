@@ -1,11 +1,12 @@
 package org.usfirst.frc.team4931.robot.commands;
 
-import org.usfirst.frc.team4931.robot.Robot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Command;
+import org.usfirst.frc.team4931.robot.Robot;
 
 public class GrabberMoveWithPOV extends Command {
-  private final double GRABBER_PERCENT = .5;
+
+  private final double GRABBER_SPEED = 100;
 
   public GrabberMoveWithPOV() {
     requires(Robot.grabber);
@@ -16,10 +17,10 @@ public class GrabberMoveWithPOV extends Command {
     
     Joystick controller = Robot.operatorInput.getLiftController();
     int pov = controller.getPOV();
-    if (pov == 1) {
-      Robot.grabber.setSpeed(GRABBER_PERCENT);
-    } else if (pov == 5) {
-      Robot.grabber.setSpeed(-GRABBER_PERCENT);
+    if (pov == 0) {
+      Robot.grabber.goToSetPoint(Robot.grabber.getSetPoint() - GRABBER_SPEED);
+    } else if (pov == 4) {
+      Robot.grabber.goToSetPoint(Robot.grabber.getSetPoint() + GRABBER_SPEED);
     }
     
   }

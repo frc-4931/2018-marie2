@@ -1,8 +1,8 @@
 package org.usfirst.frc.team4931.robot.commands;
 
-import org.usfirst.frc.team4931.robot.Robot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Command;
+import org.usfirst.frc.team4931.robot.Robot;
 
 /**
  * Allows the manual control of the lifting mechanism with the joystick.
@@ -31,7 +31,11 @@ public class LiftWithJoystick extends Command {
    */
   @Override
   protected void execute() {
-    Robot.lift.setSpeed(calculateSpeed());
+    double speed = calculateSpeed();
+    if (Math.abs(calculateSpeed()) > 0.1) {
+      //Robot.lift.setSpeed(calculateSpeed());
+      Robot.lift.setLiftHeight(Robot.lift.getSetPoint() + speed * 100);
+    }
   }
   /**
    * keeps the command from stopping on its own
@@ -47,7 +51,7 @@ public class LiftWithJoystick extends Command {
    */
   @Override
   protected void end() {
-    Robot.lift.setSpeed(0);
+
   }
   
 }

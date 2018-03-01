@@ -27,11 +27,21 @@ public class Grabber extends Subsystem {
     pneumatic = new DoubleSolenoid(RobotMap.compressor, RobotMap.grabberPorts[0], RobotMap.grabberPorts[1]);
     grabberMotor = new WPI_TalonSRX(RobotMap.grabberMotorPort);
     grabberMotor.setInverted(RobotMap.grabberMotorInverted);
-    grabberMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
-    grabberMotor.setNeutralMode(NeutralMode.Brake);
+    grabberMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute, 0, 0);
     grabberMotor.setSelectedSensorPosition(0, 0, 0);
-    grabberMotor.setSensorPhase(RobotMap.grabberMotorInverted);
-    grabberMotor.configClosedloopRamp(0.5, 0);
+    grabberMotor.setNeutralMode(NeutralMode.Brake);
+    grabberMotor.setSensorPhase(RobotMap.grabberEncoderInverted);
+//    grabberMotor.configClosedloopRamp(0.5, 0);
+
+    PIDF(0.7, 0.000003, 240, 0.05);
+    grabberMotor.configMaxIntegralAccumulator(0, 0, 0);
+  }
+
+  public void PIDF(double p, double i, double d, double f) {
+    grabberMotor.config_kP(0, p, 0);
+    grabberMotor.config_kI(0, i, 0);
+    grabberMotor.config_kD(0, d, 0);
+    grabberMotor.config_kF(0, f, 0);
   }
 
   @Override
@@ -43,7 +53,15 @@ public class Grabber extends Subsystem {
    * @return whether a and b are close to or equal to each other
    */
   private boolean fuzzyEqual(double a, double b) {
-    return Math.abs(a-b) < 5;
+    return Math.abs(a - b) < 50;
+  }
+
+  public void reset() {
+    grabberMotor.setSelectedSensorPosition(0, 0, 0);
+  }
+
+  public double getSetPoint() {
+    return setPoint;
   }
 
   /**
@@ -69,6 +87,7 @@ public class Grabber extends Subsystem {
    */
   public void goToSetPoint(double position) {
     setPoint = position;
+    grabberMotor.set(ControlMode.Position, position);
   }
 
   /**

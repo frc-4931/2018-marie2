@@ -83,7 +83,7 @@ public class Waypoints {
     }
 
     //RIGHT POSITION
-    //Starts at (?, ?, ?)
+    //Starts in the right corner
     {
       points = new EnumMap<>(Strategy.class);
 
@@ -98,11 +98,11 @@ public class Waypoints {
               new Waypoint(16.0, 15.0, 180.0)});
 
       points.put(SCALE_OPPOSITE,
-          new Waypoint[]{new Waypoint(17.0, 0.0, 90.0), new Waypoint(17.0, 18.0, 0),
-              new Waypoint(21.0, 18.0, 0.0)});
+          new Waypoint[]{new Waypoint(17.0, 0.0, 90.0), new Waypoint(17.0, 21.0, 0),
+              new Waypoint(21.0, 18.0, -90.0)});
 
       points.put(DRIVE_FORWARD,
-          new Waypoint[]{new Waypoint(10, 0.0, 0.0)});
+          new Waypoint[]{new Waypoint(15, 0.0, 0.0)});
 
       WAYPOINTS.put(StartingPos.RIGHT, points);
     }

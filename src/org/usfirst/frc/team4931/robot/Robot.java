@@ -26,6 +26,7 @@ import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.command.InstantCommand;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -106,6 +107,18 @@ public class Robot extends TimedRobot {
     SmartDashboard.putData(SET_LIFT_SCALE_TOP, new SetLiftSetpoint(FixedLiftHeight.SCALE_TOP));
     SmartDashboard.putData(SET_LIFT_EXCHANGE, new SetLiftSetpoint(FixedLiftHeight.EXCHANGE));
     SmartDashboard.putData(SET_LIFT_SWITCH, new SetLiftSetpoint(FixedLiftHeight.SWITCH));
+
+    SmartDashboard.putData("Reset Grabber Enc", new InstantCommand() {
+      @Override
+      protected void initialize() {
+        Robot.grabber.reset();
+      }
+    });
+
+    SmartDashboard.putNumber("Grabber Pro", 0);
+    SmartDashboard.putNumber("Grabber I", 0);
+    SmartDashboard.putNumber("Grabber D", 0);
+    SmartDashboard.putNumber("Grabber F", 0);
   }
 
   /**
@@ -167,6 +180,13 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     lift.checkLimitSwitchs();
+
+//    double p, i, d, f;
+//    p = SmartDashboard.getNumber("Grabber Pro", 0);
+//    i = SmartDashboard.getNumber("Grabber I", 0);
+//    d = SmartDashboard.getNumber("Grabber D", 0);
+//    f = SmartDashboard.getNumber("Grabber F", 0);
+//    lift.PIDF(p, i, d, f);
   }
 
   /**

@@ -25,19 +25,38 @@ public class Lift extends Subsystem {
 public Lift() {
   liftMotor = new WPI_TalonSRX(RobotMap.liftMotorPort);
   liftMotor.setInverted(RobotMap.liftMotorInverted);
-  liftMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
+  liftMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute, 0, 0);
   liftMotor.setSelectedSensorPosition(0, 0, 0);
   liftMotor.setSensorPhase(RobotMap.liftMotorSensorInverted);
-  liftMotor.configClosedloopRamp(0.5, 0);
   liftMotor.setNeutralMode(NeutralMode.Brake);
   liftHeight = FixedLiftHeight.FLOOR;
+  PIDF(1, 0.000002, 300, 0.025);
 
-  topLimitSwitch = new DigitalInput(RobotMap.grabberTopLimitPort);
-  bottomLimitSwitch = new DigitalInput(RobotMap.grabberBottomLimitPort);
+  topLimitSwitch = new DigitalInput(RobotMap.liftTopLimitPort);
+  bottomLimitSwitch = new DigitalInput(RobotMap.liftBottomLimitPort);
 }
 
   public double getPosition() {
     return liftMotor.getSelectedSensorPosition(0);
+  }
+
+  private boolean getTop() {
+    return !topLimitSwitch.get();
+  }
+
+  private boolean getBottom() {
+    return !bottomLimitSwitch.get();
+  }
+
+  public double getSetPoint() {
+    return setPoint;
+  }
+
+  public void PIDF(double p, double i, double d, double f) {
+    liftMotor.config_kP(0, p, 0);
+    liftMotor.config_kI(0, i, 0);
+    liftMotor.config_kD(0, d, 0);
+    liftMotor.config_kF(0, f, 0);
   }
 
   /**
@@ -67,11 +86,11 @@ public Lift() {
    */
   public void setLiftHeight(double position) {
     setPoint = position;
-    if (!topLimitSwitch.get() && !bottomLimitSwitch.get()) {
+    if (!getTop() && !getBottom()) {
       liftMotor.set(ControlMode.Position, setPoint);
-    } else if (topLimitSwitch.get() && setPoint < getPosition()) {
+    } else if (getTop() && setPoint < getPosition()) {
       liftMotor.set(ControlMode.Position, setPoint);
-    } else if (bottomLimitSwitch.get() && setPoint > getPosition()) {
+    } else if (getBottom() && setPoint > getPosition()) {
       liftMotor.set(ControlMode.Position, setPoint);
     }
   }
@@ -88,9 +107,9 @@ public Lift() {
    * Checks the limit switches on the grabber and if one is trigger it will stop the motor from running that direction
    */
   public void checkLimitSwitchs() {
-    if (topLimitSwitch.get() && liftMotor.get() > 0) {
+    if (getTop() && liftMotor.get() > 0) {
       setSpeed(0);
-    } else if (bottomLimitSwitch.get()) {
+    } else if (getBottom()) {
       liftMotor.setSelectedSensorPosition(0, 0, 0);
       if (liftMotor.get() < 0) {
         setSpeed(0);
@@ -102,6 +121,8 @@ public Lift() {
     SmartDashboard.putString("Lift Height", liftHeight.name());
     SmartDashboard.putNumber("Lift Position", getPosition());
     SmartDashboard.putNumber("Lift Motor Speed", liftMotor.get());
+    SmartDashboard.putBoolean("Lift Top", getTop());
+    SmartDashboard.putBoolean("Lift Bottom", getBottom());
   }
   
 }
