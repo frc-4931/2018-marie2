@@ -24,7 +24,7 @@ public class AutoCommand extends CommandGroup {
   public AutoCommand(Waypoint[] points, Strategy strategy) {
 
     Robot.drivetrain.switchLowGear();
-
+    addSequential(new Wait(100));
     addSequential(new GoToDistance(1, 1));
     Waypoint lastPoint = points[points.length-1];
     for (Waypoint point : points) {
@@ -53,14 +53,16 @@ public class AutoCommand extends CommandGroup {
       }
 
       curAbsoluteX += x;
-      curAbsoluteY += y;
-      //addSequential(new WaitForMS(3000));
+      curAbsoluteY -= y;
+      addSequential(new Wait(200));
+      System.out.println("Adding distance: " + distance);
       addSequential(new GoToDistance(MOVE_SPEED, distance));
-      //addSequential(new WaitForMS(3000));
+      addSequential(new Wait(200));
     }
     turn(Math.toDegrees(-lastPoint.angle));
 
     addSequential(new SetLiftSetpoint(calcLiftHeight(strategy)));
+    addSequential(new GoToDistance(1, 1));
     addSequential(new GrabberGoToPosition(GrabberPosition.SHOOT));
     addSequential(calcOpenGrabber(strategy) ? new OpenGrabber() : new CloseGrabber());
   }

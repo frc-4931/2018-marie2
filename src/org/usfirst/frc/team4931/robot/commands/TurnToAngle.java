@@ -10,10 +10,11 @@ public class TurnToAngle extends Command {
 
   private static final double RAMP_UP_THRESHOLD_DISTANCE = 270;
   private static final double RAMP_DOWN_THRESHOLD_DISTANCE = 270;
-  private static final double START_SPEED = 0.2;
-  private static final double END_SPEED = 0.1;
+  private static final double START_SPEED = 0.25;
+  private static final double END_SPEED = 0.13;
   private double speed;
   private double angle;
+  private double startAngle;
 
   public TurnToAngle(double speed, double angle) {
     requires(Robot.drivetrain);
@@ -25,12 +26,12 @@ public class TurnToAngle extends Command {
 
   @Override
   protected void initialize() {
-    Robot.drivetrain.gyroReset();
+    startAngle = Robot.drivetrain.gyroReadYawAngle();
   }
 
   @Override
   protected void execute() {
-    double currentAngle = Robot.drivetrain.gyroReadYawAngle();
+    double currentAngle = Robot.drivetrain.gyroReadYawAngle() - startAngle;
     double calcSpeed = ramp(Math.abs(currentAngle));
 
     if (speed > 0) {
@@ -44,7 +45,7 @@ public class TurnToAngle extends Command {
 
   @Override
   protected boolean isFinished() {
-    return Math.abs(Robot.drivetrain.gyroReadYawAngle()) >= Math.abs(angle);
+    return Math.abs(Robot.drivetrain.gyroReadYawAngle() - startAngle) >= Math.abs(angle);
   }
 
   @Override

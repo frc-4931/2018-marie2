@@ -34,8 +34,8 @@ import org.usfirst.frc.team4931.robot.commands.Autonomous;
 import org.usfirst.frc.team4931.robot.commands.CloseGrabber;
 import org.usfirst.frc.team4931.robot.commands.GrabberGoToPosition;
 import org.usfirst.frc.team4931.robot.commands.OpenGrabber;
-import org.usfirst.frc.team4931.robot.commands.ResetGrabber;
 import org.usfirst.frc.team4931.robot.commands.SetLiftSetpoint;
+import org.usfirst.frc.team4931.robot.commands.ZeroGrabber;
 import org.usfirst.frc.team4931.robot.field.FieldAnalyzer;
 import org.usfirst.frc.team4931.robot.field.StartingPos;
 import org.usfirst.frc.team4931.robot.subsystems.Climber;
@@ -150,6 +150,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     compressor.start();
+    drivetrain.switchLowGear();
 
     char[] fieldPos =
         DriverStation.getInstance().getGameSpecificMessage().toLowerCase().toCharArray();
@@ -179,7 +180,7 @@ public class Robot extends TimedRobot {
     compressor.start();
 
     if (SmartDashboard.getBoolean(RobotMap.RESET_SUBSYSTEMS_IN_TELEOP, false)) {
-      new ResetGrabber().start();
+      new ZeroGrabber().start();
       new SetLiftSetpoint(FixedLiftHeight.FLOOR).start();
     }
   }

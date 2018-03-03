@@ -1,6 +1,5 @@
 package org.usfirst.frc.team4931.robot.commands;
 
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Command;
 import org.usfirst.frc.team4931.robot.Robot;
@@ -23,9 +22,6 @@ public class DriveWithJoystick extends Command {
   protected void execute() {
     Joystick controller = Robot.operatorInput.getDriverController();
     double turn = controller.getZ();
-    if (Robot.drivetrain.getGearState() == Value.kForward) {
-      turn /= 2;
-    }
     Robot.drivetrain.driveArcade(controller.getY(), turn, controller.getThrottle());
   }
   

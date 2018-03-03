@@ -15,7 +15,7 @@ public class StartClimb extends Command {
   protected void initialize() {
     Robot.climber.release();
     Robot.climber.climb();
-    Robot.lift.setLiftHeight(FixedLiftHeight.FLOOR);
+    Robot.lift.setLiftHeight(FixedLiftHeight.EXCHANGE);
   }
 
   @Override

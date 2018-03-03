@@ -1,9 +1,9 @@
 package org.usfirst.frc.team4931.robot.field;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import java.util.EnumMap;
 import org.usfirst.frc.team4931.robot.Robot;
 import org.usfirst.frc.team4931.robot.RobotMap;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team4931.robot.commands.AutoCommand;
 
 /**
@@ -52,7 +52,7 @@ public class FieldAnalyzer {
       if (strategyPick[s.ordinal()] == 'y') {
         Waypoint[] points = Waypoints.WAYPOINTS.get(robotStartingPos).get(s);
 
-        AutoCommand auto = new AutoCommand(points, pickedStrategy);
+        AutoCommand auto = new AutoCommand(points, s);
 
         strategyOptions.put(s, auto);
 
