@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.command.InstantCommand;
 import org.usfirst.frc.team4931.robot.commands.CloseGrabber;
 import org.usfirst.frc.team4931.robot.commands.GrabberGoToPosition;
 import org.usfirst.frc.team4931.robot.commands.OpenGrabber;
+import org.usfirst.frc.team4931.robot.commands.ReverseClimb;
 import org.usfirst.frc.team4931.robot.commands.SetLiftSetpoint;
 import org.usfirst.frc.team4931.robot.commands.StartClimb;
 import org.usfirst.frc.team4931.robot.commands.StopClimb;
@@ -40,6 +41,7 @@ public class OperatorInput {
     Button shiftLowGear = new JoystickButton(controller, 1);
     Button shiftHighGear = new JoystickButton(controller, 2);
     Button climber = new JoystickButton(controller, 3);
+    Button reverseClimb = new JoystickButton(controller, 4);
 
     shiftHighGear.whenPressed(new InstantCommand() {
       @Override
@@ -55,6 +57,8 @@ public class OperatorInput {
     });
     climber.whenPressed(new StartClimb());
     climber.whenReleased(new StopClimb());
+    reverseClimb.whenPressed(new ReverseClimb());
+    reverseClimb.whenReleased(new StopClimb());
     return controller;
   }
 

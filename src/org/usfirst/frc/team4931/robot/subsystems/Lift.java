@@ -19,22 +19,22 @@ public class Lift extends Subsystem {
   private DigitalInput topLimitSwitch;
   private DigitalInput bottomLimitSwitch;
 
-/**
- * Creates a new lift. This sets up the motors and potentiometers necessary for lifting.
- */
-public Lift() {
-  liftMotor = new WPI_TalonSRX(RobotMap.liftMotorPort);
-  liftMotor.setInverted(RobotMap.liftMotorInverted);
-  liftMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute, 0, 0);
-  liftMotor.setSelectedSensorPosition(0, 0, 0);
-  liftMotor.setSensorPhase(RobotMap.liftMotorSensorInverted);
-  liftMotor.setNeutralMode(NeutralMode.Brake);
-  liftHeight = FixedLiftHeight.FLOOR;
-  PIDF(1, 0.000002, 300, 0.025);
+  /**
+   * Creates a new lift. This sets up the motors and potentiometers necessary for lifting.
+   */
+  public Lift() {
+    liftMotor = new WPI_TalonSRX(RobotMap.liftMotorPort);
+    liftMotor.setInverted(RobotMap.liftMotorInverted);
+    liftMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute, 0, 0);
+    liftMotor.setSelectedSensorPosition(0, 0, 0);
+    liftMotor.setSensorPhase(RobotMap.liftMotorSensorInverted);
+    liftMotor.setNeutralMode(NeutralMode.Brake);
+    liftHeight = FixedLiftHeight.FLOOR;
+    PIDF(1, 0.000002, 300, 0.025);
 
-  topLimitSwitch = new DigitalInput(RobotMap.liftTopLimitPort);
-  bottomLimitSwitch = new DigitalInput(RobotMap.liftBottomLimitPort);
-}
+    topLimitSwitch = new DigitalInput(RobotMap.liftTopLimitPort);
+    bottomLimitSwitch = new DigitalInput(RobotMap.liftBottomLimitPort);
+  }
 
   public double getPosition() {
     return liftMotor.getSelectedSensorPosition(0);
@@ -60,10 +60,17 @@ public Lift() {
   }
 
   /**
+   * @return whether a and b are close to or equal to each other
+   */
+  private boolean fuzzyEqual(double a, double b) {
+    return Math.abs(a - b) < 50;
+  }
+
+  /**
    * @return if the lift has reached it's desired set point yet.
    */
   public boolean isAtTarget() {
-    return (getPosition() >= setPoint);
+    return fuzzyEqual(getPosition(), setPoint);
   }
 
   @Override
@@ -107,12 +114,12 @@ public Lift() {
    * Checks the limit switches on the grabber and if one is trigger it will stop the motor from running that direction
    */
   public void checkLimitSwitchs() {
-    if (getTop() && liftMotor.get() > 0) {
-      setSpeed(0);
+    if (getTop() && liftMotor.get() > 0.05) {
+      setLiftHeight(FixedLiftHeight.SCALE_TOP);
     } else if (getBottom()) {
       liftMotor.setSelectedSensorPosition(0, 0, 0);
-      if (liftMotor.get() < 0) {
-        setSpeed(0);
+      if (liftMotor.get() < 0.05) {
+        setLiftHeight(FixedLiftHeight.FLOOR);
       }
     }
   }

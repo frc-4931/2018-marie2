@@ -5,7 +5,7 @@ package org.usfirst.frc.team4931.robot.subsystems;
  * @author shawn ely
  */
 public enum GrabberPosition {
-  LOW(2000), EXCHANGE(1200), SHOOT(800), HIGH(-50); //TODO set physical grabber encoder position
+  LOW(2500), EXCHANGE(2000), SHOOT(800), HIGH(-50); //TODO set physical grabber encoder position
 
   private int grabberEncPos;
 

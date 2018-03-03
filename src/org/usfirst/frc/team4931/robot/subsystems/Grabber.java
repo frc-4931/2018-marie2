@@ -33,7 +33,7 @@ public class Grabber extends Subsystem {
     grabberMotor.setSensorPhase(RobotMap.grabberEncoderInverted);
 //    grabberMotor.configClosedloopRamp(0.5, 0);
 
-    PIDF(0.7, 0.000003, 240, 0.05);
+    PIDF(0.6, 0.000003, 240, 0.025);
     grabberMotor.configMaxIntegralAccumulator(0, 0, 0);
   }
 

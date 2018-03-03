@@ -16,6 +16,7 @@ package org.usfirst.frc.team4931.robot;
 public class RobotMap {
 
   public static final String POSITION_SELECTION = "Position Selection";
+  public static final String RESET_SUBSYSTEMS_IN_TELEOP = "TeleOp Reset";
   public static final String SET_LIFT_SWITCH = "Set - Lift Switch";
   public static final String SET_LIFT_EXCHANGE = "Set - Lift Exchange";
   public static final String SET_LIFT_SCALE_TOP = "Set - Lift Scale Top";
@@ -52,7 +53,6 @@ public class RobotMap {
    */
   public static final int[] grabberPorts = {2, 3};
   public static final int grabberMotorPort = 7;
-  public static final boolean climberMotorInverted = false;
   public static final boolean grabberMotorInverted = true;
   public static final boolean grabberEncoderInverted = false;
   public static final int liftTopLimitPort = 0;
@@ -65,6 +65,7 @@ public class RobotMap {
   public static final boolean liftMotorSensorInverted = true;
 
   public static final int climberMotorPort = 9;
+  public static final boolean climberMotorInverted = true;
   /**
    * [0] is the lock port, [1] is the free port
    */

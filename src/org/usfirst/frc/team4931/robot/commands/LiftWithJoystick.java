@@ -22,8 +22,8 @@ public class LiftWithJoystick extends Command {
   private double calculateSpeed() {
     Joystick controller = Robot.operatorInput.getLiftController();
     double speed = controller.getY();
-    double throttle = (controller.getThrottle() + 1)/2;
-    return speed * throttle;
+    double throttle = 1 - (controller.getThrottle() + 1) / 2;
+    return -speed * throttle;
   }
   
   /**
@@ -32,7 +32,7 @@ public class LiftWithJoystick extends Command {
   @Override
   protected void execute() {
     double speed = calculateSpeed();
-    if (Math.abs(calculateSpeed()) > 0.1) {
+    if (Math.abs(calculateSpeed()) > 0.2) {
       //Robot.lift.setSpeed(calculateSpeed());
       Robot.lift.setLiftHeight(Robot.lift.getSetPoint() + speed * 100);
     }

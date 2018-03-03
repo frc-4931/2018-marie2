@@ -34,6 +34,7 @@ import org.usfirst.frc.team4931.robot.commands.Autonomous;
 import org.usfirst.frc.team4931.robot.commands.CloseGrabber;
 import org.usfirst.frc.team4931.robot.commands.GrabberGoToPosition;
 import org.usfirst.frc.team4931.robot.commands.OpenGrabber;
+import org.usfirst.frc.team4931.robot.commands.ResetGrabber;
 import org.usfirst.frc.team4931.robot.commands.SetLiftSetpoint;
 import org.usfirst.frc.team4931.robot.field.FieldAnalyzer;
 import org.usfirst.frc.team4931.robot.field.StartingPos;
@@ -119,6 +120,8 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Grabber I", 0);
     SmartDashboard.putNumber("Grabber D", 0);
     SmartDashboard.putNumber("Grabber F", 0);
+
+    SmartDashboard.putBoolean(RobotMap.RESET_SUBSYSTEMS_IN_TELEOP, false);
   }
 
   /**
@@ -174,6 +177,11 @@ public class Robot extends TimedRobot {
 
     drivetrain.switchHighGear();
     compressor.start();
+
+    if (SmartDashboard.getBoolean(RobotMap.RESET_SUBSYSTEMS_IN_TELEOP, false)) {
+      new ResetGrabber().start();
+      new SetLiftSetpoint(FixedLiftHeight.FLOOR).start();
+    }
   }
 
 
