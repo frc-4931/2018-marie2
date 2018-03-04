@@ -88,11 +88,11 @@ public class Waypoints {
           new Waypoint[]{new Waypoint(12, 0.0, 0.0), new Waypoint(12, 0, 90.0)});
 
       points.put(SCALE_SAME,
-          new Waypoint[]{new Waypoint(25, 0.0, 0.0), new Waypoint(25, 1, 90.0)});
+          new Waypoint[]{new Waypoint(25, -0.5, 0.0), new Waypoint(25, -0.5, 90.0)});
 
       points.put(SWITCH_OPPOSITE,
-          new Waypoint[]{new Waypoint(18.0, 0, 0), new Waypoint(18, 15.0, 90.0),
-              new Waypoint(16.0, 15.0, 180.0)});
+          new Waypoint[]{new Waypoint(18.0, 0, 0), new Waypoint(18, 19.0, 90.0),
+              new Waypoint(13.0, 19.0, -90), new Waypoint(13.0, 19.0, -90)});
 
       points.put(SCALE_OPPOSITE,
           new Waypoint[]{new Waypoint(18.0, 0.0, 90.0), new Waypoint(18.0, 21.0, 0),

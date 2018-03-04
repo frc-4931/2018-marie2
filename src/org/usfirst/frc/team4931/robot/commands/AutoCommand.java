@@ -24,7 +24,7 @@ public class AutoCommand extends CommandGroup {
   public AutoCommand(Waypoint[] points, Strategy strategy) {
 
     Robot.drivetrain.switchLowGear();
-    addSequential(new Wait(100));
+    addSequential(new Wait(350));
     addSequential(new GoToDistance(1, 1));
     Waypoint lastPoint = points[points.length-1];
     for (Waypoint point : points) {

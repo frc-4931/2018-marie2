@@ -151,6 +151,7 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     compressor.start();
     drivetrain.switchLowGear();
+    grabber.captureCube();
 
     char[] fieldPos =
         DriverStation.getInstance().getGameSpecificMessage().toLowerCase().toCharArray();
@@ -189,6 +190,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     lift.checkLimitSwitchs();
+    grabber.calculate(); //FIXME uncomment
 
 //    double p, i, d, f;
 //    p = SmartDashboard.getNumber("Grabber Pro", 0);

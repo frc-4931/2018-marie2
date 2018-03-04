@@ -11,7 +11,7 @@ public class TurnToAngle extends Command {
   private static final double RAMP_UP_THRESHOLD_DISTANCE = 270;
   private static final double RAMP_DOWN_THRESHOLD_DISTANCE = 270;
   private static final double START_SPEED = 0.25;
-  private static final double END_SPEED = 0.13;
+  private static final double END_SPEED = 0.14;
   private double speed;
   private double angle;
   private double startAngle;

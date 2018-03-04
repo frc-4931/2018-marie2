@@ -4,6 +4,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -18,7 +19,9 @@ public class Grabber extends Subsystem {
   private boolean open;
   private DoubleSolenoid pneumatic;
   private WPI_TalonSRX grabberMotor;
+  private AnalogInput distance;
   private double setPoint;
+  private boolean autoGrab;
 
   /**
    * Creates a new grabber. This sets up the motors and pneumatics neccecary for grabbing.
@@ -35,6 +38,9 @@ public class Grabber extends Subsystem {
 
     PIDF(0.6, 0.000003, 240, 0.025);
     grabberMotor.configMaxIntegralAccumulator(0, 0, 0);
+
+    distance = new AnalogInput(1);
+    autoGrab = true;
   }
 
   public void PIDF(double p, double i, double d, double f) {
@@ -47,6 +53,19 @@ public class Grabber extends Subsystem {
   @Override
   protected void initDefaultCommand() {
     setDefaultCommand(new GrabberMoveWithPOV());
+  }
+
+  public double getDistance() {
+    return distance.getValue();
+  }
+
+  public void calculate() {
+    if (autoGrab && open && getDistance() < 75) {
+      captureCube();
+      autoGrab = false;
+    } else if (getDistance() > 180) {
+      autoGrab = true;
+    }
   }
 
   /**
@@ -124,5 +143,6 @@ public class Grabber extends Subsystem {
     SmartDashboard.putBoolean("GrabberOpen", open);
     SmartDashboard.putNumber("Grabber Position", grabberMotor.getSelectedSensorPosition(0));
     SmartDashboard.putNumber("Grabber Speed", grabberMotor.get());
+    SmartDashboard.putNumber("Grabber Distance", getDistance());
   }
 }
