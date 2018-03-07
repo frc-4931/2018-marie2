@@ -60,21 +60,21 @@ public class Waypoints {
       points = new EnumMap<>(Strategy.class);
 
       points.put(SWITCH_SAME,
-          new Waypoint[]{new Waypoint(5.75, 3, 0), new Waypoint(9.25, 3, 0.0)});
+          new Waypoint[]{new Waypoint(5.75, 4, 0), new Waypoint(9.25, 4, 0.0)});
 
       points.put(SCALE_SAME,
-          new Waypoint[]{new Waypoint(6, 9.65, 0), new Waypoint(25, 9.65, 0.0),
-              new Waypoint(25, 8.65, -90.0)});
+          new Waypoint[]{new Waypoint(6, 10.65, 0), new Waypoint(25, 10.65, 0.0),
+              new Waypoint(25, 9.65, -90.0)});
 
       points.put(SWITCH_OPPOSITE,
-          new Waypoint[]{new Waypoint(5.75, -3, 0), new Waypoint(9.25, -3, 0.0)});
+          new Waypoint[]{new Waypoint(5.75, -2, 0), new Waypoint(9.25, -2, 0.0)});
 
       points.put(SCALE_OPPOSITE,
-          new Waypoint[]{new Waypoint(6, -9.65, 0), new Waypoint(25, -9.65, 0.0),
-              new Waypoint(25, -8.65, 90.0)});
+          new Waypoint[]{new Waypoint(6, -8.65, 0), new Waypoint(25, -8.65, 0.0),
+              new Waypoint(25, -7.65, 90.0)});
 
       points.put(DRIVE_FORWARD,
-          new Waypoint[]{new Waypoint(15, 0, 0)});
+          new Waypoint[]{new Waypoint(10, 0, 0)});
 
       WAYPOINTS.put(StartingPos.MIDDLE, points);
     }

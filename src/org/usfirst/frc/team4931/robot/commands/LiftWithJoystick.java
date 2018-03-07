@@ -9,7 +9,9 @@ import org.usfirst.frc.team4931.robot.Robot;
  * @author dj wickman
  */
 public class LiftWithJoystick extends Command {
-  
+
+  private boolean lockToPos = false;
+
   public LiftWithJoystick() {
     requires(Robot.lift);
   }
@@ -21,7 +23,8 @@ public class LiftWithJoystick extends Command {
    */
   private double calculateSpeed() {
     Joystick controller = Robot.operatorInput.getLiftController();
-    double speed = controller.getY();
+    double controllerY = controller.getY();
+    double speed = controllerY * Math.abs(controllerY);
     double throttle = 1 - (controller.getThrottle() + 1) / 2;
     return -speed * throttle;
   }
@@ -32,9 +35,13 @@ public class LiftWithJoystick extends Command {
   @Override
   protected void execute() {
     double speed = calculateSpeed();
-    if (Math.abs(calculateSpeed()) > 0.2) {
-      //Robot.lift.setSpeed(calculateSpeed());
-      Robot.lift.setLiftHeight(Robot.lift.getSetPoint() + speed * 100);
+    if (Math.abs(speed) > 0.05) {
+      Robot.lift.setSpeed(speed);
+//      Robot.lift.setLiftHeight(Robot.lift.getSetPoint() + speed * 100);
+      lockToPos = true;
+    } else if (lockToPos) {
+      Robot.lift.setLiftHeight(Robot.lift.getPosition());
+      lockToPos = false;
     }
   }
   /**

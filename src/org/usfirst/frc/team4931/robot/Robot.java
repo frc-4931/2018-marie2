@@ -82,6 +82,10 @@ public class Robot extends TimedRobot {
 
     operatorInput = new OperatorInput();
 
+    grabber.goToSetPoint(GrabberPosition.HIGH);
+    grabber.captureCube();
+    new ZeroGrabber().start();
+
     CameraServer.getInstance().startAutomaticCapture();
 
     SmartDashboard.putString(STRATEGY_FIELD, "nnnnn");
@@ -89,11 +93,10 @@ public class Robot extends TimedRobot {
 
     // Create position selector to the SmartDashboard
     for (StartingPos pos : StartingPos.values()) {
-        autoChooserPos.addObject(pos.name(), pos.name());
+      autoChooserPos.addObject(pos.name(), pos.name());
     }
     SmartDashboard.putData(POSITION_SELECTION, autoChooserPos);
 
-    grabber.goToSetPoint(GrabberPosition.HIGH);
 
 
     //Create testing commands
@@ -116,10 +119,10 @@ public class Robot extends TimedRobot {
       }
     });
 
-    SmartDashboard.putNumber("Grabber Pro", 0);
-    SmartDashboard.putNumber("Grabber I", 0);
-    SmartDashboard.putNumber("Grabber D", 0);
-    SmartDashboard.putNumber("Grabber F", 0);
+//    SmartDashboard.putNumber("Grabber Pro", 0);
+//    SmartDashboard.putNumber("Grabber I", 0);
+//    SmartDashboard.putNumber("Grabber D", 0);
+//    SmartDashboard.putNumber("Grabber F", 0);
 
     SmartDashboard.putBoolean(RobotMap.RESET_SUBSYSTEMS_IN_TELEOP, false);
   }
