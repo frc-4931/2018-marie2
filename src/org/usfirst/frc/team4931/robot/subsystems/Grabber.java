@@ -22,6 +22,7 @@ public class Grabber extends Subsystem {
   private AnalogInput distance;
   private double setPoint;
   private boolean autoGrab;
+  private GrabberPosition grabberPosition;
 
   /**
    * Creates a new grabber. This sets up the motors and pneumatics neccecary for grabbing.
@@ -123,6 +124,11 @@ public class Grabber extends Subsystem {
    */
   public void goToSetPoint(GrabberPosition position) {
     goToSetPoint(position.position());
+    grabberPosition = position;
+  }
+
+  public GrabberPosition getCurrentGrabberPosition() {
+    return grabberPosition;
   }
 
   /**

@@ -102,6 +102,10 @@ public class Lift extends Subsystem {
     }
   }
 
+  public FixedLiftHeight getLiftHeight() {
+    return liftHeight;
+  }
+
   /**
    * Sets the speed of the lift motor
    * @param speed the speed in +/- percent
