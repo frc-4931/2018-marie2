@@ -5,7 +5,7 @@ package org.usfirst.frc.team4931.robot.subsystems;
  */
 public enum FixedLiftHeight {
   FLOOR(0), EXCHANGE(5000), SWITCH(7000), SCALE_MID(20000), SCALE_TOP(
-      24300); //TODO set physical lift heights
+      23500); //TODO set physical lift heights
 
   private int encoderPosition;
 

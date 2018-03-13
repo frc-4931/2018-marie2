@@ -108,6 +108,7 @@ public class FieldAnalyzer {
    * Returns the calculated trajectory based on the picked strategy
    */
   public void runAuto() {
-    pickedAuto.start();
+    if (pickedAuto != null)
+      pickedAuto.start();
   }
 }

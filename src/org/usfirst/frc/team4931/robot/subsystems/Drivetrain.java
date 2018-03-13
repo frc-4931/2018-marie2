@@ -68,7 +68,7 @@ public class Drivetrain extends Subsystem {
     drivetrain = new DifferentialDrive(leftSideMotors, rightSideMotors);
 
     // Create gyro senser
-    pigeon = new PigeonIMU(rightFrontMotor);
+    pigeon = new PigeonIMU(leftFrontMotor);
     gyroReset();
   }
 

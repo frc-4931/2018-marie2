@@ -16,7 +16,7 @@ public class Climber extends Subsystem {
     climberMotor.setNeutralMode(NeutralMode.Brake);
     climberMotor.setInverted(RobotMap.climberMotorInverted);
 
-    motorLock = new DoubleSolenoid(RobotMap.climberBrake[0], RobotMap.climberBrake[1]);
+    motorLock = new DoubleSolenoid(RobotMap.compressor, RobotMap.climberBrake[0], RobotMap.climberBrake[1]);
   }
 
   @Override

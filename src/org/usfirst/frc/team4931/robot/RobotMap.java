@@ -31,10 +31,10 @@ public class RobotMap {
   public static final String STRATEGY_FIELD = "Strategy Field";
   public static final String SET_GRABBER_OPEN = "Set - Grabber Open";
 
-  public static final int leftFrontMotorPort = 1;
-  public static final int leftBackMotorPort = 2;
-  public static final int rightFrontMotorPort = 3;
-  public static final int rightBackMotorPort = 4;
+  public static final int leftFrontMotorPort = 3;
+  public static final int leftBackMotorPort = 4;
+  public static final int rightFrontMotorPort = 1;
+  public static final int rightBackMotorPort = 2;
   public static final boolean leftFrontMotorInverted = false;
   public static final boolean leftBackMotorInverted = false;
   public static final boolean rightFrontMotorInverted = false;
@@ -69,7 +69,7 @@ public class RobotMap {
   /**
    * [0] is the lock port, [1] is the free port
    */
-  public static final int[] climberBrake = {5, 4};
+  public static final int[] climberBrake = {7, 6};
   
   public static final int driverControllerPort = 0;
   public static final int liftControllerPort = 1;

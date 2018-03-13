@@ -40,11 +40,11 @@ public class Lift extends Subsystem {
     return liftMotor.getSelectedSensorPosition(0);
   }
 
-  private boolean getTop() {
+  public boolean getTop() {
     return !topLimitSwitch.get();
   }
 
-  private boolean getBottom() {
+  public boolean getBottom() {
     return !bottomLimitSwitch.get();
   }
 

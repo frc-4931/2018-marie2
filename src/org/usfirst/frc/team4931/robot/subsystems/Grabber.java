@@ -73,7 +73,7 @@ public class Grabber extends Subsystem {
    * @return whether a and b are close to or equal to each other
    */
   private boolean fuzzyEqual(double a, double b) {
-    return Math.abs(a - b) < 50;
+    return Math.abs(a - b) < 250;
   }
 
   public void reset() {
@@ -142,7 +142,7 @@ public class Grabber extends Subsystem {
    * @return if the grabber is at it's target position.
    */
   public boolean atTargetPosition() {
-    return fuzzyEqual(getCurrentPosition(), setPoint);
+    return Math.abs(setPoint - getCurrentPosition()) < 200;
   }
   
   public void log() {

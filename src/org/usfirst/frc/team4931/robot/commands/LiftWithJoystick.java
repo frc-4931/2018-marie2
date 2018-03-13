@@ -36,6 +36,13 @@ public class LiftWithJoystick extends Command {
   protected void execute() {
     double speed = calculateSpeed();
     if (Math.abs(speed) > 0.05) {
+
+      if(Robot.lift.getTop() && speed > 0) {
+        speed = 0;
+      } else if (Robot.lift.getBottom() && speed < 0) {
+        speed = 0;
+      }
+
       Robot.lift.setSpeed(speed);
 //      Robot.lift.setLiftHeight(Robot.lift.getSetPoint() + speed * 100);
       lockToPos = true;

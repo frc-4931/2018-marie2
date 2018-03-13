@@ -8,10 +8,11 @@ import org.usfirst.frc.team4931.robot.Robot;
  */
 public class TurnToAngle extends Command {
 
-  private static final double RAMP_UP_THRESHOLD_DISTANCE = 270;
-  private static final double RAMP_DOWN_THRESHOLD_DISTANCE = 270;
-  private static final double START_SPEED = 0.25;
-  private static final double END_SPEED = 0.14;
+  private static final double RAMP_UP_THRESHOLD_DISTANCE = 20;
+  private static final double RAMP_DOWN_THRESHOLD_DISTANCE = 45;
+  private static final double START_SPEED = 0.4;
+  private static final double END_SPEED = 0.3;
+  private static final double MAX_SPEED = 0.6;
   private double speed;
   private double angle;
   private double startAngle;
@@ -19,7 +20,7 @@ public class TurnToAngle extends Command {
   public TurnToAngle(double speed, double angle) {
     requires(Robot.drivetrain);
 
-    this.speed = speed;
+    this.speed = Math.min(speed, MAX_SPEED);
     this.angle = angle;
     System.out.println("Starting Speed: " + speed);
   }

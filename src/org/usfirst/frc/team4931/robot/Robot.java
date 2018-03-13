@@ -193,7 +193,6 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     lift.checkLimitSwitchs();
-    grabber.calculate(); //FIXME uncomment
 
 //    double p, i, d, f;
 //    p = SmartDashboard.getNumber("Grabber Pro", 0);
@@ -209,6 +208,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     Scheduler.getInstance().run();
+    grabber.calculate(); //FIXME uncomment
     //drivetrain.autoShift();
     log();
   }
@@ -223,6 +223,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Set - Lift Speed", 0);
     SmartDashboard.putNumber("Set - Climber Speed", 0);
     SmartDashboard.putNumber("Set - Grabber Rotation Speed", 0);
+    SmartDashboard.putBoolean("Set - Grabber Lock", false);
   }
 
   /**
@@ -245,6 +246,12 @@ public class Robot extends TimedRobot {
       climber.reverse();
     } else {
       climber.stop();
+    }
+
+    if (SmartDashboard.getBoolean("Set - Grabber Lock", false)) {
+      climber.lock();
+    } else {
+      climber.release();
     }
 
     double leftSide = SmartDashboard.getNumber("Set - Left Speed", 0);
