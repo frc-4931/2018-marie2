@@ -26,6 +26,7 @@ import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.command.InstantCommand;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -34,6 +35,7 @@ import org.usfirst.frc.team4931.robot.commands.CloseGrabber;
 import org.usfirst.frc.team4931.robot.commands.GrabberGoToPosition;
 import org.usfirst.frc.team4931.robot.commands.OpenGrabber;
 import org.usfirst.frc.team4931.robot.commands.SetLiftSetpoint;
+import org.usfirst.frc.team4931.robot.commands.ZeroGrabber;
 import org.usfirst.frc.team4931.robot.field.FieldAnalyzer;
 import org.usfirst.frc.team4931.robot.field.StartingPos;
 import org.usfirst.frc.team4931.robot.subsystems.Climber;
@@ -80,6 +82,10 @@ public class Robot extends TimedRobot {
 
     operatorInput = new OperatorInput();
 
+    grabber.goToSetPoint(GrabberPosition.HIGH);
+    grabber.captureCube();
+    new ZeroGrabber().start();
+
     CameraServer.getInstance().startAutomaticCapture();
 
     SmartDashboard.putString(STRATEGY_FIELD, "nnnnn");
@@ -87,11 +93,10 @@ public class Robot extends TimedRobot {
 
     // Create position selector to the SmartDashboard
     for (StartingPos pos : StartingPos.values()) {
-        autoChooserPos.addObject(pos.name(), pos.name());
+      autoChooserPos.addObject(pos.name(), pos.name());
     }
     SmartDashboard.putData(POSITION_SELECTION, autoChooserPos);
 
-    grabber.goToSetPoint(GrabberPosition.HIGH);
 
 
     //Create testing commands
@@ -106,6 +111,20 @@ public class Robot extends TimedRobot {
     SmartDashboard.putData(SET_LIFT_SCALE_TOP, new SetLiftSetpoint(FixedLiftHeight.SCALE_TOP));
     SmartDashboard.putData(SET_LIFT_EXCHANGE, new SetLiftSetpoint(FixedLiftHeight.EXCHANGE));
     SmartDashboard.putData(SET_LIFT_SWITCH, new SetLiftSetpoint(FixedLiftHeight.SWITCH));
+
+    SmartDashboard.putData("Reset Grabber Enc", new InstantCommand() {
+      @Override
+      protected void initialize() {
+        Robot.grabber.reset();
+      }
+    });
+
+//    SmartDashboard.putNumber("Grabber Pro", 0);
+//    SmartDashboard.putNumber("Grabber I", 0);
+//    SmartDashboard.putNumber("Grabber D", 0);
+//    SmartDashboard.putNumber("Grabber F", 0);
+
+    SmartDashboard.putBoolean(RobotMap.RESET_SUBSYSTEMS_IN_TELEOP, false);
   }
 
   /**
@@ -134,14 +153,14 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     compressor.start();
+    drivetrain.switchLowGear();
+    grabber.captureCube();
 
     char[] fieldPos =
         DriverStation.getInstance().getGameSpecificMessage().toLowerCase().toCharArray();
     fieldAnalyzer.setFieldPosition(fieldPos);
     fieldAnalyzer.calculateStrategy();
-    autonomousCommand = new Autonomous(fieldAnalyzer.getPickedStrategy(),
-        fieldAnalyzer.getPickedTrajectory());
-    autonomousCommand.start();
+    fieldAnalyzer.runAuto();
 
     SmartDashboard.putString("Autonomous Strategy", fieldAnalyzer.getPickedStrategy().name());
   }
@@ -163,12 +182,24 @@ public class Robot extends TimedRobot {
 
     drivetrain.switchHighGear();
     compressor.start();
+
+    if (SmartDashboard.getBoolean(RobotMap.RESET_SUBSYSTEMS_IN_TELEOP, false)) {
+      new ZeroGrabber().start();
+      new SetLiftSetpoint(FixedLiftHeight.FLOOR).start();
+    }
   }
 
 
   @Override
   public void robotPeriodic() {
     lift.checkLimitSwitchs();
+
+//    double p, i, d, f;
+//    p = SmartDashboard.getNumber("Grabber Pro", 0);
+//    i = SmartDashboard.getNumber("Grabber I", 0);
+//    d = SmartDashboard.getNumber("Grabber D", 0);
+//    f = SmartDashboard.getNumber("Grabber F", 0);
+//    lift.PIDF(p, i, d, f);
   }
 
   /**
@@ -177,6 +208,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     Scheduler.getInstance().run();
+    grabber.calculate(); //FIXME uncomment
     //drivetrain.autoShift();
     log();
   }
@@ -191,6 +223,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Set - Lift Speed", 0);
     SmartDashboard.putNumber("Set - Climber Speed", 0);
     SmartDashboard.putNumber("Set - Grabber Rotation Speed", 0);
+    SmartDashboard.putBoolean("Set - Grabber Lock", false);
   }
 
   /**
@@ -213,6 +246,12 @@ public class Robot extends TimedRobot {
       climber.reverse();
     } else {
       climber.stop();
+    }
+
+    if (SmartDashboard.getBoolean("Set - Grabber Lock", false)) {
+      climber.lock();
+    } else {
+      climber.release();
     }
 
     double leftSide = SmartDashboard.getNumber("Set - Left Speed", 0);

@@ -4,6 +4,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -18,7 +19,10 @@ public class Grabber extends Subsystem {
   private boolean open;
   private DoubleSolenoid pneumatic;
   private WPI_TalonSRX grabberMotor;
+  private AnalogInput distance;
   private double setPoint;
+  private boolean autoGrab;
+  private GrabberPosition grabberPosition;
 
   /**
    * Creates a new grabber. This sets up the motors and pneumatics neccecary for grabbing.
@@ -27,10 +31,24 @@ public class Grabber extends Subsystem {
     pneumatic = new DoubleSolenoid(RobotMap.compressor, RobotMap.grabberPorts[0], RobotMap.grabberPorts[1]);
     grabberMotor = new WPI_TalonSRX(RobotMap.grabberMotorPort);
     grabberMotor.setInverted(RobotMap.grabberMotorInverted);
-    grabberMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
-    grabberMotor.setNeutralMode(NeutralMode.Brake);
+    grabberMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute, 0, 0);
     grabberMotor.setSelectedSensorPosition(0, 0, 0);
-    grabberMotor.setSensorPhase(RobotMap.grabberMotorInverted);
+    grabberMotor.setNeutralMode(NeutralMode.Brake);
+    grabberMotor.setSensorPhase(RobotMap.grabberEncoderInverted);
+//    grabberMotor.configClosedloopRamp(0.5, 0);
+
+    PIDF(0.6, 0.000003, 240, 0.025);
+    grabberMotor.configMaxIntegralAccumulator(0, 0, 0);
+
+    distance = new AnalogInput(1);
+    autoGrab = true;
+  }
+
+  public void PIDF(double p, double i, double d, double f) {
+    grabberMotor.config_kP(0, p, 0);
+    grabberMotor.config_kI(0, i, 0);
+    grabberMotor.config_kD(0, d, 0);
+    grabberMotor.config_kF(0, f, 0);
   }
 
   @Override
@@ -38,11 +56,32 @@ public class Grabber extends Subsystem {
     setDefaultCommand(new GrabberMoveWithPOV());
   }
 
+  public double getDistance() {
+    return distance.getValue();
+  }
+
+  public void calculate() {
+    if (autoGrab && open && getDistance() < 75) {
+      captureCube();
+      autoGrab = false;
+    } else if (getDistance() > 180) {
+      autoGrab = true;
+    }
+  }
+
   /**
    * @return whether a and b are close to or equal to each other
    */
   private boolean fuzzyEqual(double a, double b) {
-    return Math.abs(a-b) < 5;
+    return Math.abs(a - b) < 250;
+  }
+
+  public void reset() {
+    grabberMotor.setSelectedSensorPosition(0, 0, 0);
+  }
+
+  public double getSetPoint() {
+    return setPoint;
   }
 
   /**
@@ -68,6 +107,7 @@ public class Grabber extends Subsystem {
    */
   public void goToSetPoint(double position) {
     setPoint = position;
+    grabberMotor.set(ControlMode.Position, position);
   }
 
   /**
@@ -84,6 +124,11 @@ public class Grabber extends Subsystem {
    */
   public void goToSetPoint(GrabberPosition position) {
     goToSetPoint(position.position());
+    grabberPosition = position;
+  }
+
+  public GrabberPosition getCurrentGrabberPosition() {
+    return grabberPosition;
   }
 
   /**
@@ -97,12 +142,13 @@ public class Grabber extends Subsystem {
    * @return if the grabber is at it's target position.
    */
   public boolean atTargetPosition() {
-    return fuzzyEqual(getCurrentPosition(), setPoint);
+    return Math.abs(setPoint - getCurrentPosition()) < 200;
   }
   
   public void log() {
     SmartDashboard.putBoolean("GrabberOpen", open);
     SmartDashboard.putNumber("Grabber Position", grabberMotor.getSelectedSensorPosition(0));
     SmartDashboard.putNumber("Grabber Speed", grabberMotor.get());
+    SmartDashboard.putNumber("Grabber Distance", getDistance());
   }
 }

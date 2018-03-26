@@ -1,8 +1,8 @@
 package org.usfirst.frc.team4931.robot.commands;
 
-import org.usfirst.frc.team4931.robot.Robot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Command;
+import org.usfirst.frc.team4931.robot.Robot;
 
 /**
  * Allows manual control of the drivetrain with the joystick. 
@@ -21,7 +21,8 @@ public class DriveWithJoystick extends Command {
   @Override
   protected void execute() {
     Joystick controller = Robot.operatorInput.getDriverController();
-    Robot.drivetrain.driveArcade(controller.getY(), controller.getZ(), controller.getThrottle());
+    double turn = controller.getZ();
+    Robot.drivetrain.driveArcade(controller.getY(), turn, controller.getThrottle());
   }
   
   /**

@@ -16,6 +16,7 @@ package org.usfirst.frc.team4931.robot;
 public class RobotMap {
 
   public static final String POSITION_SELECTION = "Position Selection";
+  public static final String RESET_SUBSYSTEMS_IN_TELEOP = "TeleOp Reset";
   public static final String SET_LIFT_SWITCH = "Set - Lift Switch";
   public static final String SET_LIFT_EXCHANGE = "Set - Lift Exchange";
   public static final String SET_LIFT_SCALE_TOP = "Set - Lift Scale Top";
@@ -30,16 +31,16 @@ public class RobotMap {
   public static final String STRATEGY_FIELD = "Strategy Field";
   public static final String SET_GRABBER_OPEN = "Set - Grabber Open";
 
-  public static final int leftFrontMotorPort = 1;
-  public static final int leftBackMotorPort = 2;
-  public static final int rightFrontMotorPort = 3;
-  public static final int rightBackMotorPort = 4;
+  public static final int leftFrontMotorPort = 3;
+  public static final int leftBackMotorPort = 4;
+  public static final int rightFrontMotorPort = 1;
+  public static final int rightBackMotorPort = 2;
   public static final boolean leftFrontMotorInverted = false;
   public static final boolean leftBackMotorInverted = false;
   public static final boolean rightFrontMotorInverted = false;
   public static final boolean rightBackMotorInverted = false;
-  public static final boolean leftSideEncoderInverted = true;
-  public static final boolean rightSideEncoderInverted = false;
+  public static final boolean leftSideEncoderInverted = false;
+  public static final boolean rightSideEncoderInverted = true;
 
   public static final int encoderPPR = 120 * 4; //Multiplied for 4x encoding
 
@@ -52,22 +53,23 @@ public class RobotMap {
    */
   public static final int[] grabberPorts = {2, 3};
   public static final int grabberMotorPort = 7;
-  public static final boolean climberMotorInverted = false;
   public static final boolean grabberMotorInverted = true;
-  public static final int grabberTopLimitPort = 0;
-  public static final int grabberBottomLimitPort = 1;
+  public static final boolean grabberEncoderInverted = false;
+  public static final int liftTopLimitPort = 0;
+  public static final int liftBottomLimitPort = 1;
 
   public static final int compressor = 6;
 
   public static final int liftMotorPort = 5;
-  public static final boolean liftMotorInverted = true;
+  public static final boolean liftMotorInverted = false;
   public static final boolean liftMotorSensorInverted = true;
 
   public static final int climberMotorPort = 9;
+  public static final boolean climberMotorInverted = true;
   /**
    * [0] is the lock port, [1] is the free port
    */
-  public static final int[] climberBrake = {5, 4};
+  public static final int[] climberBrake = {7, 6};
   
   public static final int driverControllerPort = 0;
   public static final int liftControllerPort = 1;

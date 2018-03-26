@@ -8,8 +8,7 @@ import org.usfirst.frc.team4931.robot.Robot;
 public class CloseGrabber extends Command {
 
   public CloseGrabber() {
-    requires(Robot.grabber);
-    setInterruptible(false);
+    setInterruptible(true);
   }
 
   @Override

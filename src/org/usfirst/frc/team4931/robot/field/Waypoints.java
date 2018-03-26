@@ -11,7 +11,6 @@ import java.util.Map;
 
 /**
  * This function tells us each waypoint based on positions and strategies.
- *
  */
 public class Waypoints {
 
@@ -21,62 +20,88 @@ public class Waypoints {
   public static Map<StartingPos, Map<Strategy, Waypoint[]>> WAYPOINTS =
       new EnumMap<>(StartingPos.class);
 
+
   /**
    * The waypoints for autonomous.
    */
   static {
-    Map<Strategy, Waypoint[]> points = new EnumMap<>(Strategy.class);
-    points.put(SWITCH_SAME, new Waypoint[]{new Waypoint(0, 24, 0), new Waypoint(11, 25, -35),
-        new Waypoint(14, 20, -90)});
-    points.put(SCALE_SAME, new Waypoint[]{new Waypoint(0, 24, 0), new Waypoint(20, 25, 0),
-        new Waypoint(27, 21, -90)});
-    points.put(SWITCH_OPPOSITE, new Waypoint[]{new Waypoint(0, 24, 0), new Waypoint(15, 24, 0),
-        new Waypoint(20, 19, -90), new Waypoint(20, 12, -90), new Waypoint(16, 9, 180)});
-    points.put(SCALE_OPPOSITE,
-        new Waypoint[]{new Waypoint(0, 24, 0), new Waypoint(17, 23, 0), new Waypoint(20, 20, -90),
-            new Waypoint(20, 5, -90), new Waypoint(24, 2, 0), new Waypoint(27, 6, 90)});
-    //points.put(DRIVE_FORWARD, new Waypoint[] {new Waypoint(0, 24, 0), new Waypoint(20, 24, 0)});
-    points.put(DRIVE_FORWARD,
-        new Waypoint[]{new Waypoint(1, 12, 45), new Waypoint(4, 7, -15), new Waypoint(10, 8, 90),
-            new Waypoint(17, 2, 45)});
-    WAYPOINTS.put(StartingPos.LEFT, points);
+    //FIXME uncomment correct waypoints
 
-    points = new EnumMap<>(Strategy.class);
-    points.put(SWITCH_SAME,
-        new Waypoint[]{new Waypoint(0, 14, 0), new Waypoint(7, 18, 35), new Waypoint(12, 18, 0)});
-    points.put(SCALE_SAME, new Waypoint[]{new Waypoint(0, 14, 0), new Waypoint(7, 20, 90),
-        new Waypoint(11, 23, 0), new Waypoint(21, 24, 0), new Waypoint(27, 21, -90)});
-    points.put(SWITCH_OPPOSITE,
-        new Waypoint[]{new Waypoint(0, 14, 0), new Waypoint(7, 9, -35), new Waypoint(12, 8, 0)});
-    points.put(SCALE_OPPOSITE, new Waypoint[]{new Waypoint(0, 14, 0), new Waypoint(6, 9, -90),
-        new Waypoint(10, 4, 0), new Waypoint(21, 2, 0), new Waypoint(27, 6, 90)});
-    points.put(DRIVE_FORWARD, new Waypoint[]{new Waypoint(0, 14, 0), new Waypoint(7, 15, 35),
-        new Waypoint(10, 18, 90), new Waypoint(10, 20, 90)});
-    WAYPOINTS.put(StartingPos.MIDDLE, points);
+    Map<Strategy, Waypoint[]> points;
 
-    points = new EnumMap<>(Strategy.class);
-    points.put(SWITCH_SAME,
-        new Waypoint[]{new Waypoint(0, 3, 0), new Waypoint(4, 3, 0), new Waypoint(14, 7, 90)});
-    points.put(SCALE_SAME,
-        new Waypoint[]{new Waypoint(0, 3, 0), new Waypoint(22, 3, 0), new Waypoint(27, 6, 90)});
-    points.put(SWITCH_OPPOSITE, new Waypoint[]{new Waypoint(0, 3, 0), new Waypoint(17, 4, 35),
-        new Waypoint(19, 7, 90), new Waypoint(19, 60, 90), new Waypoint(16, 18, 180)});
-    points.put(SCALE_OPPOSITE,
-        new Waypoint[]{new Waypoint(0, 3, 0), new Waypoint(16, 4, 0), new Waypoint(20, 8, 90),
-            new Waypoint(20, 21, 90), new Waypoint(24, 24, 0), new Waypoint(27, 21, -90)});
-    //points.put(DRIVE_FORWARD, new Waypoint[] {new Waypoint(0, 3, 0), new Waypoint(20, 3, 0)});
-    points.put(DRIVE_FORWARD,
-        new Waypoint[]{new Waypoint(0, 0, 0), new Waypoint(8, 0, 0)});
-    WAYPOINTS.put(StartingPos.RIGHT, points);
-  }
+    //LEFT POSITION
+    //Starts at (?, ?, ?)
+    {
+      points = new EnumMap<>(Strategy.class);
 
-  private static class Waypoint extends jaci.pathfinder.Waypoint {
+      points.put(SWITCH_SAME,
+          new Waypoint[]{new Waypoint(12, 0.0, 0.0), new Waypoint(12, 0, -90.0)});
 
-    private static final double FEET_TO_METERS = 0.3048;
-    private static final double DEGREES_TO_RADS = Math.PI / 180;
+      points.put(SCALE_SAME,
+          new Waypoint[]{new Waypoint(25, 0.0, 0.0), new Waypoint(25, -1, -90.0)});
 
-    public Waypoint(double x, double y, double angle) {
-      super(x * FEET_TO_METERS, y * FEET_TO_METERS, angle * DEGREES_TO_RADS);
+      points.put(SWITCH_OPPOSITE,
+          new Waypoint[]{new Waypoint(18.0, 0, 0), new Waypoint(18.0, -15.0, -90.0),
+              new Waypoint(16.0, -15.0, -180.0)});
+
+      points.put(SCALE_OPPOSITE,
+          new Waypoint[]{new Waypoint(17.0, 0.0, -90.0), new Waypoint(17.0, -21.0, 0),
+              new Waypoint(21.0, -18.0, 90.0)});
+
+      points.put(DRIVE_FORWARD,
+          new Waypoint[]{new Waypoint(15, 0.0, 0.0)});
+
+      WAYPOINTS.put(StartingPos.LEFT, points);
+    }
+
+    //MIDDLE POSITION
+    //Starts at (?, ?, ?) 116" from the wall
+    {
+      points = new EnumMap<>(Strategy.class);
+
+      points.put(SWITCH_SAME,
+          new Waypoint[]{new Waypoint(5.75, 4, 0), new Waypoint(9.25, 4, 0.0)});
+
+      points.put(SCALE_SAME,
+          new Waypoint[]{new Waypoint(6, 10.65, 0), new Waypoint(25, 10.65, 0.0),
+              new Waypoint(25, 9.65, -90.0)});
+
+      points.put(SWITCH_OPPOSITE,
+          new Waypoint[]{new Waypoint(5.75, -2, 0), new Waypoint(9.25, -2, 0.0)});
+
+      points.put(SCALE_OPPOSITE,
+          new Waypoint[]{new Waypoint(6, -8.65, 0), new Waypoint(25, -8.65, 0.0),
+              new Waypoint(25, -7.65, 90.0)});
+
+      points.put(DRIVE_FORWARD,
+          new Waypoint[]{new Waypoint(10, 0, 0)});
+
+      WAYPOINTS.put(StartingPos.MIDDLE, points);
+    }
+
+    //RIGHT POSITION
+    //Starts in the right corner
+    {
+      points = new EnumMap<>(Strategy.class);
+
+      points.put(SWITCH_SAME,
+          new Waypoint[]{new Waypoint(12, 0.0, 0.0), new Waypoint(12, 0, 90.0)});
+
+      points.put(SCALE_SAME,
+          new Waypoint[]{new Waypoint(25, -0.5, 0.0), new Waypoint(25, -0.5, 90.0)});
+
+      points.put(SWITCH_OPPOSITE,
+          new Waypoint[]{new Waypoint(18.0, 0, 0), new Waypoint(18, 19.0, 90.0),
+              new Waypoint(13.0, 19.0, -90), new Waypoint(13.0, 19.0, -90)});
+
+      points.put(SCALE_OPPOSITE,
+          new Waypoint[]{new Waypoint(18.0, 0.0, 90.0), new Waypoint(18.0, 21.0, 0),
+              new Waypoint(21.0, 18.0, -90.0)});
+
+      points.put(DRIVE_FORWARD,
+          new Waypoint[]{new Waypoint(15, 0.0, 0.0)});
+
+      WAYPOINTS.put(StartingPos.RIGHT, points);
     }
   }
 }

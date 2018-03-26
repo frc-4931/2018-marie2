@@ -1,15 +1,17 @@
 package org.usfirst.frc.team4931.robot.commands;
 
-import org.usfirst.frc.team4931.robot.Robot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Command;
+import org.usfirst.frc.team4931.robot.Robot;
 
 /**
  * Allows the manual control of the lifting mechanism with the joystick.
  * @author dj wickman
  */
 public class LiftWithJoystick extends Command {
-  
+
+  private boolean lockToPos = false;
+
   public LiftWithJoystick() {
     requires(Robot.lift);
   }
@@ -21,9 +23,10 @@ public class LiftWithJoystick extends Command {
    */
   private double calculateSpeed() {
     Joystick controller = Robot.operatorInput.getLiftController();
-    double speed = controller.getY();
-    double throttle = (controller.getThrottle() + 1)/2;
-    return speed * throttle;
+    double controllerY = controller.getY();
+    double speed = controllerY * Math.abs(controllerY);
+    double throttle = 1 - (controller.getThrottle() + 1) / 2;
+    return -speed * throttle;
   }
   
   /**
@@ -31,7 +34,22 @@ public class LiftWithJoystick extends Command {
    */
   @Override
   protected void execute() {
-    Robot.lift.setSpeed(calculateSpeed());
+    double speed = calculateSpeed();
+    if (Math.abs(speed) > 0.05) {
+
+      if(Robot.lift.getTop() && speed > 0) {
+        speed = 0;
+      } else if (Robot.lift.getBottom() && speed < 0) {
+        speed = 0;
+      }
+
+      Robot.lift.setSpeed(speed);
+//      Robot.lift.setLiftHeight(Robot.lift.getSetPoint() + speed * 100);
+      lockToPos = true;
+    } else if (lockToPos) {
+      Robot.lift.setLiftHeight(Robot.lift.getPosition());
+      lockToPos = false;
+    }
   }
   /**
    * keeps the command from stopping on its own
@@ -47,7 +65,7 @@ public class LiftWithJoystick extends Command {
    */
   @Override
   protected void end() {
-    Robot.lift.setSpeed(0);
+
   }
   
 }

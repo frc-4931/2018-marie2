@@ -13,10 +13,9 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.command.InstantCommand;
 import org.usfirst.frc.team4931.robot.commands.CloseGrabber;
 import org.usfirst.frc.team4931.robot.commands.GrabberGoToPosition;
-import org.usfirst.frc.team4931.robot.commands.LockClimber;
+import org.usfirst.frc.team4931.robot.commands.LiftToPosAndCloseGrabberIfNeeded;
 import org.usfirst.frc.team4931.robot.commands.OpenGrabber;
-import org.usfirst.frc.team4931.robot.commands.ReleaseClimber;
-import org.usfirst.frc.team4931.robot.commands.SetLiftSetpoint;
+import org.usfirst.frc.team4931.robot.commands.ReverseClimb;
 import org.usfirst.frc.team4931.robot.commands.StartClimb;
 import org.usfirst.frc.team4931.robot.commands.StopClimb;
 import org.usfirst.frc.team4931.robot.subsystems.FixedLiftHeight;
@@ -42,8 +41,7 @@ public class OperatorInput {
     Button shiftLowGear = new JoystickButton(controller, 1);
     Button shiftHighGear = new JoystickButton(controller, 2);
     Button climber = new JoystickButton(controller, 3);
-    Button lockClimber = new JoystickButton(controller, 5);
-    Button releaseClimber = new JoystickButton(controller, 6);
+    Button reverseClimb = new JoystickButton(controller, 4);
 
     shiftHighGear.whenPressed(new InstantCommand() {
       @Override
@@ -59,16 +57,16 @@ public class OperatorInput {
     });
     climber.whenPressed(new StartClimb());
     climber.whenReleased(new StopClimb());
-    lockClimber.whenPressed(new LockClimber());
-    releaseClimber.whenPressed(new ReleaseClimber());
+    reverseClimb.whenPressed(new ReverseClimb());
+    reverseClimb.whenReleased(new StopClimb());
     return controller;
   }
 
   private Joystick liftController() {
     Joystick controller = new Joystick(RobotMap.liftControllerPort);
     // talk to drive team about button arrangement
-    Button openGrabber = new JoystickButton(controller, 2); // thumb button
-    Button closeGrabber = new JoystickButton(controller, 1); // trigger
+    Button openGrabber = new JoystickButton(controller, 1); // thumb button
+    Button closeGrabber = new JoystickButton(controller, 2); // trigger
     Button grabberExchange = new JoystickButton(controller, 4); // bottom right button 
     Button grabberLow = new JoystickButton(controller, 3); // bottom left button
     Button grabberHigh = new JoystickButton(controller, 6); // top right button
@@ -79,17 +77,17 @@ public class OperatorInput {
     Button switchHeight = new JoystickButton(controller, 9);
     Button exchange = new JoystickButton(controller, 8);
 
-    openGrabber.whenPressed(new OpenGrabber());
-    closeGrabber.whenPressed(new CloseGrabber());
+    openGrabber.whileHeld(new OpenGrabber());
+    closeGrabber.whileHeld(new CloseGrabber());
     grabberExchange.whenPressed(new GrabberGoToPosition(GrabberPosition.EXCHANGE));
     grabberShoot.whenPressed(new GrabberGoToPosition(GrabberPosition.SHOOT));
     grabberLow.whenPressed(new GrabberGoToPosition(GrabberPosition.LOW));
     grabberHigh.whenPressed(new GrabberGoToPosition(GrabberPosition.HIGH));
-    scaleHigh.whenPressed(new SetLiftSetpoint(FixedLiftHeight.SCALE_TOP));
-    scaleMid.whenPressed(new SetLiftSetpoint(FixedLiftHeight.SCALE_MID));
-    floor.whenPressed(new SetLiftSetpoint(FixedLiftHeight.FLOOR));
-    switchHeight.whenPressed(new SetLiftSetpoint(FixedLiftHeight.SWITCH));
-    exchange.whenPressed(new SetLiftSetpoint(FixedLiftHeight.EXCHANGE));
+    scaleHigh.whenPressed(new LiftToPosAndCloseGrabberIfNeeded(FixedLiftHeight.SCALE_TOP));
+    scaleMid.whenPressed(new LiftToPosAndCloseGrabberIfNeeded(FixedLiftHeight.SCALE_MID));
+    switchHeight.whenPressed(new LiftToPosAndCloseGrabberIfNeeded(FixedLiftHeight.SWITCH));
+    exchange.whenPressed(new LiftToPosAndCloseGrabberIfNeeded(FixedLiftHeight.EXCHANGE));
+    floor.whenPressed(new LiftToPosAndCloseGrabberIfNeeded(FixedLiftHeight.FLOOR));
     return controller;
   }
 
