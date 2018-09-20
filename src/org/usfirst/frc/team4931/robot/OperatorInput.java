@@ -1,102 +1,38 @@
-/*----------------------------------------------------------------------------*/
-/* Copyright (c) 2017-2018 FIRST. All Rights Reserved.                        */
-/* Open Source Software - may be modified and shared by FRC teams. The code   */
-/* must be accompanied by the FIRST BSD license file in the root directory of */
-/* the project.                                                               */
-/*----------------------------------------------------------------------------*/
-
 package org.usfirst.frc.team4931.robot;
+
+import org.usfirst.frc.team4931.robot.commands.ShiftGear;
+import org.usfirst.frc.team4931.robot.enums.Gear;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
-import edu.wpi.first.wpilibj.command.InstantCommand;
-import org.usfirst.frc.team4931.robot.commands.CloseGrabber;
-import org.usfirst.frc.team4931.robot.commands.GrabberGoToPosition;
-import org.usfirst.frc.team4931.robot.commands.LiftToPosAndCloseGrabberIfNeeded;
-import org.usfirst.frc.team4931.robot.commands.OpenGrabber;
-import org.usfirst.frc.team4931.robot.commands.ReverseClimb;
-import org.usfirst.frc.team4931.robot.commands.StartClimb;
-import org.usfirst.frc.team4931.robot.commands.StopClimb;
-import org.usfirst.frc.team4931.robot.subsystems.FixedLiftHeight;
-import org.usfirst.frc.team4931.robot.subsystems.GrabberPosition;
 
-/**
- * This class is the glue that binds the controls on the physical operator
- * interface to the commands and command groups that allow control of the robot.
- */
+
 public class OperatorInput {
 
-  private Joystick driverController;
-  private Joystick liftController;
+	private Joystick joystick;
 
+	public OperatorInput() {
+		joystick = makeJoystick();
+	}
 
-  public OperatorInput() {
-    driverController = tankDriveController();
-    liftController = liftController();
-  }
+	private Joystick makeJoystick() {
+		Joystick joystick = new Joystick(RobotMap.JOYSTICK.getValue());
 
-  private Joystick tankDriveController() {
-    Joystick controller = new Joystick (RobotMap.driverControllerPort);
-    Button shiftLowGear = new JoystickButton(controller, 1);
-    Button shiftHighGear = new JoystickButton(controller, 2);
-    Button climber = new JoystickButton(controller, 3);
-    Button reverseClimb = new JoystickButton(controller, 4);
+		Button grabberOpen = new JoystickButton(joystick, RobotMap.GRABBER_OPEN.getValue());
+		Button grabberClose = new JoystickButton(joystick, RobotMap.GRABBER_CLOSE.getValue());
 
-    shiftHighGear.whenPressed(new InstantCommand() {
-      @Override
-      protected void initialize() {
-        Robot.drivetrain.switchHighGear();
-      }
-    });
-    shiftLowGear.whenPressed(new InstantCommand() {
-      @Override
-      protected void initialize() {
-        Robot.drivetrain.switchLowGear();
-      }
-    });
-    climber.whenPressed(new StartClimb());
-    climber.whenReleased(new StopClimb());
-    reverseClimb.whenPressed(new ReverseClimb());
-    reverseClimb.whenReleased(new StopClimb());
-    return controller;
-  }
+		/* Shifting */
+		Button shiftToLowGear = new JoystickButton(joystick, RobotMap.SHIFT_TO_LOW_GEAR.getValue());
+		shiftToLowGear.whenPressed(new ShiftGear(Gear.LOW));
 
-  private Joystick liftController() {
-    Joystick controller = new Joystick(RobotMap.liftControllerPort);
-    // talk to drive team about button arrangement
-    Button openGrabber = new JoystickButton(controller, 1); // thumb button
-    Button closeGrabber = new JoystickButton(controller, 2); // trigger
-    Button grabberExchange = new JoystickButton(controller, 4); // bottom right button 
-    Button grabberLow = new JoystickButton(controller, 3); // bottom left button
-    Button grabberHigh = new JoystickButton(controller, 6); // top right button
-    Button grabberShoot = new JoystickButton(controller, 5); // bottom right button
-    Button scaleHigh = new JoystickButton(controller, 11);
-    Button scaleMid = new JoystickButton(controller, 10);
-    Button floor = new JoystickButton(controller, 7);
-    Button switchHeight = new JoystickButton(controller, 9);
-    Button exchange = new JoystickButton(controller, 8);
+		Button shiftToHighGear = new JoystickButton(joystick, RobotMap.SHIFT_TO_HIGH_GEAR.getValue());
+		shiftToHighGear.whenPressed(new ShiftGear(Gear.HIGH));
+		
+		return joystick;
+	}
 
-    openGrabber.whileHeld(new OpenGrabber());
-    closeGrabber.whileHeld(new CloseGrabber());
-    grabberExchange.whenPressed(new GrabberGoToPosition(GrabberPosition.EXCHANGE));
-    grabberShoot.whenPressed(new GrabberGoToPosition(GrabberPosition.SHOOT));
-    grabberLow.whenPressed(new GrabberGoToPosition(GrabberPosition.LOW));
-    grabberHigh.whenPressed(new GrabberGoToPosition(GrabberPosition.HIGH));
-    scaleHigh.whenPressed(new LiftToPosAndCloseGrabberIfNeeded(FixedLiftHeight.SCALE_TOP));
-    scaleMid.whenPressed(new LiftToPosAndCloseGrabberIfNeeded(FixedLiftHeight.SCALE_MID));
-    switchHeight.whenPressed(new LiftToPosAndCloseGrabberIfNeeded(FixedLiftHeight.SWITCH));
-    exchange.whenPressed(new LiftToPosAndCloseGrabberIfNeeded(FixedLiftHeight.EXCHANGE));
-    floor.whenPressed(new LiftToPosAndCloseGrabberIfNeeded(FixedLiftHeight.FLOOR));
-    return controller;
-  }
-
-  public Joystick getDriverController() {
-    return driverController;
-  }
-
-  public Joystick getLiftController() {
-    return liftController;
-  }
-
+	public Joystick getJoystick() {
+		return joystick;
+	}
 }
