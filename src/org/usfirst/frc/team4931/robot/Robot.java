@@ -3,9 +3,9 @@ package org.usfirst.frc.team4931.robot;
 import org.usfirst.frc.team4931.robot.subsystems.Drivetrain;
 import org.usfirst.frc.team4931.robot.subsystems.Grabber;
 
-import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.TimedRobot;
 
-public class Robot extends IterativeRobot {
+public class Robot extends TimedRobot {
 
 	private static Grabber grabber;
 	private static Drivetrain drivetrain;
