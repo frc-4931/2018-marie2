@@ -14,10 +14,10 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void robotInit() {
+		operatorInput = new OperatorInput();
+		
 		grabber = new Grabber();
 		drivetrain = new Drivetrain();
-		
-		operatorInput = new OperatorInput();
 	}
 
 	public static Grabber getGrabber() {

@@ -16,7 +16,7 @@ public class GrabberRotationWithStick extends Command {
 		joystick = Robot.getOperatorInput().getJoystick();
 		grabber = Robot.getGrabber();
 	}
-
+	
 	@Override
 	protected void execute() {
 		grabber.getGrabberMotor().set(joystick.getZ());
