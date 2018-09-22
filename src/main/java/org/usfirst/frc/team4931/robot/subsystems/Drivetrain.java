@@ -34,10 +34,7 @@ public class Drivetrain extends Subsystem {
     motorMap.put(RobotMap.MOTOR_DT_BACK_LEFT, backLeft);
     motorMap.put(RobotMap.MOTOR_DT_BACK_RIGHT, backRight);
 
-    motorMap
-        .values()
-        .forEach(
-            (motor) -> motor.setNeutralMode(NeutralMode.Brake));
+    motorMap.values().forEach((motor) -> motor.setNeutralMode(NeutralMode.Brake));
 
     differentialDrive = new DifferentialDrive(speedControllerGroupLeft, speedControllerGroupRight);
 
