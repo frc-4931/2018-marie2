@@ -27,11 +27,14 @@ public class Grabber extends Subsystem {
     grabberMotor = new WPI_TalonSRX(RobotMap.MOTOR_GRABBER.getValue());
     grabberMotor.setInverted(true);
     grabberMotor.setNeutralMode(NeutralMode.Brake);
+
     grabberMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
     grabberMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 10, 0);
     grabberMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 10, 0);
+
     grabberMotor.configNominalOutputForward(0, 0);
     grabberMotor.configNominalOutputReverse(0, 0);
+
     grabberMotor.configPeakOutputForward(1, 0);
     grabberMotor.configPeakOutputReverse(-1, 0);
 
@@ -43,8 +46,10 @@ public class Grabber extends Subsystem {
     grabberMotor.config_kI(0, 0, 0);
     grabberMotor.config_kD(0, 0, 0);
 
-    grabberMotor.configMotionCruiseVelocity(RobotMap.GRABBER_CRUISE_VELOCITY.getValue(), 0);
-    grabberMotor.configMotionAcceleration(RobotMap.GRABBER_ACCELERATION.getValue(), 0);
+    grabberMotor.configMotionCruiseVelocity(RobotMap.GRABBER_CONFIG_CRUISE_VELOCITY.getValue(), 0);
+    grabberMotor.configMotionAcceleration(RobotMap.GRABBER_CONFIG_ACCELERATION.getValue(), 0);
+
+    // TODO: Zero out the motor
   }
 
   @Override
@@ -65,13 +70,5 @@ public class Grabber extends Subsystem {
         pneumatic.set(Value.kReverse);
         break;
     }
-  }
-
-  public DoubleSolenoid getPneumatic() {
-    return pneumatic;
-  }
-
-  public WPI_TalonSRX getGrabberMotor() {
-    return grabberMotor;
   }
 }

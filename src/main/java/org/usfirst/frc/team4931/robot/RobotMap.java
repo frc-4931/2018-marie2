@@ -2,6 +2,8 @@ package org.usfirst.frc.team4931.robot;
 
 public enum RobotMap {
 
+  // FIXME: Add real values
+
   /* Input */
   JOYSTICK(0),
 
@@ -17,19 +19,27 @@ public enum RobotMap {
   MOTOR_DT_BACK_LEFT(4),
   MOTOR_DT_BACK_RIGHT(2),
 
-  /* Grabber Config */
   MOTOR_GRABBER(7),
-  GRABBER_CRUISE_VELOCITY(2276 / 10), // Distance per second per 100 MS
-  GRABBER_ACCELERATION(2276 / 3 / 10), // Figure this all out some other time
-  GRABBER_MAX_POSITION(2276),
 
-  /* Compressor */
+  /* Grabber Config */
+
+  /* The maximum distance the grabber can go to*/
+  GRABBER_CONFIG_POSITION_MAX(2276),
+
+  /* The travel speed of the grabber in distance per 100 milliseconds */
+  GRABBER_CONFIG_CRUISE_VELOCITY(RobotMap.GRABBER_CONFIG_POSITION_MAX.getValue() / 10),
+
+  /* Figure out this some other time */
+  GRABBER_CONFIG_ACCELERATION(RobotMap.GRABBER_CONFIG_POSITION_MAX.getValue() / 3 / 10),
+
+  /* Pneumatic */
   COMPRESSOR(6),
 
   /* GearBox */
   GEARBOX_1(1),
   GEARBOX_2(0),
 
+  /* Grabber */
   GRABBER_1(2),
   GRABBER_2(3);
 
