@@ -4,14 +4,14 @@ import edu.wpi.first.wpilibj.command.Command;
 import org.usfirst.frc.team4931.robot.Robot;
 import org.usfirst.frc.team4931.robot.subsystems.Drivetrain;
 
-public class DriveForMillis extends Command {
+public class DriveForMilliseconds extends Command {
 
   private long startTime;
   private long targetTime;
 
   private Drivetrain drivetrain;
 
-  public DriveForMillis(long targetTime) {
+  public DriveForMilliseconds(long targetTime) {
     requires(Robot.getDrivetrain());
     this.targetTime = targetTime;
     drivetrain = Robot.getDrivetrain();

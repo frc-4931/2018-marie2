@@ -4,8 +4,10 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import org.usfirst.frc.team4931.robot.commands.ChangeGear;
+import org.usfirst.frc.team4931.robot.commands.ChangeGrabberPosition;
 import org.usfirst.frc.team4931.robot.commands.ChangeGrabberState;
 import org.usfirst.frc.team4931.robot.enums.Gear;
+import org.usfirst.frc.team4931.robot.enums.GrabberPosition;
 import org.usfirst.frc.team4931.robot.enums.GrabberState;
 
 public class OperatorInput {
@@ -16,20 +18,29 @@ public class OperatorInput {
     joystick = new Joystick(RobotMap.JOYSTICK.getValue());
 
     /* Grabber */
-    Button grabberOpen = new JoystickButton(joystick, RobotMap.GRABBER_OPEN.getValue());
-    grabberOpen.whenActive(new ChangeGrabberState(GrabberState.OPENED));
-
-    Button grabberClose = new JoystickButton(joystick, RobotMap.GRABBER_CLOSE.getValue());
-    grabberClose.whenActive(new ChangeGrabberState(GrabberState.CLOSED));
+    Button grabberToggle = new JoystickButton(joystick, RobotMap.GRABBER_TOOGLE.getValue());
+    grabberToggle.whenPressed(new ChangeGrabberState(GrabberState.TOGGLE));
 
     /* Grabber Position*/
+    RobotMap[] grabberPositions = {
+      RobotMap.GRABBER_POSITION_FORWARD_DOWN,
+      RobotMap.GRABBER_POSITION_FORWARD_STRAIGHT,
+      RobotMap.GRABBER_POSITION_FORWARD_SWITCH,
+      RobotMap.GRABBER_POSITION_VERTICAL,
+      RobotMap.GRABBER_POSITION_BACK_SWITCH,
+      RobotMap.GRABBER_POSITION_BACKWARD_STRAIGHT,
+      RobotMap.GRABBER_POSITION_BACKWARD_DOWN
+    };
+    for (RobotMap grabberPosition : grabberPositions) {
+      Button button = new JoystickButton(joystick, grabberPosition.getValue());
+      button.whenPressed(
+          new ChangeGrabberPosition(GrabberPosition.valueOf(grabberPosition.name().substring(17))));
+    }
 
     /* Shifting */
-    Button shiftToLowGear = new JoystickButton(joystick, RobotMap.SHIFT_TO_LOW_GEAR.getValue());
-    shiftToLowGear.whenPressed(new ChangeGear(Gear.LOW));
-
-    Button shiftToHighGear = new JoystickButton(joystick, RobotMap.SHIFT_TO_HIGH_GEAR.getValue());
-    shiftToHighGear.whenPressed(new ChangeGear(Gear.HIGH));
+    Button drivetrainShiftToggle =
+        new JoystickButton(joystick, RobotMap.DRIVETRAIN_SHIFT_GEAR_TOOGLE.getValue());
+    drivetrainShiftToggle.whenPressed(new ChangeGear(Gear.TOGGLE));
   }
 
   public Joystick getJoystick() {

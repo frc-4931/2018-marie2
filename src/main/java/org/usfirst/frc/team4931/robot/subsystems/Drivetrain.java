@@ -58,6 +58,8 @@ public class Drivetrain extends Subsystem {
       case HIGH:
         gearBox.set(Value.kForward);
         break;
+      case TOGGLE:
+        gearBox.set(gearBox.get() == Value.kReverse ? Value.kForward : Value.kReverse);
     }
   }
 

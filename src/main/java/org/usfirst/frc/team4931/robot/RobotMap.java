@@ -1,17 +1,28 @@
 package org.usfirst.frc.team4931.robot;
 
+import org.usfirst.frc.team4931.robot.enums.Gear;
+import org.usfirst.frc.team4931.robot.enums.GrabberPosition;
+import org.usfirst.frc.team4931.robot.enums.GrabberState;
+
 public enum RobotMap {
 
-  // FIXME: Add real values
+  // todo: Add real values
 
   /* Input */
   JOYSTICK(0),
 
-  GRABBER_OPEN(7),
-  GRABBER_CLOSE(10),
+  DRIVETRAIN_SHIFT_GEAR_TOOGLE(1),
 
-  SHIFT_TO_LOW_GEAR(9),
-  SHIFT_TO_HIGH_GEAR(12),
+  GRABBER_TOOGLE(2),
+
+  /* FIXME: USE REAL JOYSTICK TO FIND INPUTS */
+  GRABBER_POSITION_FORWARD_DOWN(1),
+  GRABBER_POSITION_FORWARD_STRAIGHT(2),
+  GRABBER_POSITION_FORWARD_SWITCH(3),
+  GRABBER_POSITION_VERTICAL(4),
+  GRABBER_POSITION_BACK_SWITCH(5),
+  GRABBER_POSITION_BACKWARD_STRAIGHT(6),
+  GRABBER_POSITION_BACKWARD_DOWN(7),
 
   /* Motors */
   MOTOR_DT_FRONT_LEFT(3),
@@ -42,6 +53,10 @@ public enum RobotMap {
   /* Grabber */
   GRABBER_1(2),
   GRABBER_2(3);
+
+  public static GrabberPosition defaultGrabberPosition = GrabberPosition.VERTICAL;
+  public static GrabberState defaultGrabberState = GrabberState.OPENED;
+  public static Gear defaultGear = Gear.LOW;
 
   private int value;
 

@@ -14,10 +14,16 @@ import org.usfirst.frc.team4931.robot.enums.GrabberState;
 
 public class Grabber extends Subsystem {
 
+  // DigitalInput forwardLimitSwitch, reverseLimitSwitch;
+
   private DoubleSolenoid pneumatic;
   private WPI_TalonSRX grabberMotor;
 
   public Grabber() {
+    /* TODO: Add limit switch */
+    // DigitalInput forwardLimitSwitch = new DigitalInput(-1);
+    // DigitalInput reverseLimitSwitch = new DigitalInput(-1);
+
     pneumatic =
         new DoubleSolenoid(
             RobotMap.COMPRESSOR.getValue(),
@@ -58,7 +64,16 @@ public class Grabber extends Subsystem {
   }
 
   public void changeGrabberPosition(int position) {
-    grabberMotor.set(ControlMode.MotionMagic, position);
+    int maxPosition = RobotMap.GRABBER_CONFIG_POSITION_MAX.getValue();
+
+    if (position > 0 && position <= maxPosition)
+      grabberMotor.set(ControlMode.MotionMagic, position);
+    else
+      System.out.println(
+          "Tried to move grabber to position "
+              + position
+              + ". It is either less than 0 or greater than "
+              + maxPosition);
   }
 
   public void changeGrabberState(GrabberState grabberState) {
@@ -69,6 +84,8 @@ public class Grabber extends Subsystem {
       case CLOSED:
         pneumatic.set(Value.kReverse);
         break;
+      case TOGGLE:
+        pneumatic.set(pneumatic.get() == Value.kReverse ? Value.kForward : Value.kReverse);
     }
   }
 }

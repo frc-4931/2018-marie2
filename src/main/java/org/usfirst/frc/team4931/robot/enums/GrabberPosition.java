@@ -7,15 +7,15 @@ public enum GrabberPosition {
   FORWARD_STRAIGHT(1),
   FORWARD_SWITCH(2),
   VERTICAL(3),
-  BACK_SWITCH(4),
-  BACK_STRAIGHT(5),
-  BACK_DOWN(6);
+  BACKWARD_SWITCH(4),
+  BACKWARD_STRAIGHT(5),
+  BACKWARD_DOWN(6);
 
   private int position;
 
   GrabberPosition(int position) {
     this.position =
-        RobotMap.GRABBER_MAX_POSITION.getValue() / (GrabberPosition.values().length - 1) * position;
+        RobotMap.GRABBER_CONFIG_POSITION_MAX.getValue() / (this.values().length - 1) * position;
   }
 
   public int getPosition() {

@@ -2,7 +2,7 @@ package org.usfirst.frc.team4931.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
-import org.usfirst.frc.team4931.robot.commands.autonomous.DriveForMillis;
+import org.usfirst.frc.team4931.robot.commands.autonomous.DriveForMilliseconds;
 import org.usfirst.frc.team4931.robot.subsystems.Drivetrain;
 import org.usfirst.frc.team4931.robot.subsystems.Grabber;
 
@@ -25,15 +25,13 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    autonomousCommand = new DriveForMillis(5000);
+    autonomousCommand = new DriveForMilliseconds(5000);
     autonomousCommand.start();
   }
 
   @Override
   public void teleopInit() {
-    if (autonomousCommand != null) {
-      autonomousCommand.cancel();
-    }
+    if (autonomousCommand != null) autonomousCommand.cancel();
   }
 
   public static Grabber getGrabber() {
