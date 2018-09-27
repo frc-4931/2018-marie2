@@ -11,7 +11,7 @@ public class GrabberRotationWithThrottle extends Command {
   private Joystick joystick;
   private Grabber grabber;
 
-  private double lastThrottlePosition = 0;
+  private int lastThrottlePosition = getGrabberPosition();
 
   public GrabberRotationWithThrottle() {
     requires(Robot.getGrabber());
@@ -21,11 +21,13 @@ public class GrabberRotationWithThrottle extends Command {
 
   @Override
   protected void execute() {
-    if (lastThrottlePosition != joystick.getThrottle())
-      grabber.changeGrabberPosition(
-          (int)
-              (RobotMap.GRABBER_CONFIG_POSITION_MAX.getValue()
-                  * ((lastThrottlePosition = joystick.getThrottle() + 1) / 2)));
+    if (lastThrottlePosition == getGrabberPosition())
+      grabber.changeGrabberPosition(lastThrottlePosition = getGrabberPosition());
+  }
+
+  private int getGrabberPosition() {
+    return (int)
+        (RobotMap.GRABBER_CONFIG_POSITION_MAX.getValue() * ((joystick.getThrottle() + 1) / 2));
   }
 
   @Override

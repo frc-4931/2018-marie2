@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import java.util.HashMap;
 import org.usfirst.frc.team4931.robot.RobotMap;
 import org.usfirst.frc.team4931.robot.commands.DriveWithJoyStick;
@@ -72,5 +73,12 @@ public class Drivetrain extends Subsystem {
 
   public void tankDrive(double leftSpeed, double rightSpeed) {
     differentialDrive.tankDrive(leftSpeed, rightSpeed);
+  }
+
+  public void log() {
+    SmartDashboard.putNumber("Drivetrain Left Group Speed", speedControllerGroupLeft.get());
+    SmartDashboard.putNumber("Drivetrain Left Group Speed", speedControllerGroupRight.get());
+
+    SmartDashboard.putBoolean("Drivetrain in Low Gear", gearBox.get() == Value.kReverse);
   }
 }

@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import org.usfirst.frc.team4931.robot.commands.autonomous.DriveForMilliseconds;
-import org.usfirst.frc.team4931.robot.enums.Gear;
 import org.usfirst.frc.team4931.robot.subsystems.Drivetrain;
 import org.usfirst.frc.team4931.robot.subsystems.Grabber;
 
@@ -28,19 +27,22 @@ public class Robot extends TimedRobot {
 
     grabber = new Grabber();
     drivetrain = new Drivetrain();
+
+    drivetrain.shiftGear(RobotMap.defaultGear);
+    grabber.changeGrabberState(RobotMap.defaultGrabberState);
+    // FIXME: Zero out motor
   }
 
   @Override
   public void teleopInit() {
     compressor.start();
-    drivetrain.shiftGear(Gear.HIGH);
 
     if (autonomousCommand != null) autonomousCommand.cancel();
   }
 
   @Override
   public void autonomousInit() {
-    drivetrain.shiftGear(Gear.HIGH);
+    compressor.start();
 
     autonomousCommand = new DriveForMilliseconds(5000);
     autonomousCommand.start();
@@ -49,6 +51,16 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledInit() {
     compressor.stop();
+  }
+
+  @Override
+  public void robotPeriodic() {
+    log();
+  }
+
+  private void log() {
+    drivetrain.log();
+    grabber.log();
   }
 
   public static Grabber getGrabber() {

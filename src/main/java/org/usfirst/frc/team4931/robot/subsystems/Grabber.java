@@ -8,6 +8,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team4931.robot.RobotMap;
 import org.usfirst.frc.team4931.robot.commands.GrabberRotationWithThrottle;
 import org.usfirst.frc.team4931.robot.enums.GrabberState;
@@ -54,8 +55,6 @@ public class Grabber extends Subsystem {
 
     grabberMotor.configMotionCruiseVelocity(RobotMap.GRABBER_CONFIG_CRUISE_VELOCITY.getValue(), 0);
     grabberMotor.configMotionAcceleration(RobotMap.GRABBER_CONFIG_ACCELERATION.getValue(), 0);
-
-    // TODO: Zero out the motor
   }
 
   @Override
@@ -87,5 +86,11 @@ public class Grabber extends Subsystem {
       case TOGGLE:
         pneumatic.set(pneumatic.get() == Value.kReverse ? Value.kForward : Value.kReverse);
     }
+  }
+
+  public void log() {
+    SmartDashboard.putBoolean("Grabber Open", pneumatic.get() == Value.kForward);
+    SmartDashboard.putNumber("Grabber Position", grabberMotor.getSelectedSensorPosition(0));
+    SmartDashboard.putNumber("Grabber Speed", grabberMotor.get());
   }
 }
