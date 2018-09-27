@@ -3,6 +3,7 @@ package org.usfirst.frc.team4931.robot;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.command.Scheduler;
 import org.usfirst.frc.team4931.robot.commands.autonomous.DriveForMilliseconds;
 import org.usfirst.frc.team4931.robot.subsystems.Drivetrain;
 import org.usfirst.frc.team4931.robot.subsystems.Grabber;
@@ -55,6 +56,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotPeriodic() {
+    Scheduler.getInstance().run();
     log();
   }
 
