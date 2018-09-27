@@ -1,15 +1,27 @@
 package org.usfirst.frc.team4931.robot;
 
+import org.usfirst.frc.team4931.robot.enums.Gear;
+import org.usfirst.frc.team4931.robot.enums.GrabberPosition;
+import org.usfirst.frc.team4931.robot.enums.GrabberState;
+
 public enum RobotMap {
+
+  // todo: Add real values
 
   /* Input */
   JOYSTICK(0),
 
-  GRABBER_OPEN(7),
-  GRABBER_CLOSE(10),
+  DRIVETRAIN_SHIFT_GEAR_TOGGLE(1),
 
-  SHIFT_TO_LOW_GEAR(9),
-  SHIFT_TO_HIGH_GEAR(12),
+  GRABBER_TOGGLE(2),
+
+  GRABBER_POSITION_FORWARD_DOWN(7),
+  GRABBER_POSITION_FORWARD_STRAIGHT(8),
+  GRABBER_POSITION_FORWARD_SWITCH(9),
+  GRABBER_POSITION_VERTICAL(3),
+  GRABBER_POSITION_BACK_SWITCH(12),
+  GRABBER_POSITION_BACKWARD_STRAIGHT(11),
+  GRABBER_POSITION_BACKWARD_DOWN(10),
 
   /* Motors */
   MOTOR_DT_FRONT_LEFT(3),
@@ -17,21 +29,33 @@ public enum RobotMap {
   MOTOR_DT_BACK_LEFT(4),
   MOTOR_DT_BACK_RIGHT(2),
 
-  /* Grabber Config */
   MOTOR_GRABBER(7),
-  GRABBER_CRUISE_VELOCITY(2276 / 10), // Distance per second per 100 MS
-  GRABBER_ACCELERATION(2276 / 3 / 10), // Figure this all out some other time
-  GRABBER_MAX_POSITION(2276),
 
-  /* Compressor */
+  /* Grabber Config */
+
+  /* The maximum distance the grabber can go to*/
+  GRABBER_CONFIG_POSITION_MAX(2276),
+
+  /* The travel speed of the grabber in distance per 100 milliseconds */
+  GRABBER_CONFIG_CRUISE_VELOCITY(RobotMap.GRABBER_CONFIG_POSITION_MAX.getValue() / 10),
+
+  /* Figure out this some other time */
+  GRABBER_CONFIG_ACCELERATION(RobotMap.GRABBER_CONFIG_POSITION_MAX.getValue() / 3 / 10),
+
+  /* Pneumatic */
   COMPRESSOR(6),
 
   /* GearBox */
   GEARBOX_1(1),
   GEARBOX_2(0),
 
+  /* Grabber */
   GRABBER_1(2),
   GRABBER_2(3);
+
+  public static GrabberPosition defaultGrabberPosition = GrabberPosition.VERTICAL;
+  public static GrabberState defaultGrabberState = GrabberState.OPENED;
+  public static Gear defaultGear = Gear.LOW;
 
   private int value;
 
