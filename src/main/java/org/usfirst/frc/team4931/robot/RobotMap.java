@@ -52,12 +52,12 @@ public enum RobotMap {
   COMPRESSOR(6),
 
   /* GearBox */
-  GEARBOX_1(1),
-  GEARBOX_2(0),
+  GEARBOX_1(4),
+  GEARBOX_2(5),
 
   /* Grabber */
-  GRABBER_1(2),
-  GRABBER_2(3),
+  GRABBER_1(6),
+  GRABBER_2(7),
 
   GRABBER_LIMIT_FORWARD(0),
   GRABBER_LIMIT_REVERSE(1);

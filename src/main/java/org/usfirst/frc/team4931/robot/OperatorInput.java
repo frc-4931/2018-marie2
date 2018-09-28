@@ -16,8 +16,10 @@ public class OperatorInput {
     joystick = new Joystick(RobotMap.JOYSTICK.getValue());
 
     /* Grabber */
-    Button grabberToggle = new JoystickButton(joystick, RobotMap.GRABBER_TOGGLE.getValue());
-    grabberToggle.whenPressed(new ChangeGrabberState(GrabberState.TOGGLE));
+    Button grabberOpen = new JoystickButton(joystick, 1);
+    grabberOpen.whenPressed(new ChangeGrabberState(GrabberState.OPENED));
+    Button grabberClose = new JoystickButton(joystick, 2);
+    grabberClose.whenPressed(new ChangeGrabberState(GrabberState.CLOSED));
 
     /* Grabber Position*/
 //    RobotMap[] grabberPositions = {
@@ -36,9 +38,7 @@ public class OperatorInput {
 //    }
 
     /* Shifting */
-    Button drivetrainShiftToggle =
-        new JoystickButton(joystick, RobotMap.DRIVETRAIN_SHIFT_GEAR_TOGGLE.getValue());
-    drivetrainShiftToggle.whenPressed(new ChangeGear(Gear.TOGGLE));
+
   }
 
   public Joystick getJoystick() {

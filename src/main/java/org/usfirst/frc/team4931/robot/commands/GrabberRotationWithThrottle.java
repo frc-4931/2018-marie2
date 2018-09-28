@@ -32,7 +32,7 @@ public class GrabberRotationWithThrottle extends Command {
 
   private int getGrabberPosition() {
     return (int)
-        (RobotMap.GRABBER_CONFIG_POSITION_MAX.getValue() * ((joystick.getThrottle() + 1) / 2));
+        (6000 * ((joystick.getThrottle() + 1) / 2));
   }
 
   @Override
