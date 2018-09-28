@@ -49,7 +49,7 @@ public class Grabber extends Subsystem {
     /* PID */
     // FIXME: Change PID Stuff
     grabberMotor.selectProfileSlot(0, 0);
-    // pidf(0.6, 0.000003, 240, 0.025);
+    pidf(0.5, 0.000003, 240, 0.025);
 
     grabberMotor.configMotionCruiseVelocity(RobotMap.GRABBER_CONFIG_CRUISE_VELOCITY.getValue(), 0);
     grabberMotor.configMotionAcceleration(RobotMap.GRABBER_CONFIG_ACCELERATION.getValue(), 0);

@@ -57,7 +57,7 @@ public enum RobotMap {
   GRABBER_LIMIT_REVERSE(1);
 
   public static GrabberPosition defaultGrabberPosition = GrabberPosition.VERTICAL;
-  public static GrabberState defaultGrabberState = GrabberState.OPENED;
+  public static GrabberState defaultGrabberState = GrabberState.CLOSED;
   public static Gear defaultGear = Gear.LOW;
 
   private int value;
