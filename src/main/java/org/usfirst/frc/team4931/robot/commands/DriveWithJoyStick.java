@@ -12,13 +12,17 @@ public class DriveWithJoyStick extends Command {
 
   public DriveWithJoyStick() {
     requires(Robot.getDrivetrain());
+  }
+
+  @Override
+  public void initialize() {
     joystick = Robot.getOperatorInput().getJoystick();
     drivetrain = Robot.getDrivetrain();
   }
 
   @Override
   protected void execute() {
-    drivetrain.arcadeDrive(joystick.getX(), joystick.getY(), 1);
+    drivetrain.arcadeDrive(-joystick.getY(), -joystick.getX(), 1);
   }
 
   @Override

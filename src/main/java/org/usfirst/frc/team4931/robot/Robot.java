@@ -23,16 +23,23 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     operatorInput = new OperatorInput();
 
+    grabber = new Grabber();
+    drivetrain = new Drivetrain();
+
     compressor = new Compressor(RobotMap.COMPRESSOR.getValue());
     compressor.setClosedLoopControl(true);
     compressor.start();
 
-    grabber = new Grabber();
-    drivetrain = new Drivetrain();
-
     drivetrain.shiftGear(RobotMap.defaultGear);
     grabber.changeGrabberState(RobotMap.defaultGrabberState);
     // FIXME: Zero out motor
+
+    SmartDashboard.putNumber("Grabber Pro", 0.5);
+    SmartDashboard.putNumber("Grabber I", 0.000003);
+    SmartDashboard.putNumber("Grabber D", 240);
+    SmartDashboard.putNumber("Grabber F", 0.025);
+
+    SmartDashboard.putNumber("Grabber Pos", 0);
   }
 
   @Override
@@ -73,6 +80,11 @@ public class Robot extends TimedRobot {
   private void log() {
     drivetrain.log();
     grabber.log();
+  }
+
+  @Override
+  public void testPeriodic() {
+    grabber.changeGrabberPosition((int) SmartDashboard.getNumber("Grabber Pos", 0));
   }
 
   public static Grabber getGrabber() {
