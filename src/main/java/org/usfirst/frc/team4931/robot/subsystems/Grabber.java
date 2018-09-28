@@ -99,7 +99,9 @@ public class Grabber extends Subsystem {
     }
 
     if (reverseLimitSwitch.get()) {
-      grabberMotor.set(0);
+      if(grabberMotor.get() > 0) {
+        grabberMotor.set(0);
+      }
     }
   }
 
