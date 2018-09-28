@@ -5,6 +5,7 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -15,15 +16,15 @@ import org.usfirst.frc.team4931.robot.enums.GrabberState;
 
 public class Grabber extends Subsystem {
 
-  // DigitalInput forwardLimitSwitch, reverseLimitSwitch;
+  private DigitalInput forwardLimitSwitch, reverseLimitSwitch;
 
   private DoubleSolenoid pneumatic;
   private WPI_TalonSRX grabberMotor;
 
   public Grabber() {
     /* TODO: Add limit switch */
-    // DigitalInput forwardLimitSwitch = new DigitalInput(-1);
-    // DigitalInput reverseLimitSwitch = new DigitalInput(-1);
+    forwardLimitSwitch = new DigitalInput(RobotMap.GRABBER_LIMIT_FORWARD.getValue());
+    reverseLimitSwitch = new DigitalInput(RobotMap.GRABBER_LIMIT_REVERSE.getValue());
 
     pneumatic =
         new DoubleSolenoid(
@@ -48,13 +49,17 @@ public class Grabber extends Subsystem {
     /* PID */
     // FIXME: Change PID Stuff
     grabberMotor.selectProfileSlot(0, 0);
-    grabberMotor.config_kF(0, 0.2, 0);
-    grabberMotor.config_kP(0, 0.2, 0);
-    grabberMotor.config_kI(0, 0, 0);
-    grabberMotor.config_kD(0, 0, 0);
+    // pidf(0.6, 0.000003, 240, 0.025);
 
     grabberMotor.configMotionCruiseVelocity(RobotMap.GRABBER_CONFIG_CRUISE_VELOCITY.getValue(), 0);
     grabberMotor.configMotionAcceleration(RobotMap.GRABBER_CONFIG_ACCELERATION.getValue(), 0);
+  }
+
+  public void pidf(double p, double i, double d, double f) {
+    grabberMotor.config_kP(0, p, 0);
+    grabberMotor.config_kI(0, i, 0);
+    grabberMotor.config_kD(0, d, 0);
+    grabberMotor.config_kF(0, f, 0);
   }
 
   @Override
@@ -85,6 +90,16 @@ public class Grabber extends Subsystem {
         break;
       case TOGGLE:
         pneumatic.set(pneumatic.get() == Value.kReverse ? Value.kForward : Value.kReverse);
+    }
+  }
+
+  public void checkLimitSwitches() {
+    if (forwardLimitSwitch.get()) {
+      grabberMotor.setSelectedSensorPosition(0, 0, 0);
+    }
+
+    if (reverseLimitSwitch.get()) {
+      grabberMotor.set(0);
     }
   }
 

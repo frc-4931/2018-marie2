@@ -51,7 +51,10 @@ public enum RobotMap {
 
   /* Grabber */
   GRABBER_1(2),
-  GRABBER_2(3);
+  GRABBER_2(3),
+
+  GRABBER_LIMIT_FORWARD(0),
+  GRABBER_LIMIT_REVERSE(1);
 
   public static GrabberPosition defaultGrabberPosition = GrabberPosition.VERTICAL;
   public static GrabberState defaultGrabberState = GrabberState.OPENED;
