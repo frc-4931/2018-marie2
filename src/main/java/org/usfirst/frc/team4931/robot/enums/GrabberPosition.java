@@ -13,9 +13,8 @@ public enum GrabberPosition {
 
   private int position;
 
-  GrabberPosition(int position) {
-    this.position =
-        RobotMap.GRABBER_CONFIG_POSITION_MAX.getValue() / (this.values().length - 1) * position;
+  GrabberPosition(int percentage) {
+    position = 6000 / (7 - 1) * percentage;
   }
 
   public int getPosition() {

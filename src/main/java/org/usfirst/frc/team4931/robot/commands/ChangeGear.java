@@ -9,7 +9,6 @@ public class ChangeGear extends Command {
   private Gear gear;
 
   public ChangeGear(Gear gear) {
-    requires(Robot.getDrivetrain());
     this.gear = gear;
   }
 

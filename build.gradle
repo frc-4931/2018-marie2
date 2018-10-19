@@ -7,7 +7,7 @@ plugins {
 	id "com.diffplug.gradle.spotless" version "3.14.0"
 }
 
-def TEAM = 4931
+def TEAM = 4932
 def ROBOT_CLASS = "org.usfirst.frc.team4931.robot.Robot"
 
 // Define my targets (RoboRIO) and artifacts (deployable files)
@@ -16,7 +16,7 @@ deploy {
     targets {
         target("roborio", edu.wpi.first.gradlerio.frc.RoboRIO) {
             // Team can be overridden by command line, for use with VSCode
-            team = getTeamOrDefault(4931)
+            team = getTeamOrDefault(4932)
         }
     }
     artifacts {

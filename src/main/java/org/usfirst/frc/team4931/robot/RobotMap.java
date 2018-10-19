@@ -6,8 +6,6 @@ import org.usfirst.frc.team4931.robot.enums.GrabberState;
 
 public enum RobotMap {
 
-  // todo: Add real values
-
   /* Input */
   JOYSTICK(0),
 
@@ -19,15 +17,23 @@ public enum RobotMap {
   GRABBER_POSITION_FORWARD_STRAIGHT(8),
   GRABBER_POSITION_FORWARD_SWITCH(9),
   GRABBER_POSITION_VERTICAL(3),
-  GRABBER_POSITION_BACK_SWITCH(12),
+  GRABBER_POSITION_BACKWARD_SWITCH(12),
   GRABBER_POSITION_BACKWARD_STRAIGHT(11),
   GRABBER_POSITION_BACKWARD_DOWN(10),
 
+
+//  /* Motors */
+//  MOTOR_DT_FRONT_LEFT(1),
+//  MOTOR_DT_FRONT_RIGHT(3),
+//  MOTOR_DT_BACK_LEFT(2),
+//  MOTOR_DT_BACK_RIGHT(4),
+
+
   /* Motors */
-  MOTOR_DT_FRONT_LEFT(3),
-  MOTOR_DT_FRONT_RIGHT(1),
+  MOTOR_DT_FRONT_LEFT(2), //2
+  MOTOR_DT_FRONT_RIGHT(1), //1
   MOTOR_DT_BACK_LEFT(4),
-  MOTOR_DT_BACK_RIGHT(2),
+  MOTOR_DT_BACK_RIGHT(3), //3
 
   MOTOR_GRABBER(7),
 
@@ -46,15 +52,18 @@ public enum RobotMap {
   COMPRESSOR(6),
 
   /* GearBox */
-  GEARBOX_1(1),
-  GEARBOX_2(0),
+  GEARBOX_1(4),
+  GEARBOX_2(5),
 
   /* Grabber */
-  GRABBER_1(2),
-  GRABBER_2(3);
+  GRABBER_1(6),
+  GRABBER_2(7),
+
+  GRABBER_LIMIT_FORWARD(0),
+  GRABBER_LIMIT_REVERSE(1);
 
   public static GrabberPosition defaultGrabberPosition = GrabberPosition.VERTICAL;
-  public static GrabberState defaultGrabberState = GrabberState.OPENED;
+  public static GrabberState defaultGrabberState = GrabberState.CLOSED;
   public static Gear defaultGear = Gear.LOW;
 
   private int value;
