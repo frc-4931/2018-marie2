@@ -3,7 +3,6 @@ package org.usfirst.frc.team4931.robot.commands;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Command;
 import org.usfirst.frc.team4931.robot.Robot;
-import org.usfirst.frc.team4931.robot.RobotMap;
 import org.usfirst.frc.team4931.robot.subsystems.Grabber;
 
 public class GrabberRotationWithThrottle extends Command {
@@ -31,8 +30,7 @@ public class GrabberRotationWithThrottle extends Command {
   }
 
   private int getGrabberPosition() {
-    return (int)
-        (6000 * ((joystick.getThrottle() + 1) / 2));
+    return (int) (6000 * ((joystick.getThrottle() + 1) / 2));
   }
 
   @Override

@@ -3,7 +3,6 @@ package org.usfirst.frc.team4931.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -40,19 +39,21 @@ public class Grabber extends Subsystem {
     grabberMotor.setSelectedSensorPosition(0, 0, 0);
     grabberMotor.setSensorPhase(true);
 
-//    grabberMotor.configNominalOutputForward(0, 0);
-//    grabberMotor.configNominalOutputReverse(0, 0);
-//
-//    grabberMotor.configPeakOutputForward(1, 0);
-//    grabberMotor.configPeakOutputReverse(-1, 0);
+    //    grabberMotor.configNominalOutputForward(0, 0);
+    //    grabberMotor.configNominalOutputReverse(0, 0);
+    //
+    //    grabberMotor.configPeakOutputForward(1, 0);
+    //    grabberMotor.configPeakOutputReverse(-1, 0);
 
     /* PID */
     // FIXME: Change PID Stuff
-    //grabberMotor.selectProfileSlot(0, 0);
+    // grabberMotor.selectProfileSlot(0, 0);
     pidf(0.5, 0.000003, 240, 0.025);
 
-//    grabberMotor.configMotionCruiseVelocity(RobotMap.GRABBER_CONFIG_CRUISE_VELOCITY.getValue(), 0);
-//    grabberMotor.configMotionAcceleration(RobotMap.GRABBER_CONFIG_ACCELERATION.getValue(), 0);
+    //
+    // grabberMotor.configMotionCruiseVelocity(RobotMap.GRABBER_CONFIG_CRUISE_VELOCITY.getValue(),
+    // 0);
+    //    grabberMotor.configMotionAcceleration(RobotMap.GRABBER_CONFIG_ACCELERATION.getValue(), 0);
   }
 
   public void pidf(double p, double i, double d, double f) {
@@ -70,14 +71,14 @@ public class Grabber extends Subsystem {
   public void changeGrabberPosition(int position) {
     int maxPosition = RobotMap.GRABBER_CONFIG_POSITION_MAX.getValue();
 
-//    if (position > 0 && position <= maxPosition)
+    //    if (position > 0 && position <= maxPosition)
     grabberMotor.set(ControlMode.Position, position);
-//    else
-//      System.out.println(
-//          "Tried to move grabber to position "
-//              + position
-//              + ". It is either less than 0 or greater than "
-//              + maxPosition);
+    //    else
+    //      System.out.println(
+    //          "Tried to move grabber to position "
+    //              + position
+    //              + ". It is either less than 0 or greater than "
+    //              + maxPosition);
   }
 
   public void changeGrabberState(GrabberState grabberState) {
@@ -93,20 +94,37 @@ public class Grabber extends Subsystem {
     }
   }
 
+  public void setSpeed(double speed) {
+    grabberMotor.set(ControlMode.PercentOutput, speed);
+  }
+
   public void checkLimitSwitches() {
     if (!forwardLimitSwitch.get()) {
       grabberMotor.setSelectedSensorPosition(0, 0, 0);
+      if (grabberMotor.get() < 0)
+        grabberMotor.set(ControlMode.PercentOutput, 0);
     }
 
     if (!reverseLimitSwitch.get()) {
       if (grabberMotor.get() > 0) {
-        grabberMotor.set(0);
+        grabberMotor.set(ControlMode.PercentOutput, 0);
       }
     }
   }
 
-  public void log() {
+  public boolean getForwardLimitSwitch() {
+    return !forwardLimitSwitch.get();
+  }
 
+  public boolean getReverseLimitSwitch() {
+    return !reverseLimitSwitch.get();
+  }
+
+  public void resetZero() {
+    grabberMotor.setSelectedSensorPosition(0, 0, 0);
+  }
+
+  public void log() {
 
     SmartDashboard.putBoolean("Grabber Open", pneumatic.get() == Value.kForward);
     SmartDashboard.putNumber("Grabber Position", grabberMotor.getSelectedSensorPosition(0));

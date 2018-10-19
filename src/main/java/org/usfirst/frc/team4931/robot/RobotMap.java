@@ -21,19 +21,17 @@ public enum RobotMap {
   GRABBER_POSITION_BACKWARD_STRAIGHT(11),
   GRABBER_POSITION_BACKWARD_DOWN(10),
 
-
-//  /* Motors */
-//  MOTOR_DT_FRONT_LEFT(1),
-//  MOTOR_DT_FRONT_RIGHT(3),
-//  MOTOR_DT_BACK_LEFT(2),
-//  MOTOR_DT_BACK_RIGHT(4),
-
+  //  /* Motors */
+  //  MOTOR_DT_FRONT_LEFT(1),
+  //  MOTOR_DT_FRONT_RIGHT(3),
+  //  MOTOR_DT_BACK_LEFT(2),
+  //  MOTOR_DT_BACK_RIGHT(4),
 
   /* Motors */
-  MOTOR_DT_FRONT_LEFT(2), //2
-  MOTOR_DT_FRONT_RIGHT(1), //1
+  MOTOR_DT_FRONT_LEFT(2), // 2
+  MOTOR_DT_FRONT_RIGHT(1), // 1
   MOTOR_DT_BACK_LEFT(4),
-  MOTOR_DT_BACK_RIGHT(3), //3
+  MOTOR_DT_BACK_RIGHT(3), // 3
 
   MOTOR_GRABBER(7),
 
@@ -52,8 +50,8 @@ public enum RobotMap {
   COMPRESSOR(6),
 
   /* GearBox */
-  GEARBOX_1(4),
-  GEARBOX_2(5),
+  GEARBOX_1(5),
+  GEARBOX_2(4),
 
   /* Grabber */
   GRABBER_1(6),
