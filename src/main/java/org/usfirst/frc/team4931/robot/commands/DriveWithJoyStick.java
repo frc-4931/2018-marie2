@@ -1,6 +1,8 @@
 package org.usfirst.frc.team4931.robot.commands;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.buttons.Button;
+import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.command.Command;
 import org.usfirst.frc.team4931.robot.Robot;
 import org.usfirst.frc.team4931.robot.subsystems.Drivetrain;
@@ -9,6 +11,7 @@ public class DriveWithJoyStick extends Command {
 
   private Joystick joystick;
   private Drivetrain drivetrain;
+  private Button holdMax;
 
   public DriveWithJoyStick() {
     requires(Robot.getDrivetrain());
@@ -18,11 +21,12 @@ public class DriveWithJoyStick extends Command {
   public void initialize() {
     joystick = Robot.getOperatorInput().getJoystick();
     drivetrain = Robot.getDrivetrain();
+    holdMax = new JoystickButton(joystick, 8);
   }
 
   @Override
   protected void execute() {
-    drivetrain.arcadeDrive(-joystick.getY(), -joystick.getX(), 1);
+    drivetrain.arcadeDrive(-joystick.getY(), holdMax.get() ? joystick.getZ() : joystick.getZ() / 2, 1);
   }
 
   @Override

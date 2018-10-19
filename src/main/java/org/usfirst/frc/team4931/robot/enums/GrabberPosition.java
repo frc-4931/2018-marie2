@@ -1,7 +1,5 @@
 package org.usfirst.frc.team4931.robot.enums;
 
-import org.usfirst.frc.team4931.robot.RobotMap;
-
 public enum GrabberPosition {
   FORWARD_DOWN(0),
   FORWARD_STRAIGHT(1),

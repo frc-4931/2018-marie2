@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import org.usfirst.frc.team4931.robot.commands.ResetGrabber;
 import org.usfirst.frc.team4931.robot.commands.autonomous.DriveForMilliseconds;
 import org.usfirst.frc.team4931.robot.subsystems.Drivetrain;
 import org.usfirst.frc.team4931.robot.subsystems.Grabber;
@@ -21,10 +22,10 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
-    operatorInput = new OperatorInput();
-
     grabber = new Grabber();
     drivetrain = new Drivetrain();
+
+    operatorInput = new OperatorInput();
 
     compressor = new Compressor(RobotMap.COMPRESSOR.getValue());
     compressor.setClosedLoopControl(true);
@@ -47,14 +48,17 @@ public class Robot extends TimedRobot {
     compressor.start();
 
     if (autonomousCommand != null) autonomousCommand.cancel();
+
+    //new ResetGrabber().start();
   }
 
   @Override
   public void autonomousInit() {
     compressor.start();
 
-    autonomousCommand = new DriveForMilliseconds(5000);
-    autonomousCommand.start();
+    autonomousCommand = new DriveForMilliseconds(1500);
+    autonomousCommand.start(); //FIXME ENABLE THIS
+    new ResetGrabber().start();
   }
 
   @Override
