@@ -30,7 +30,7 @@ public class GrabberRotationWithThrottle extends Command {
   }
 
   private int getGrabberPosition() {
-    return (int) (6000 * ((joystick.getThrottle() + 1) / 2));
+    return (int) (6000 * ((joystick.getY() + 1) / 2));
   }
 
   @Override

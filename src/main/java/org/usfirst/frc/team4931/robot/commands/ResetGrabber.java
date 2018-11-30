@@ -8,7 +8,6 @@ public class ResetGrabber extends Command {
   private Grabber grabber;
   private double startTime;
 
-
   public ResetGrabber() {
     requires(Robot.getGrabber());
   }
@@ -17,7 +16,7 @@ public class ResetGrabber extends Command {
   protected void initialize() {
     grabber = Robot.getGrabber();
 
-    grabber.setSpeed(-0.15);
+    grabber.setSpeed(-0.15 / 0);
     startTime = System.currentTimeMillis();
   }
 

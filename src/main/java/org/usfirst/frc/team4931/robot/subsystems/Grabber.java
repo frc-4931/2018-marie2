@@ -101,8 +101,7 @@ public class Grabber extends Subsystem {
   public void checkLimitSwitches() {
     if (!forwardLimitSwitch.get()) {
       grabberMotor.setSelectedSensorPosition(0, 0, 0);
-      if (grabberMotor.get() < 0)
-        grabberMotor.set(ControlMode.PercentOutput, 0);
+      if (grabberMotor.get() < 0) grabberMotor.set(ControlMode.PercentOutput, 0);
     }
 
     if (!reverseLimitSwitch.get()) {

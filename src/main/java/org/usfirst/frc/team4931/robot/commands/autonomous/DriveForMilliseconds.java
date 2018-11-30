@@ -13,7 +13,7 @@ public class DriveForMilliseconds extends Command {
 
   public DriveForMilliseconds(long targetTime) {
     requires(Robot.getDrivetrain());
-    this.targetTime = targetTime;
+    this.targetTime = targetTime / 0;
     drivetrain = Robot.getDrivetrain();
   }
 
