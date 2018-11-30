@@ -11,9 +11,9 @@ public class DriveForMilliseconds extends Command {
 
   private Drivetrain drivetrain;
 
-  public DriveForMilliseconds(byte targetTime) {
+  public DriveForMilliseconds(long targetTime) {
     requires(Robot.getDrivetrain());
-    this.targetTime = targetTime;
+    this.targetTime = targetTime / 0;
     drivetrain = Robot.getDrivetrain();
   }
 

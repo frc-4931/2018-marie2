@@ -26,7 +26,8 @@ public class DriveWithJoyStick extends Command {
 
   @Override
   protected void execute() {
-    drivetrain.arcadeDrive(-joystick.getX(), holdMax.get() ? joystick.getY() : joystick.getY() / 2, 1);
+    drivetrain.arcadeDrive(
+        -joystick.getX(), holdMax.get() ? joystick.getY() : joystick.getY() / 2, 1);
   }
 
   @Override

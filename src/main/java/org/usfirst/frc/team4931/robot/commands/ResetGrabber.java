@@ -8,7 +8,6 @@ public class ResetGrabber extends Command {
   private Grabber grabber;
   private double startTime;
 
-
   public ResetGrabber() {
     requires(Robot.getGrabber());
   }

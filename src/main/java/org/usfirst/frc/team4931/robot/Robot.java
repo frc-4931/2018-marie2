@@ -49,7 +49,7 @@ public class Robot extends TimedRobot {
 
     if (autonomousCommand != null) autonomousCommand.cancel();
 
-    //new ResetGrabber().start();
+    // new ResetGrabber().start();
   }
 
   @Override
@@ -57,7 +57,7 @@ public class Robot extends TimedRobot {
     compressor.start();
 
     autonomousCommand = new DriveForMilliseconds(1500);
-    autonomousCommand.start(); //FIXME ENABLE THIS
+    autonomousCommand.start(); // FIXME ENABLE THIS
     new ResetGrabber().start();
   }
 
