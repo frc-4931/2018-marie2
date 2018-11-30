@@ -12,7 +12,7 @@ public enum GrabberPosition {
   private int position;
 
   GrabberPosition(int percentage) {
-    position = 6000 / (7 - 1) * percentage;
+    position = 6000 / (6 - 1) * percentage;
   }
 
   public int getPosition() {
